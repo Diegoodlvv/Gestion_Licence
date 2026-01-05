@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TeachingBlockRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -33,6 +35,18 @@ class TeachingBlock
 
     #[ORM\Column(nullable: true)]
     private ?int $hours_count = null;
+
+    /**
+     * @var Collection<int, Module>
+     */
+    #[ORM\OneToMany(targetEntity: Module::class, mappedBy: 'teaching_block_id')]
+    private Collection $modules;
+
+    public function __construct()
+    {
+        $this->modules = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
@@ -83,6 +97,36 @@ class TeachingBlock
     public function setHoursCount(?int $hours_count): static
     {
         $this->hours_count = $hours_count;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Module>
+     */
+    public function getModules(): Collection
+    {
+        return $this->modules;
+    }
+
+    public function addModule(Module $module): static
+    {
+        if (!$this->modules->contains($module)) {
+            $this->modules->add($module);
+            $module->setTeachingBlockId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeModule(Module $module): static
+    {
+        if ($this->modules->removeElement($module)) {
+            // set the owning side to null (unless already changed)
+            if ($module->getTeachingBlockId() === $this) {
+                $module->setTeachingBlockId(null);
+            }
+        }
 
         return $this;
     }

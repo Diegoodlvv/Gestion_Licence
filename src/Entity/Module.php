@@ -1,0 +1,183 @@
+<?php
+
+namespace App\Entity;
+
+use App\Repository\ModuleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+#[ORM\Entity(repositoryClass: ModuleRepository::class)]
+class Module
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\Column(type: Types::TEXT, length: 50)]
+    #[Assert\Type('string')]
+    #[Assert\NotNull()]
+    #[Assert\NotBlank()]
+    private ?string $code = null;
+
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'modules_children')]
+    private ?self $parent_id = null;
+
+    /**
+     * @var Collection<int, self>
+     */
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent_id')]
+    private Collection $modules_children;
+
+    #[ORM\Column(type: Types::TEXT, length: 255)]
+    #[Assert\Type('string')]
+    #[Assert\NotNull()]
+    #[Assert\NotBlank()]
+    private ?string $name = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\Type('string')]
+    private ?string $description = null;
+
+    #[ORM\Column(type: Types::INTEGER)]
+    #[Assert\Type('integer')]
+    #[Assert\NotNull()]
+    #[Assert\NotBlank()]
+    private ?int $hours_count = null;
+
+    #[ORM\Column(type: Types::BOOLEAN)]
+    #[Assert\Type('boolean')]
+    #[Assert\NotNull()]
+    #[Assert\NotBlank()]
+    private ?bool $capstone_project = null;
+
+    #[ORM\ManyToOne(inversedBy: 'modules')]
+    private ?TeachingBlock $teaching_block_id = null;
+
+    public function __construct()
+    {
+        $this->modules_children = new ArrayCollection();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    public function setCode(string $code): static
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    public function getParentId(): ?self
+    {
+        return $this->parent_id;
+    }
+
+    public function setParentId(?self $parent_id): static
+    {
+        $this->parent_id = $parent_id;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getModulesChildren(): Collection
+    {
+        return $this->modules_children;
+    }
+
+    public function addModulesChild(self $modulesChild): static
+    {
+        if (!$this->modules_children->contains($modulesChild)) {
+            $this->modules_children->add($modulesChild);
+            $modulesChild->setParentId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeModulesChild(self $modulesChild): static
+    {
+        if ($this->modules_children->removeElement($modulesChild)) {
+            // set the owning side to null (unless already changed)
+            if ($modulesChild->getParentId() === $this) {
+                $modulesChild->setParentId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getHoursCount(): ?int
+    {
+        return $this->hours_count;
+    }
+
+    public function setHoursCount(int $hours_count): static
+    {
+        $this->hours_count = $hours_count;
+
+        return $this;
+    }
+
+    public function isCapstoneProject(): ?bool
+    {
+        return $this->capstone_project;
+    }
+
+    public function setCapstoneProject(bool $capstone_project): static
+    {
+        $this->capstone_project = $capstone_project;
+
+        return $this;
+    }
+
+    public function getTeachingBlockId(): ?TeachingBlock
+    {
+        return $this->teaching_block_id;
+    }
+
+    public function setTeachingBlockId(?TeachingBlock $teaching_block_id): static
+    {
+        $this->teaching_block_id = $teaching_block_id;
+
+        return $this;
+    }
+}
