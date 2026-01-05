@@ -1,0 +1,37 @@
+{% set variants = {
+    blue: '
+        bg-slate-800 text-white
+        hover:bg-slate-900
+        focus:ring-slate-700
+    ',
+    grey: '
+        bg-slate-100 text-slate-800
+        hover:bg-slate-200
+        focus:ring-slate-300
+    ',
+    yellow: '
+        bg-yellow-400 text-slate-900
+        hover:bg-yellow-500
+        focus:ring-yellow-400
+    ',
+    red: '
+        bg-red-600 text-white
+        hover:bg-red-700
+        focus:ring-red-600
+    '
+} %}
+
+{% set classes = [
+    'inline-flex items-center justify-center',
+    'rounded-lg px-5 py-2.5',
+    'text-sm font-semibold',
+    'transition',
+    'focus:outline-none focus:ring-2 focus:ring-offset-2',
+    disabled ? 'opacity-50 cursor-not-allowed' : '',
+    variants[variant]|default(variants.primary),
+    class
+]|filter(v => v)|join(' ') %}
+
+<button type="{{ type }}" class="{{ classes }}" {% if disabled %} disabled {% endif %}>
+	<x-slot/>
+</button>

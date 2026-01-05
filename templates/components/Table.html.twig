@@ -1,0 +1,48 @@
+{% set classes = [
+    'w-full border-collapse',
+    'text-sm text-slate-700',
+    class
+]|filter(v => v)|join(' ') %}
+
+<table class="{{ classes }}">
+	<thead class="bg-slate-50 text-slate-600">
+		<tr>
+			{% for column in columns %}
+				<th class="px-4 py-3 font-medium text-left">
+					{{ column }}
+				</th>
+			{% endfor %}
+			{% if actions %}
+				<th class="px-4 py-3"></th>
+			{% endif %}
+		</tr>
+	</thead>
+
+	<tbody class="divide-y divide-slate-100">
+		{% if rows is empty %}
+			<tr>
+				<td colspan="{{ columns|length + (actions ? 1 : 0) }}" class="px-4 py-6 text-center text-slate-400">
+					{{ emptyMessage }}
+				</td>
+			</tr>
+		{% else %}
+			{% for row in rows %}
+				<tr class="hover:bg-slate-50 transition">
+					{% for field in fields %}
+						<td class="px-4 py-4">
+							{{ attribute(row, field) }}
+						</td>
+					{% endfor %}
+
+					{% if actions %}
+						<td class="px-4 py-4">
+							<div class="flex items-center gap-3">
+								<x-slot:actions/>
+							</div>
+						</td>
+					{% endif %}
+				</tr>
+			{% endfor %}
+		{% endif %}
+	</tbody>
+</table>
