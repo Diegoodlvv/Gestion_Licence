@@ -25,13 +25,13 @@ class SchoolYear
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Assert\DateTime(format: 'YYYY')]
+    #[Assert\DateTime(format: 'dd/MM/YYYY')]
     #[Assert\NotNull()]
     #[Assert\NotBlank()]
     private ?\DateTime $start_date = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Assert\DateTime(format: 'YYYY')]
+    #[Assert\DateTime(format: 'dd/MM/YYYY')]
     #[Assert\NotNull()]
     #[Assert\NotBlank()]
     private ?\DateTime $end_date = null;
