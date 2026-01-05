@@ -3,8 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\CoursePeriodRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CoursePeriodRepository::class)]
 class CoursePeriod
@@ -15,14 +18,21 @@ class CoursePeriod
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'coursePeriods')]
+    #[Assert\NotNull()]
+    #[Assert\NotBlank()]
     private ?SchoolYear $school_year_id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\DateTime(format: 'dd/MM/YYYY')]
+    #[Assert\NotNull()]
+    #[Assert\NotBlank()]
     private ?\DateTime $start_date = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\DateTime(format: 'dd/MM/YYYY')]
+    #[Assert\NotNull()]
+    #[Assert\NotBlank()]
     private ?\DateTime $end_date = null;
-
 
     public function getId(): ?int
     {
