@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\InterventionTypeRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -15,19 +16,19 @@ class InterventionType
     #[ORM\Column(unique: true)]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: Types::TEXT)]
     #[Assert\Type('string')]
     #[Assert\NotNull()]
     #[Assert\NotBlank()]
     private ?string $name = null;
 
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: Types::TEXT)]
     #[Assert\Type('string')]
     #[Assert\NotNull()]
     #[Assert\NotBlank()]
     private ?string $description = null;
 
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: Types::TEXT)]
     #[Assert\Type('string')]
     #[Assert\NotNull()]
     #[Assert\NotBlank()]
