@@ -57,9 +57,16 @@ class Module
     #[ORM\ManyToOne(inversedBy: 'modules')]
     private ?TeachingBlock $teaching_block_id = null;
 
+    /**
+     * @var Collection<int, Intervention>
+     */
+    #[ORM\OneToMany(targetEntity: Intervention::class, mappedBy: 'module_id')]
+    private Collection $interventions;
+
     public function __construct()
     {
         $this->modules_children = new ArrayCollection();
+        $this->interventions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -177,6 +184,36 @@ class Module
     public function setTeachingBlockId(?TeachingBlock $teaching_block_id): static
     {
         $this->teaching_block_id = $teaching_block_id;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Intervention>
+     */
+    public function getInterventions(): Collection
+    {
+        return $this->interventions;
+    }
+
+    public function addIntervention(Intervention $intervention): static
+    {
+        if (!$this->interventions->contains($intervention)) {
+            $this->interventions->add($intervention);
+            $intervention->setModuleId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIntervention(Intervention $intervention): static
+    {
+        if ($this->interventions->removeElement($intervention)) {
+            // set the owning side to null (unless already changed)
+            if ($intervention->getModuleId() === $this) {
+                $intervention->setModuleId(null);
+            }
+        }
 
         return $this;
     }
