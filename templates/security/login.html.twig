@@ -1,0 +1,50 @@
+{% block stylesheets %}
+	{{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block javascripts %}
+	{{ encore_entry_script_tags('app') }}
+{% endblock %}
+
+{% block body %}
+	<div class="flex min-h-screen">
+		{% include 'components/sidebarLogin.html.twig' %}
+		<main class="flex-1 bg-white p-12">
+			<h1 class="text-2xl font-bold text-slate-900 mb-8">Gestion du supérieur</h1>
+
+			<form method="post" class="max-w-xl">
+				{% if error %}
+					<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+						{{ error.messageKey|trans(error.messageData, 'security') }}
+					</div>
+				{% endif %}
+
+				{% if app.user %}
+					<div class="mb-4 text-slate-600">
+						Vous êtes connecté en tant que
+						{{ app.user.userIdentifier }},
+						<a href="{{ logout_path() }}" class="text-blue-600 hover:underline">Déconnexion</a>
+					</div>
+				{% endif %}
+
+				<h2 class="text-lg font-semibold text-blue-800 mb-6">Connexion au portail</h2>
+
+				<div class="mb-4">
+					<label for="username" class="block text-sm text-slate-700 mb-1">Email - champ obligatoire</label>
+					<input type="email" value="{{ last_username }}" name="_username" id="username" class="w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" autocomplete="email" required autofocus placeholder="j.martins@mentalworks.fr">
+				</div>
+
+				<div class="mb-6">
+					<label for="password" class="block text-sm text-slate-700 mb-1">Mot de passe - champ obligatoire</label>
+					<input type="password" name="_password" id="password" class="w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" autocomplete="current-password" required>
+				</div>
+
+				<input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+
+				<button class="bg-slate-700 hover:bg-slate-800 text-white font-medium py-2 px-6 rounded transition-colors" type="submit">
+					Accéder au portail
+				</button>
+			</form>
+		</main>
+	</div>
+{% endblock %}
