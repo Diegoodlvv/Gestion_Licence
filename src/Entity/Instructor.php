@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\InstructorRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: InstructorRepository::class)]
@@ -14,21 +16,56 @@ class Instructor
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'instructors')]
-    private ?User $user_id = null;
+    private ?User $user = null;
+
+    /**
+     * @var Collection<int, Module>
+     */
+    #[ORM\ManyToMany(targetEntity: Module::class, inversedBy: 'instructors')]
+    private Collection $module;
+
+    public function __construct()
+    {
+        $this->module = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUserId(): ?User
+    public function getUser(): ?User
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function setUserId(?User $user_id): static
+    public function setUser(?User $user): static
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Module>
+     */
+    public function getModule(): Collection
+    {
+        return $this->module;
+    }
+
+    public function addModule(Module $module): static
+    {
+        if (!$this->module->contains($module)) {
+            $this->module->add($module);
+        }
+
+        return $this;
+    }
+
+    public function removeModule(Module $module): static
+    {
+        $this->module->removeElement($module);
 
         return $this;
     }
