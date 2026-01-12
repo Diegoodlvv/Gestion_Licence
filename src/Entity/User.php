@@ -39,6 +39,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Instructor::class, mappedBy: 'user_id')]
     private Collection $instructors;
 
+    #[ORM\Column]
+    private ?string $lastname = null;
+
+    #[ORM\Column]
+    private ?string $firstname = null;
+
     public function __construct()
     {
         $this->instructors = new ArrayCollection();
@@ -52,6 +58,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getEmail(): ?string
     {
         return $this->email;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): static
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(string $firstname): static
+    {
+        $this->firstname = $firstname;
+
+        return $this;
     }
 
     public function setEmail(string $email): static
