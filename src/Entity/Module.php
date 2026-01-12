@@ -23,14 +23,16 @@ class Module
     #[Assert\NotBlank()]
     private ?string $code = null;
 
-    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'modules_children')]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'modules_children', cascade: ["persist"])]
+    #[ORM\JoinColumn(onDelete: "SET NULL")]
     private ?self $parent = null;
+
 
     /**
      * @var Collection<int, self>
      */
-    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
-    private Collection $modules_children;
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent', cascade: ["persist"])]
+    private ?Collection $childrens = null;
 
     #[ORM\Column(type: Types::TEXT, length: 255)]
     #[Assert\Type('string')]
@@ -71,7 +73,7 @@ class Module
 
     public function __construct()
     {
-        $this->modules_children = new ArrayCollection();
+        $this->childrens = new ArrayCollection();
         $this->interventions = new ArrayCollection();
         $this->instructors = new ArrayCollection();
     }
@@ -110,13 +112,13 @@ class Module
      */
     public function getModulesChildren(): Collection
     {
-        return $this->modules_children;
+        return $this->childrens;
     }
 
     public function addModulesChild(self $modulesChild): static
     {
-        if (!$this->modules_children->contains($modulesChild)) {
-            $this->modules_children->add($modulesChild);
+        if (!$this->childrens->contains($modulesChild)) {
+            $this->childrens->add($modulesChild);
             $modulesChild->setParentId($this);
         }
 
@@ -125,7 +127,7 @@ class Module
 
     public function removeModulesChild(self $modulesChild): static
     {
-        if ($this->modules_children->removeElement($modulesChild)) {
+        if ($this->childrens->removeElement($modulesChild)) {
             // set the owning side to null (unless already changed)
             if ($modulesChild->getParentId() === $this) {
                 $modulesChild->setParentId(null);
