@@ -20,7 +20,7 @@ class CoursePeriod
     #[ORM\ManyToOne(inversedBy: 'coursePeriods')]
     #[Assert\NotNull()]
     #[Assert\NotBlank()]
-    private ?SchoolYear $school_year_id = null;
+    private ?SchoolYear $school_year = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Assert\DateTime(format: 'dd/MM/YYYY')]
@@ -37,7 +37,7 @@ class CoursePeriod
     /**
      * @var Collection<int, Intervention>
      */
-    #[ORM\OneToMany(targetEntity: Intervention::class, mappedBy: 'course_period_id')]
+    #[ORM\OneToMany(targetEntity: Intervention::class, mappedBy: 'course_period')]
     private Collection $interventions;
 
     public function __construct()
@@ -52,12 +52,12 @@ class CoursePeriod
 
     public function getSchoolYearId(): ?SchoolYear
     {
-        return $this->school_year_id;
+        return $this->school_year;
     }
 
-    public function setSchoolYearId(?SchoolYear $school_year_id): static
+    public function setSchoolYearId(?SchoolYear $school_year): static
     {
-        $this->school_year_id = $school_year_id;
+        $this->school_year = $school_year;
 
         return $this;
     }

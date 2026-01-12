@@ -21,13 +21,13 @@ class Intervention
     private ?\DateTime $end_date = null;
 
     #[ORM\ManyToOne(inversedBy: 'interventions')]
-    private ?CoursePeriod $course_period_id = null;
+    private ?CoursePeriod $course_period = null;
 
     #[ORM\ManyToOne(inversedBy: 'interventions')]
-    private ?InterventionType $interventon_type_id = null;
+    private ?InterventionType $interventon_type = null;
 
     #[ORM\ManyToOne(inversedBy: 'interventions')]
-    private ?Module $module_id = null;
+    private ?Module $module = null;
 
     #[ORM\Column]
     private ?bool $remotely = null;
@@ -66,36 +66,36 @@ class Intervention
 
     public function getCoursePeriodId(): ?CoursePeriod
     {
-        return $this->course_period_id;
+        return $this->course_period;
     }
 
-    public function setCoursePeriodId(?CoursePeriod $course_period_id): static
+    public function setCoursePeriodId(?CoursePeriod $course_period): static
     {
-        $this->course_period_id = $course_period_id;
+        $this->course_period = $course_period;
 
         return $this;
     }
 
     public function getInterventonTypeId(): ?InterventionType
     {
-        return $this->interventon_type_id;
+        return $this->interventon_type;
     }
 
-    public function setInterventonTypeId(?InterventionType $interventon_type_id): static
+    public function setInterventonTypeId(?InterventionType $interventon_type): static
     {
-        $this->interventon_type_id = $interventon_type_id;
+        $this->interventon_type = $interventon_type;
 
         return $this;
     }
 
     public function getModuleId(): ?Module
     {
-        return $this->module_id;
+        return $this->module;
     }
 
-    public function setModuleId(?Module $module_id): static
+    public function setModuleId(?Module $module): static
     {
-        $this->module_id = $module_id;
+        $this->module = $module;
 
         return $this;
     }

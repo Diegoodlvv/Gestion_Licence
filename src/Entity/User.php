@@ -131,7 +131,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->instructors->contains($instructor)) {
             $this->instructors->add($instructor);
-            $instructor->setUserId($this);
+            $instructor->setUser($this);
         }
 
         return $this;
@@ -141,8 +141,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->instructors->removeElement($instructor)) {
             // set the owning side to null (unless already changed)
-            if ($instructor->getUserId() === $this) {
-                $instructor->setUserId(null);
+            if ($instructor->getUser() === $this) {
+                $instructor->setUser(null);
             }
         }
 

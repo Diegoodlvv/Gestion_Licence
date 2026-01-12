@@ -24,12 +24,12 @@ class Module
     private ?string $code = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'modules_children')]
-    private ?self $parent_id = null;
+    private ?self $parent = null;
 
     /**
      * @var Collection<int, self>
      */
-    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent_id')]
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     private Collection $modules_children;
 
     #[ORM\Column(type: Types::TEXT, length: 255)]
@@ -55,18 +55,25 @@ class Module
     private ?bool $capstone_project = null;
 
     #[ORM\ManyToOne(inversedBy: 'modules')]
-    private ?TeachingBlock $teaching_block_id = null;
+    private ?TeachingBlock $teaching_block = null;
 
     /**
      * @var Collection<int, Intervention>
      */
-    #[ORM\OneToMany(targetEntity: Intervention::class, mappedBy: 'module_id')]
+    #[ORM\OneToMany(targetEntity: Intervention::class, mappedBy: 'module')]
     private Collection $interventions;
+
+    /**
+     * @var Collection<int, Instructor>
+     */
+    #[ORM\ManyToMany(targetEntity: Instructor::class, mappedBy: 'module')]
+    private Collection $instructors;
 
     public function __construct()
     {
         $this->modules_children = new ArrayCollection();
         $this->interventions = new ArrayCollection();
+        $this->instructors = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -88,12 +95,12 @@ class Module
 
     public function getParentId(): ?self
     {
-        return $this->parent_id;
+        return $this->parent;
     }
 
-    public function setParentId(?self $parent_id): static
+    public function setParentId(?self $parent): static
     {
-        $this->parent_id = $parent_id;
+        $this->parent = $parent;
 
         return $this;
     }
@@ -178,12 +185,12 @@ class Module
 
     public function getTeachingBlockId(): ?TeachingBlock
     {
-        return $this->teaching_block_id;
+        return $this->teaching_block;
     }
 
-    public function setTeachingBlockId(?TeachingBlock $teaching_block_id): static
+    public function setTeachingBlockId(?TeachingBlock $teaching_block): static
     {
-        $this->teaching_block_id = $teaching_block_id;
+        $this->teaching_block = $teaching_block;
 
         return $this;
     }
@@ -213,6 +220,33 @@ class Module
             if ($intervention->getModuleId() === $this) {
                 $intervention->setModuleId(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Instructor>
+     */
+    public function getInstructors(): Collection
+    {
+        return $this->instructors;
+    }
+
+    public function addInstructor(Instructor $instructor): static
+    {
+        if (!$this->instructors->contains($instructor)) {
+            $this->instructors->add($instructor);
+            $instructor->addModule($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInstructor(Instructor $instructor): static
+    {
+        if ($this->instructors->removeElement($instructor)) {
+            $instructor->removeModule($this);
         }
 
         return $this;
