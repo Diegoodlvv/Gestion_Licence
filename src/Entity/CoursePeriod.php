@@ -98,7 +98,7 @@ class CoursePeriod
     {
         if (!$this->interventions->contains($intervention)) {
             $this->interventions->add($intervention);
-            $intervention->setCoursePeriodId($this);
+            $intervention->setCoursePeriod($this);
         }
 
         return $this;
@@ -107,9 +107,9 @@ class CoursePeriod
     public function removeIntervention(Intervention $intervention): static
     {
         if ($this->interventions->removeElement($intervention)) {
-            // set the owning side to null (unless already changed)
-            if ($intervention->getCoursePeriodId() === $this) {
-                $intervention->setCoursePeriodId(null);
+            // set the owning se to null (unless already changed)
+            if ($intervention->getCoursePeriod() === $this) {
+                $intervention->setCoursePeriod(null);
             }
         }
 
