@@ -46,6 +46,8 @@ class TeachingBlockFixtures extends Fixture
                 ->setHoursCount($data['hours_count']);
 
             $manager->persist($block);
+
+            $this->addReference($data['code'], $block);
         }
 
         $manager->flush();
