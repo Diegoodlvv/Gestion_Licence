@@ -16,7 +16,9 @@
 		{% endblock %}
 	</head>
 	<body>
-		{% include 'components/Sidebar.html.twig' %}
-		{% block body %}{% endblock %}
+		<div class="flex min-h-screen">
+			{% include 'components/Sidebar.html.twig' %}
+			{% block body %}{% endblock %}
+		</div>
 	</body>
 </html>
