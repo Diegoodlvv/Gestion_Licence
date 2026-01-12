@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -30,6 +32,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    /**
+     * @var Collection<int, Instructor>
+     */
+    #[ORM\OneToMany(targetEntity: Instructor::class, mappedBy: 'user_id')]
+    private Collection $instructors;
+
+    public function __construct()
+    {
+        $this->instructors = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -104,5 +117,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $data["\0" . self::class . "\0password"] = hash('crc32c', $this->password);
 
         return $data;
+    }
+
+    /**
+     * @return Collection<int, Instructor>
+     */
+    public function getInstructors(): Collection
+    {
+        return $this->instructors;
+    }
+
+    public function addInstructor(Instructor $instructor): static
+    {
+        if (!$this->instructors->contains($instructor)) {
+            $this->instructors->add($instructor);
+            $instructor->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInstructor(Instructor $instructor): static
+    {
+        if ($this->instructors->removeElement($instructor)) {
+            // set the owning side to null (unless already changed)
+            if ($instructor->getUserId() === $this) {
+                $instructor->setUserId(null);
+            }
+        }
+
+        return $this;
     }
 }
