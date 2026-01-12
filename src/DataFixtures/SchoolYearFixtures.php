@@ -27,8 +27,8 @@ class SchoolYearFixtures extends Fixture
 
         foreach ($years as $data) {
             $year = new SchoolYear();
-            $year->setYear("year");
-            $year->setSaison("saison");
+            $year->setYear($data["year"]);
+            $year->setSaison($data["saison"]);
 
             $manager->persist($year);
 

@@ -24,7 +24,7 @@ class SchoolYear
     #[Assert\NotBlank()]
     private ?string $year = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::TEXT)]
     #[Assert\Type('string')]
     #[Assert\NotNull()]
     #[Assert\NotBlank()]
