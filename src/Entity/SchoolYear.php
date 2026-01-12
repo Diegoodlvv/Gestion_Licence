@@ -22,19 +22,13 @@ class SchoolYear
     #[Assert\Type('string')]
     #[Assert\NotNull()]
     #[Assert\NotBlank()]
-    private ?string $name = null;
+    private ?string $year = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Assert\DateTime(format: 'dd/MM/YYYY')]
+    #[Assert\Type('string')]
     #[Assert\NotNull()]
     #[Assert\NotBlank()]
-    private ?\DateTime $start_date = null;
-
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Assert\DateTime(format: 'dd/MM/YYYY')]
-    #[Assert\NotNull()]
-    #[Assert\NotBlank()]
-    private ?\DateTime $end_date = null;
+    private ?string $saison = null;
 
     /**
      * @var Collection<int, CoursePeriod>
@@ -52,38 +46,26 @@ class SchoolYear
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getYear(): ?string
     {
-        return $this->name;
+        return $this->year;
     }
 
-    public function setName(string $name): static
+    public function setYear(string $year): static
     {
-        $this->name = $name;
+        $this->year = $year;
 
         return $this;
     }
 
-    public function getStartDate(): ?\DateTime
+    public function getSaison(): ?string
     {
-        return $this->start_date;
+        return $this->saison;
     }
 
-    public function setStartDate(\DateTime $start_date): static
+    public function setSaison(string $saison): static
     {
-        $this->start_date = $start_date;
-
-        return $this;
-    }
-
-    public function getEndDate(): ?\DateTime
-    {
-        return $this->end_date;
-    }
-
-    public function setEndDate(\DateTime $end_date): static
-    {
-        $this->end_date = $end_date;
+        $this->saison = $saison;
 
         return $this;
     }
