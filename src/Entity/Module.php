@@ -183,12 +183,12 @@ class Module
         return $this;
     }
 
-    public function getTeachingBlockId(): ?TeachingBlock
+    public function getTeachingBlock(): ?TeachingBlock
     {
         return $this->teaching_block;
     }
 
-    public function setTeachingBlockId(?TeachingBlock $teaching_block): static
+    public function setTeachingBlock(?TeachingBlock $teaching_block): static
     {
         $this->teaching_block = $teaching_block;
 
@@ -207,7 +207,7 @@ class Module
     {
         if (!$this->interventions->contains($intervention)) {
             $this->interventions->add($intervention);
-            $intervention->setModuleId($this);
+            $intervention->setModule($this);
         }
 
         return $this;
@@ -216,9 +216,9 @@ class Module
     public function removeIntervention(Intervention $intervention): static
     {
         if ($this->interventions->removeElement($intervention)) {
-            // set the owning side to null (unless already changed)
-            if ($intervention->getModuleId() === $this) {
-                $intervention->setModuleId(null);
+            // set the owning sde to null (unless already changed)
+            if ($intervention->getModule() === $this) {
+                $intervention->setModule(null);
             }
         }
 

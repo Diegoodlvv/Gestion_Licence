@@ -34,12 +34,12 @@ class TeachingBlock
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $hours_count = null;
+    private ?float $hours_count = null;
 
     /**
      * @var Collection<int, Module>
      */
-    #[ORM\OneToMany(targetEntity: Module::class, mappedBy: 'teaching_block_id')]
+    #[ORM\OneToMany(targetEntity: Module::class, mappedBy: 'teaching_block')]
     private Collection $modules;
 
     public function __construct()
@@ -89,12 +89,12 @@ class TeachingBlock
         return $this;
     }
 
-    public function getHoursCount(): ?int
+    public function getHoursCount(): ?float
     {
         return $this->hours_count;
     }
 
-    public function setHoursCount(?int $hours_count): static
+    public function setHoursCount(?float $hours_count): static
     {
         $this->hours_count = $hours_count;
 
@@ -113,7 +113,7 @@ class TeachingBlock
     {
         if (!$this->modules->contains($module)) {
             $this->modules->add($module);
-            $module->setTeachingBlockId($this);
+            $module->setTeachingBlock($this);
         }
 
         return $this;
@@ -123,8 +123,8 @@ class TeachingBlock
     {
         if ($this->modules->removeElement($module)) {
             // set the owning side to null (unless already changed)
-            if ($module->getTeachingBlockId() === $this) {
-                $module->setTeachingBlockId(null);
+            if ($module->getTeachingBlock() === $this) {
+                $module->setTeachingBlock(null);
             }
         }
 

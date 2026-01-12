@@ -64,36 +64,36 @@ class Intervention
         return $this;
     }
 
-    public function getCoursePeriodId(): ?CoursePeriod
+    public function getCoursePeriod(): ?CoursePeriod
     {
         return $this->course_period;
     }
 
-    public function setCoursePeriodId(?CoursePeriod $course_period): static
+    public function setCoursePeriod(?CoursePeriod $course_period): static
     {
         $this->course_period = $course_period;
 
         return $this;
     }
 
-    public function getInterventonTypeId(): ?InterventionType
+    public function getInterventonType(): ?InterventionType
     {
         return $this->interventon_type;
     }
 
-    public function setInterventonTypeId(?InterventionType $interventon_type): static
+    public function setInterventonType(?InterventionType $interventon_type): static
     {
         $this->interventon_type = $interventon_type;
 
         return $this;
     }
 
-    public function getModuleId(): ?Module
+    public function getModule(): ?Module
     {
         return $this->module;
     }
 
-    public function setModuleId(?Module $module): static
+    public function setModule(?Module $module): static
     {
         $this->module = $module;
 
