@@ -30,8 +30,11 @@
 				{{ form_row(form.module) }}
 			</div>
 
-			<div class="mt-8">
-				{{ form_widget(form.submit) }}
+			<div class="mt-8 flex gap-4">
+				<a href="{{ path('app_instructor') }}">
+					<twig:Button label="Retour" variant="grey" type="button"/>
+				</a>
+				<twig:Button label="Sauvegarder" type="submit"/>
 			</div>
 
 			{{ form_end(form) }}

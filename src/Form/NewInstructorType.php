@@ -49,10 +49,7 @@ class NewInstructorType extends AbstractType
                 'attr' => ['class' => 'w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-bla focus:border-black h-32'],
                 'label_attr' => ['class' => 'block text-sm text-slate-700 mb-1'],
             ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Ajouter l\'enseignant',
-                'attr' => ['class' => 'bg-slate-700 hover:bg-slate-800 text-white font-medium py-2 px-6 rounded transition-colors cursor-pointer'],
-            ])
+
         ;
     }
 
