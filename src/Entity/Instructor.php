@@ -24,9 +24,16 @@ class Instructor
     #[ORM\ManyToMany(targetEntity: Module::class, inversedBy: 'instructors')]
     private Collection $module;
 
+    /**
+     * @var Collection<int, Intervention>
+     */
+    #[ORM\ManyToMany(targetEntity: Intervention::class, mappedBy: 'instructors')]
+    private Collection $interventions;
+
     public function __construct()
     {
         $this->module = new ArrayCollection();
+        $this->interventions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -66,6 +73,33 @@ class Instructor
     public function removeModule(Module $module): static
     {
         $this->module->removeElement($module);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Intervention>
+     */
+    public function getInterventions(): Collection
+    {
+        return $this->interventions;
+    }
+
+    public function addIntervention(Intervention $intervention): static
+    {
+        if (!$this->interventions->contains($intervention)) {
+            $this->interventions->add($intervention);
+            $intervention->addInstructor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIntervention(Intervention $intervention): static
+    {
+        if ($this->interventions->removeElement($intervention)) {
+            $intervention->removeInstructor($this);
+        }
 
         return $this;
     }

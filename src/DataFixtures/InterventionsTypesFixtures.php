@@ -45,6 +45,8 @@ class InterventionsTypesFixtures extends Fixture
             $type->setColor($data['color']);
 
             $manager->persist($type);
+
+            $this->addReference($data["name"], $type);
         }
 
         $manager->flush();

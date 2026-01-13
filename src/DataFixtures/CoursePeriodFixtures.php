@@ -15,18 +15,27 @@ class CoursePeriodFixtures extends Fixture implements DependentFixtureInterface
     {
         $periods = [
             [
+                "index" => 0,
                 "start_date" => new DateTime("01/09/2025"),
                 "end_date" => new DateTime("12/09/2025"),
                 "school_year" => "2025"
             ],
             [
+                "index" => 1,
                 "start_date" => new DateTime("06/10/2025"),
                 "end_date" => new DateTime("10/10/2025"),
                 "school_year" => "2025"
             ],
             [
+                "index" => 2,
                 "start_date" => new DateTime("03/11/2025"),
                 "end_date" => new DateTime("07/11/2025"),
+                "school_year" => "2025"
+            ],
+            [
+                "index" => 3,
+                "start_date" => new DateTime("08/12/2025"),
+                "end_date" => new DateTime("12/12/2025"),
                 "school_year" => "2025"
             ]
         ];
@@ -38,6 +47,8 @@ class CoursePeriodFixtures extends Fixture implements DependentFixtureInterface
             $period->setSchoolYearId($this->getReference($data["school_year"], SchoolYear::class));
 
             $manager->persist($period);
+
+            $this->addReference($data["index"], $period);
         }
 
         $manager->flush();
