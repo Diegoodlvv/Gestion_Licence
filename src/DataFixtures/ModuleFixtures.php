@@ -376,6 +376,8 @@ class ModuleFixtures extends Fixture implements DependentFixtureInterface
 
 
             $manager->persist($module);
+
+            $this->addReference($data['name'], $module);
         }
         $manager->flush();
     }
