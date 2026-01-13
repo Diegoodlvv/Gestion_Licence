@@ -92,8 +92,7 @@ class InterventionsFixtures extends Fixture
         return [
             CoursePeriodFixtures::class,
             InterventionsFixtures::class,
-            ModuleFixtures::class,
-            InstructorFixtures::class
+            ModuleFixtures::class
         ];
     }
 }
