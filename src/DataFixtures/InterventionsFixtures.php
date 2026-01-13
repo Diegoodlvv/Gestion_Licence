@@ -24,7 +24,7 @@ class InterventionsFixtures extends Fixture
                 "intervention_type_id" => "Cours",
                 "module_id" => "Gestion de projet - Méthode agile",
                 "instructor" => [
-                    "Aste"
+                    "name" => "Aste"
                 ]
             ],
             [
@@ -35,7 +35,7 @@ class InterventionsFixtures extends Fixture
                 "intervention_type_id" => "Cours",
                 "module_id" => "Eco-Conception",
                 "instructor" => [
-                    "Knorr"
+                    "name" => "Knorr"
                 ]
             ],
             [
@@ -46,8 +46,12 @@ class InterventionsFixtures extends Fixture
                 "intervention_type_id" => "Cours",
                 "module_id" => "Devops/Cyber",
                 "instructor" => [
-                    "Delsaux",
-                    "Martins-Jacquelot"
+                    [
+                        "name" => "Martins-Jacquelot"
+                    ],
+                    [
+                        "name" => "Delsaux"
+                    ]
                 ]
             ],
             [
@@ -63,19 +67,21 @@ class InterventionsFixtures extends Fixture
 
 
         foreach ($interventions as $data) {
-            $interventions = new Intervention();
-            $interventions->setStartDate($data["start_date"]);
-            $interventions->setEndDate($data("end_date"));
-            $interventions->setRemotely($data["remotely"]);
-            $interventions->setCoursePeriod($this->getReference($data["course_period_id"], CoursePeriod::class));
-            $interventions->setInterventonType($this->getReference($data["intervention_type_id"], InterventionType::class));
-            $interventions->setModule($this->getReference($data["module_id"], Module::class));
+            $intervention = new Intervention();
+            $intervention->setStartDate($data["start_date"]);
+            $intervention->setEndDate($data("end_date"));
+            $intervention->setRemotely($data["remotely"]);
+            $intervention->setCoursePeriod($this->getReference($data["course_period_id"], CoursePeriod::class));
+            $intervention->setInterventonType($this->getReference($data["intervention_type_id"], InterventionType::class));
+            $intervention->setModule($this->getReference($data["module_id"], Module::class));
 
             if ($data["instructor"]) {
                 foreach ($data["instructor"] as $datainstructors) {
-                    $interventions->addInstructor($this->getReference($datainstructors, Instructor::class));
+                    $intervention->addInstructor($this->getReference($datainstructors["name"], Instructor::class));
                 }
             }
+
+            $manager->persist($intervention);
         }
 
         $manager->flush();
@@ -86,7 +92,8 @@ class InterventionsFixtures extends Fixture
         return [
             CoursePeriodFixtures::class,
             InterventionsFixtures::class,
-            ModuleFixtures::class
+            ModuleFixtures::class,
+            InstructorFixtures::class
         ];
     }
 }
