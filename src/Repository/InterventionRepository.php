@@ -16,28 +16,31 @@ class InterventionRepository extends ServiceEntityRepository
         parent::__construct($registry, Intervention::class);
     }
 
-    //    /**
-    //     * @return Intervention[] Returns an array of Intervention objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('i')
-    //            ->andWhere('i.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('i.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findByFilters(?string $startDate, ?string $endDate, ?string $module): array
+    {
+        $qb = $this->createQueryBuilder('i');
 
-    //    public function findOneBySomeField($value): ?Intervention
-    //    {
-    //        return $this->createQueryBuilder('i')
-    //            ->andWhere('i.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if (!empty($startDate) && !empty($endDate)) {
+
+            $qb->andWhere('i.date >= :startDate')
+                ->andWhere('i.date <= :endDate')
+                ->setParameter('startDate', new \DateTime($startDate))
+                ->setParameter('endDate', new \DateTime($endDate));
+        } elseif (!empty($startDate)) {
+
+            $qb->andWhere('i.date >= :startDate')
+                ->setParameter('startDate', new \DateTime($startDate));
+        } elseif (!empty($endDate)) {
+
+            $qb->andWhere('i.date <= :endDate')
+                ->setParameter('endDate', new \DateTime($endDate));
+        }
+
+        if (!empty($module)) {
+            $qb->andWhere('i.module = :module')
+                ->setParameter('module', $module);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }
