@@ -19,7 +19,7 @@ class ModuleFixtures extends Fixture implements DependentFixtureInterface
                 "name" => "Gestion de projet - Méthode Agile",
                 "description" => "Piloter un projet informatique",
                 "hours_count" => 63,
-                "capstone_project" => 0,
+                "capstone_project" => 1,
                 "children" => null,
                 "teaching_block" => 'B1'
             ],
@@ -41,7 +41,7 @@ class ModuleFixtures extends Fixture implements DependentFixtureInterface
                     ],
                     [
                         "code" => "PROPRIETE_INTELLECTUELLE",
-                        "name" => "Propriéte intellectuelle",
+                        "name" => "Propriété Intellectuelle",
                         "description" => "Piloter un projet informatique",
                         "hours_count" => 0,
                         "capstone_project" => 0,
@@ -59,7 +59,7 @@ class ModuleFixtures extends Fixture implements DependentFixtureInterface
                     ],
                     [
                         "code" => "ACCESSIBILITE",
-                        "name" => "accessiblité",
+                        "name" => "Accessibilité",
                         "description" => "Piloter un projet informatique",
                         "hours_count" => 0,
                         "capstone_project" => 0,
@@ -74,7 +74,7 @@ class ModuleFixtures extends Fixture implements DependentFixtureInterface
                 "name" => "Eco-Conception",
                 "description" => "Piloter un projet informatique",
                 "hours_count" => 3.5,
-                "capstone_project" => 0,
+                "capstone_project" => 1,
                 "children" => null,
                 "teaching_block" => 'B1'
             ],
@@ -82,8 +82,8 @@ class ModuleFixtures extends Fixture implements DependentFixtureInterface
             // B2 
 
             [
-                "code" => "PREPARATION_TOIC",
-                "name" => "Anglais - Préparation au TOEIC",
+                "code" => "PREPARATION_TOIEC",
+                "name" => "Anglais - Préparation au TOIEC",
                 "description" => "Coordoner une équipe projet",
                 "hours_count" => 17.5,
                 "capstone_project" => 0,
@@ -138,7 +138,7 @@ class ModuleFixtures extends Fixture implements DependentFixtureInterface
                         "name" => "Git",
                         "description" => "Coordoner une équipe projet",
                         "hours_count" => 7,
-                        "capstone_project" => 0,
+                        "capstone_project" => 1,
                         "children" => null,
                         "teaching_block" => 'B2'
                     ],
@@ -181,7 +181,7 @@ class ModuleFixtures extends Fixture implements DependentFixtureInterface
                 "name" => "Rédaction de comptes rendus d'activités",
                 "description" => "Superviser la mise en oeuvre d'un projet informatique",
                 "hours_count" => 14,
-                "capstone_project" => 0,
+                "capstone_project" => 1,
                 "children" => null,
                 "teaching_block" => 'B3'
             ],
@@ -213,10 +213,10 @@ class ModuleFixtures extends Fixture implements DependentFixtureInterface
                             ],
                             [
                                 "code" => "UXUI_PROJET",
-                                "name" => "L'UI et l'UX en mode projet",
+                                "name" => "L'UI et L'UX en mode projet",
                                 "description" => "Superviser la mise en oeuvre d'un projet informatique",
                                 "hours_count" => 28,
-                                "capstone_project" => 0,
+                                "capstone_project" => 1,
                                 "children" => null,
                                 "teaching_block" => 'B4'
                             ],
@@ -238,7 +238,7 @@ class ModuleFixtures extends Fixture implements DependentFixtureInterface
                         "name" => "Structurer et mettre en place une architecture de base de données",
                         "description" => "Coordonner le cycle de vie des applications",
                         "hours_count" => 7,
-                        "capstone_project" => 0,
+                        "capstone_project" => 1,
                         "children" => null,
                         "teaching_block" => 'B4'
                     ],
@@ -247,7 +247,7 @@ class ModuleFixtures extends Fixture implements DependentFixtureInterface
                         "name" => "Monitorer une base de données + perfomance ",
                         "description" => "Coordonner le cycle de vie des applications",
                         "hours_count" => 3.5,
-                        "capstone_project" => 0,
+                        "capstone_project" => 1,
                         "children" => null,
                         "teaching_block" => 'B4'
                     ],
@@ -263,7 +263,7 @@ class ModuleFixtures extends Fixture implements DependentFixtureInterface
                 "children" => [
                     [
                         "code" => "TAILWIND_CSS",
-                        "name" => "Tailwind CSS",
+                        "name" => "Tailwind css",
                         "description" => "Coordonner le cycle de vie des applications",
                         "hours_count" => 14,
                         "capstone_project" => 0,
@@ -284,7 +284,7 @@ class ModuleFixtures extends Fixture implements DependentFixtureInterface
                         "name" => "React",
                         "description" => "Coordonner le cycle de vie des applications",
                         "hours_count" => 49,
-                        "capstone_project" => 0,
+                        "capstone_project" => 1,
                         "children" => null,
                         "teaching_block" => 'B4'
                     ],
@@ -309,7 +309,7 @@ class ModuleFixtures extends Fixture implements DependentFixtureInterface
                 "children" => [
                     [
                         "code" => "MAN_PHP",
-                        "name" => "Mise à niveau de PHP",
+                        "name" => "Mise à niveau PHP",
                         "description" => "Coordonner le cycle de vie des applications",
                         "hours_count" => 21,
                         "capstone_project" => 0,
@@ -330,7 +330,7 @@ class ModuleFixtures extends Fixture implements DependentFixtureInterface
                         "name" => "Symfony",
                         "description" => "Coordonner le cycle de vie des applications",
                         "hours_count" => 63,
-                        "capstone_project" => 0,
+                        "capstone_project" => 1,
                         "children" => null,
                         "teaching_block" => 'B4'
                     ],
@@ -359,6 +359,8 @@ class ModuleFixtures extends Fixture implements DependentFixtureInterface
                     $child->setTeachingBlock($this->getReference($datachild["teaching_block"], TeachingBlock::class));
                     $module->addModulesChild($child);
 
+                    $this->addReference($datachild["name"], $child);
+
                     if (($datachild["children"])) {
                         foreach ($datachild["children"] as $childDataChild) {
                             $littleChild = new Module();
@@ -369,6 +371,8 @@ class ModuleFixtures extends Fixture implements DependentFixtureInterface
                             $littleChild->setCapstoneProject($childDataChild["capstone_project"]);
                             $littleChild->setTeachingBlock($this->getReference($childDataChild["teaching_block"], TeachingBlock::class));
                             $child->addModulesChild($littleChild);
+
+                            $this->addReference($childDataChild["name"], $littleChild);
                         }
                     }
                 }
@@ -377,7 +381,7 @@ class ModuleFixtures extends Fixture implements DependentFixtureInterface
 
             $manager->persist($module);
 
-            $this->addReference($data['name'], $module);
+            $this->addReference($data["name"], $module);
         }
         $manager->flush();
     }
