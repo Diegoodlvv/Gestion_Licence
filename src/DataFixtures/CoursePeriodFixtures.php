@@ -15,30 +15,31 @@ class CoursePeriodFixtures extends Fixture implements DependentFixtureInterface
     {
         $periods = [
             [
-                "index" => 0,
+                "index" => "2025_09_w1",
                 "start_date" => new DateTime("01/09/2025"),
                 "end_date" => new DateTime("12/09/2025"),
                 "school_year" => "2025"
             ],
             [
-                "index" => 1,
+                "index" => "2025_10_w2",
                 "start_date" => new DateTime("06/10/2025"),
                 "end_date" => new DateTime("10/10/2025"),
                 "school_year" => "2025"
             ],
             [
-                "index" => 2,
+                "index" => "2025_11_w1",
                 "start_date" => new DateTime("03/11/2025"),
                 "end_date" => new DateTime("07/11/2025"),
                 "school_year" => "2025"
             ],
             [
-                "index" => 3,
+                "index" => "2025_12_w2",
                 "start_date" => new DateTime("08/12/2025"),
                 "end_date" => new DateTime("12/12/2025"),
                 "school_year" => "2025"
-            ]
+            ],
         ];
+
 
         foreach ($periods as $data) {
             $period = new CoursePeriod();

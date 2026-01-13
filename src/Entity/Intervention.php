@@ -87,12 +87,12 @@ class Intervention
         return $this;
     }
 
-    public function getInterventonType(): ?InterventionType
+    public function getInterventionType(): ?InterventionType
     {
         return $this->interventon_type;
     }
 
-    public function setInterventonType(?InterventionType $interventon_type): static
+    public function setInterventionType(?InterventionType $interventon_type): static
     {
         $this->interventon_type = $interventon_type;
 

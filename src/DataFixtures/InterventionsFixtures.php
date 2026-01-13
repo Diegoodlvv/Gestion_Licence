@@ -9,9 +9,10 @@ use App\Entity\InterventionType;
 use App\Entity\Module;
 use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class InterventionsFixtures extends Fixture
+class InterventionsFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
@@ -20,9 +21,9 @@ class InterventionsFixtures extends Fixture
                 "start_date" => new DateTime("10/12/2025 13:30"),
                 "end_date" => new DateTime("10/12/2025 17:30"),
                 "remotely" => 1,
-                "course_period_id" => 3,
+                "course_period_id" => "2025_12_w2",
                 "intervention_type_id" => "Cours",
-                "module_id" => "Gestion de projet - Méthode agile",
+                "module_id" => "Gestion de projet - Méthode Agile",
                 "instructor" => [
                     "name" => "Aste"
                 ]
@@ -31,7 +32,7 @@ class InterventionsFixtures extends Fixture
                 "start_date" => new DateTime("8/12/2025 8:30"),
                 "end_date" => new DateTime("8/12/2025 12:30"),
                 "remotely" => 0,
-                "course_period_id" => 3,
+                "course_period_id" => "2025_12_w2",
                 "intervention_type_id" => "Cours",
                 "module_id" => "Eco-Conception",
                 "instructor" => [
@@ -42,7 +43,7 @@ class InterventionsFixtures extends Fixture
                 "start_date" => new DateTime("9/12/2025 13:30"),
                 "end_date" => new DateTime("9/12/2025 17:30"),
                 "remotely" => 1,
-                "course_period_id" => 3,
+                "course_period_id" => "2025_12_w2",
                 "intervention_type_id" => "Cours",
                 "module_id" => "Devops/Cyber",
                 "instructor" => [
@@ -58,7 +59,7 @@ class InterventionsFixtures extends Fixture
                 "start_date" => new DateTime("9/12/2025 8:30"),
                 "end_date" => new DateTime("9/12/2025 12:30"),
                 "remotely" => 1,
-                "course_period_id" => 3,
+                "course_period_id" => "2025_12_w2",
                 "intervention_type_id" => "Autonomie",
                 "module_id" => "Javascript",
                 "instructor" => null
@@ -69,15 +70,23 @@ class InterventionsFixtures extends Fixture
         foreach ($interventions as $data) {
             $intervention = new Intervention();
             $intervention->setStartDate($data["start_date"]);
-            $intervention->setEndDate($data("end_date"));
+            $intervention->setEndDate($data["end_date"]);
             $intervention->setRemotely($data["remotely"]);
             $intervention->setCoursePeriod($this->getReference($data["course_period_id"], CoursePeriod::class));
-            $intervention->setInterventonType($this->getReference($data["intervention_type_id"], InterventionType::class));
+            $intervention->setInterventionType($this->getReference($data["intervention_type_id"], InterventionType::class));
             $intervention->setModule($this->getReference($data["module_id"], Module::class));
 
-            if ($data["instructor"]) {
-                foreach ($data["instructor"] as $datainstructors) {
-                    $intervention->addInstructor($this->getReference($datainstructors["name"], Instructor::class));
+            $instructors = $data['instructor'];
+
+            if ($instructors && isset($instructors['name'])) {
+                $instructors = [$instructors];
+            }
+
+            if ($instructors) {
+                foreach ($instructors as $datainstructors) {
+                    $intervention->addInstructor(
+                        $this->getReference($datainstructors["name"], Instructor::class)
+                    );
                 }
             }
 
@@ -91,8 +100,8 @@ class InterventionsFixtures extends Fixture
     {
         return [
             CoursePeriodFixtures::class,
-            InterventionsFixtures::class,
-            ModuleFixtures::class
+            ModuleFixtures::class,
+            InstructorFixtures::class
         ];
     }
 }
