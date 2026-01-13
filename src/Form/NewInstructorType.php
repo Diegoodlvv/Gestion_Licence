@@ -21,32 +21,36 @@ class NewInstructorType extends AbstractType
             ->add('email', EmailType::class, [
                 'mapped' => false,
                 'label' => 'Email',
-                'attr' => ['class' => 'w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-bla focus:border-black', 'placeholder' => 'exemple@email.com'],
+                'attr' => ['class' => 'w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black', 'placeholder' => 'exemple@email.com'],
                 'label_attr' => ['class' => 'block text-sm text-slate-700 mb-1'],
             ])
             ->add('firstname', TextType::class, [
                 'mapped' => false,
                 'label' => 'Prénom',
-                'attr' => ['class' => 'w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-bla focus:border-black'],
+                'attr' => ['class' => 'w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black'],
                 'label_attr' => ['class' => 'block text-sm text-slate-700 mb-1'],
             ])
             ->add('lastname', TextType::class, [
                 'mapped' => false,
                 'label' => 'Nom',
-                'attr' => ['class' => 'w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-bla focus:border-black'],
+                'attr' => ['class' => 'w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black'],
                 'label_attr' => ['class' => 'block text-sm text-slate-700 mb-1'],
             ])
             ->add('plainPassword', PasswordType::class, [
                 'mapped' => false,
                 'label' => 'Mot de passe',
-                'attr' => ['autocomplete' => 'new-password', 'class' => 'w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-bla focus:border-black'],
+                'attr' => ['autocomplete' => 'new-password', 'class' => 'w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black'],
                 'label_attr' => ['class' => 'block text-sm text-slate-700 mb-1'],
             ])
             ->add('module', EntityType::class, [
                 'class' => Module::class,
                 'choice_label' => 'name',
                 'multiple' => true,
-                'attr' => ['class' => 'w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-bla focus:border-black h-32'],
+                'expanded' => false,
+                'attr' => [
+                    'class' => 'w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black',
+                    'data-controller' => 'tom-select'
+                ],
                 'label_attr' => ['class' => 'block text-sm text-slate-700 mb-1'],
             ])
 
