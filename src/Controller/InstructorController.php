@@ -12,14 +12,18 @@ use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\User;
 use App\Form\NewInstructorType;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use App\Repository\InstructorRepository;
 
 class InstructorController extends AbstractController
 {
     #[Route('/instructor', name: 'app_instructor')]
-    public function index(): Response
+    public function index(InstructorRepository $repository): Response
     {
+        $instructors = $repository->findAll();
+
         return $this->render('instructor/index.html.twig', [
             'controller_name' => 'InstructorController',
+            'instructors' => $instructors,
         ]);
     }
 
