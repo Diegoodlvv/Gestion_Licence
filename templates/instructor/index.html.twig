@@ -65,8 +65,10 @@
 				{% set moduleNames = [] %}
 				{% for module in instructor.module %}
 					{% set moduleNames = moduleNames|merge([module.name]) %}
+					{# merge permet de fusionner les tableaux des modules #}
 				{% endfor %}
 				{{ moduleNames|join(', ') ?: '-' }}
+				{# join permet de joindre les modules avec une virgule #}
 			</td>
 			<td class="py-4 px-6 text-gray-800">
 				{% set totalHours = 0 %}
