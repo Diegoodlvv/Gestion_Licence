@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\InterventionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -32,8 +34,17 @@ class Intervention
     #[ORM\Column]
     private ?bool $remotely = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $title = null;
+
+    /**
+     * @var Collection<int, Instructor>
+     */
+    #[ORM\ManyToMany(targetEntity: Instructor::class, inversedBy: 'interventions')]
+    private Collection $instructors;
+
+    public function __construct()
+    {
+        $this->instructors = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -76,12 +87,12 @@ class Intervention
         return $this;
     }
 
-    public function getInterventonType(): ?InterventionType
+    public function getInterventionType(): ?InterventionType
     {
         return $this->interventon_type;
     }
 
-    public function setInterventonType(?InterventionType $interventon_type): static
+    public function setInterventionType(?InterventionType $interventon_type): static
     {
         $this->interventon_type = $interventon_type;
 
@@ -112,14 +123,27 @@ class Intervention
         return $this;
     }
 
-    public function getTitle(): ?string
+
+    /**
+     * @return Collection<int, Instructor>
+     */
+    public function getInstructors(): Collection
     {
-        return $this->title;
+        return $this->instructors;
     }
 
-    public function setTitle(?string $title): static
+    public function addInstructor(Instructor $instructor): static
     {
-        $this->title = $title;
+        if (!$this->instructors->contains($instructor)) {
+            $this->instructors->add($instructor);
+        }
+
+        return $this;
+    }
+
+    public function removeInstructor(Instructor $instructor): static
+    {
+        $this->instructors->removeElement($instructor);
 
         return $this;
     }

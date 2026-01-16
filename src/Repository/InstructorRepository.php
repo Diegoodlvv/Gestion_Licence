@@ -40,4 +40,31 @@ class InstructorRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    // Recherche les instructors par nom, prénom et/ou email
+    public function findByFilters(?string $lastname, ?string $firstname, ?string $email): array
+    {
+        $qb = $this->createQueryBuilder('i')
+            ->leftJoin('i.user', 'u')
+            ->addSelect('u');
+
+        if ($lastname) {
+            $qb->andWhere('LOWER(u.lastname) LIKE LOWER(:lastname)') // LOWER permet d'avoir la meme recherche si on met en majuscule ou minuscule
+                ->setParameter('lastname', '%' . $lastname . '%');
+        }
+
+        if ($firstname) {
+            $qb->andWhere('LOWER(u.firstname) LIKE LOWER(:firstname)') // :firstname agit comme un placeholder
+                ->setParameter('firstname', '%' . $firstname . '%');
+        }
+
+        if ($email) {
+            $qb->andWhere('LOWER(u.email) LIKE LOWER(:email)')
+                ->setParameter('email', '%' . $email . '%');
+        }
+
+        return $qb->orderBy('u.lastname', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

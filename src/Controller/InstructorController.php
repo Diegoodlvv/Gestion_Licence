@@ -11,15 +11,39 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\User;
 use App\Form\NewInstructorType;
+use App\Form\InstructorFilterType;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use App\Repository\InstructorRepository;
 
 class InstructorController extends AbstractController
 {
     #[Route('/instructor', name: 'app_instructor')]
-    public function index(): Response
+    public function index(Request $request, InstructorRepository $instructorRepository): Response
     {
+        $form = $this->createForm(InstructorFilterType::class);
+        $form->handleRequest($request);
+
+        $instructors = [];
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $lastname = $form->get('lastname')->getData();
+            $firstname = $form->get('firstname')->getData();
+            $email = $form->get('email')->getData();
+
+            // verifi si au moins un filtre est rempli
+            if ($lastname || $firstname || $email) {
+                $instructors = $instructorRepository->findByFilters($lastname, $firstname, $email);
+            } else {
+                $instructors = $instructorRepository->findAll();
+            }
+        } else {
+            $instructors = $instructorRepository->findAll();
+        }
+
         return $this->render('instructor/index.html.twig', [
-            'controller_name' => 'InstructorController',
+            'instructors' => $instructors,
+            'form' => $form,
+            'count' => count($instructors)
         ]);
     }
 
