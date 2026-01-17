@@ -116,6 +116,7 @@ class InstructorController extends AbstractController
 
         return $this->render('instructor/edit.html.twig', [
             'form' => $form,
+            'instructor' => $instructor
         ]);
     }
 }
