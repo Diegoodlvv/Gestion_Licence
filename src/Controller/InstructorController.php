@@ -14,6 +14,7 @@ use App\Form\NewInstructorType;
 use App\Form\InstructorFilterType;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Repository\InstructorRepository;
+use App\Form\EditInstructorType;
 
 class InstructorController extends AbstractController
 {
@@ -94,12 +95,27 @@ class InstructorController extends AbstractController
     }
 
     #[Route('/instructor/{id}/edit', name: 'app_instructor_edit')]
-    public function edit($id)
+    public function edit($id, InstructorRepository $instructorRepository, Request $request, EntityManagerInterface $entityManager)
     {
-        $edit = "edit";
+        $instructor = $instructorRepository->find($id);
+        $form = $this->createForm(EditInstructorType::class, $instructor);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                $entityManager->flush();
+                $this->addFlash('success', 'Enseignant modifié avec succès !');
+                return $this->redirectToRoute('app_instructor');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la modification de l\'enseignant : ' . $e->getMessage());
+                return $this->redirectToRoute('app_instructor');
+            }
+        }
+
+
+
         return $this->render('instructor/edit.html.twig', [
-            'edit' => $edit,
-            'id' => $id
+            'form' => $form,
         ]);
     }
 }
