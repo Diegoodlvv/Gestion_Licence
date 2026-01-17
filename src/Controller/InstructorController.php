@@ -123,6 +123,13 @@ class InstructorController extends AbstractController
     #[Route('/instructor/{id}/delete', name: 'app_instructor_delete')]
     public function delete($id, InstructorRepository $instructorRepository, EntityManagerInterface $entityManager)
     {
+        $instructor = $instructorRepository->find($id);
+
+        if ($instructor) {
+            $entityManager->remove($instructor);
+            $entityManager->flush();
+        }
+
         return $this->redirectToRoute('app_instructor');
     }
 }
