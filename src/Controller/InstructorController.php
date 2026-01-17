@@ -92,4 +92,14 @@ class InstructorController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    #[Route('/instructor/{id}/edit', name: 'app_instructor_edit')]
+    public function edit($id)
+    {
+        $edit = "edit";
+        return $this->render('instructor/edit.html.twig', [
+            'edit' => $edit,
+            'id' => $id
+        ]);
+    }
 }
