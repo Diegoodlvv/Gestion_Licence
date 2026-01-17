@@ -34,9 +34,9 @@
 			<button class="bg-slate-800 text-white px-3 py-2 rounded-md text-md font-medium">
 				Informations générales
 			</button>
-			<button class="bg-white border border-slate-200 text-slate-800 px-3 py-2 rounded-md text-md font-medium hover:bg-slate-50 transition">
+			<a href="{{ path('app_instructor_interventions', {'id': instructor.id}) }}" class="bg-white border border-slate-200 text-slate-800 px-3 py-2 rounded-md text-md font-medium hover:bg-slate-50 transition">
 				Interventions
-			</button>
+			</a>
 		</div>
 
 		{# Form Section #}
