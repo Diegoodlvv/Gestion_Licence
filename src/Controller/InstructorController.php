@@ -119,4 +119,10 @@ class InstructorController extends AbstractController
             'instructor' => $instructor
         ]);
     }
+
+    #[Route('/instructor/{id}/delete', name: 'app_instructor_delete')]
+    public function delete($id, InstructorRepository $instructorRepository, EntityManagerInterface $entityManager)
+    {
+        return $this->redirectToRoute('app_instructor');
+    }
 }
