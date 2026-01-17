@@ -1,0 +1,126 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Interventions -
+	{{ instructor.user.firstname }}
+	{{ instructor.user.lastname }}
+{% endblock %}
+
+{% block body %}
+	<main
+		class="flex-1 bg-white p-12 font-sans">
+		{# Header Section #}
+		<div class="mb-8">
+			<h1 class="text-3xl font-semibold text-slate-800 mb-2">{{ instructor.user.firstname }}
+				{{ instructor.user.lastname }}</h1>
+
+			<h2 class="text-lg font-semibold text-amber-400 mb-4">Modules enseignés</h2>
+
+			<ul class="space-y-2 mb-4 text-slate-900 font-medium">
+				{% for module in instructor.module %}
+					<li>{{ module.name }}
+						:
+						{{ module.hoursCount }}h00 (dont 0 restantes pour cette année)</li>
+				{% endfor %}
+			</ul>
+
+			<button class="bg-slate-800 text-white px-4 py-2 rounded text-sm font-medium">
+				Exporter le récapitulatif
+			</button>
+		</div>
+
+		{# Divider #}
+		<div class="border-t-2 border-amber-200 mb-8 w-full"></div>
+
+		{# Tabs #}
+		<div class="flex gap-2 mb-8">
+			<a href="{{ path('app_instructor_edit', {'id': instructor.id}) }}" class="bg-white border border-slate-200 text-slate-800 px-3 py-2 rounded-md text-md font-medium hover:bg-slate-50 transition no-underline">
+				Informations générales
+			</a>
+			<button class="bg-slate-800 text-white px-3 py-2 rounded-md text-md font-medium">
+				Interventions
+			</button>
+		</div>
+
+		{# Filter Section #}
+		<div class="mb-8">
+			<h3 class="text-xl font-semibold text-amber-400 mb-4">Filtrer les interventions</h3>
+
+			{{ form_start(form) }}
+			<div class="flex items-end gap-4">
+				<div class="w-1/4">
+					{{ form_label(form.start_date, 'Date de début', {'label_attr': {'class': 'block text-sm font-medium text-slate-700 mb-1'}}) }}
+					{{ form_widget(form.start_date, {'attr': {'class': 'w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500'}}) }}
+				</div>
+				<div class="w-1/4">
+					{{ form_label(form.end_date, 'Date de fin', {'label_attr': {'class': 'block text-sm font-medium text-slate-700 mb-1'}}) }}
+					{{ form_widget(form.end_date, {'attr': {'class': 'w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500'}}) }}
+				</div>
+				<div class="w-1/3">
+					{{ form_label(form.module, 'Module', {'label_attr': {'class': 'block text-sm font-medium text-slate-700 mb-1'}}) }}
+					{{ form_widget(form.module, {'attr': {'class': 'w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500'}}) }}
+				</div>
+				<div class="w-auto">
+					<button type="submit" class="bg-amber-400 text-slate-900 font-semibold px-8 py-2 rounded-md hover:bg-amber-500 transition h-[42px]">
+						Filtrer
+					</button>
+				</div>
+			</div>
+			{{ form_end(form) }}
+		</div>
+
+		{# Results Section #}
+		<div>
+			<h3 class="text-xl font-bold text-slate-900 mb-6">{{ interventions|length }}
+				interventions trouvées</h3>
+
+			<div class="overflow-x-auto">
+				<table class="w-full text-left border-collapse">
+					<thead>
+						<tr class="bg-slate-50 text-slate-600 text-sm font-medium">
+							<th class="p-4 border-b border-slate-100">Date de l'intervention</th>
+							<th class="p-4 border-b border-slate-100">Module</th>
+							<th class="p-4 border-b border-slate-100">Type</th>
+							<th class="p-4 border-b border-slate-100">Intervenants</th>
+							<th class="p-4 border-b border-slate-100 text-center">En visio</th>
+						</tr>
+					</thead>
+					<tbody class="text-slate-800">
+						{% for intervention in interventions %}
+							<tr class="border-b border-slate-100 hover:bg-slate-50">
+								<td class="p-4">
+									{{ intervention.startDate|date('d/m/Y') }}
+								</td>
+								<td class="p-4">{{ intervention.module.name }}</td>
+								<td class="p-4">{{ intervention.interventionType ? intervention.interventionType.name : 'N/A' }}</td>
+								<td class="p-4">
+									{% for instr in intervention.instructors %}
+										{{ instr.user.firstname|first|upper }}.
+										{{ instr.user.lastname|upper }}
+										{% if not loop.last %},
+										{% endif %}
+									{% endfor %}
+								</td>
+								<td class="p-4 text-center">
+									{% if intervention.remotely %}
+										<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mx-auto" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+										</svg>
+									{% else %}
+										<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mx-auto text-slate-400" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
+										</svg>
+									{% endif %}
+								</td>
+							</tr>
+						{% else %}
+							<tr>
+								<td colspan="5" class="p-4 text-center text-slate-500">Aucune intervention trouvée.</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+	</main>
+{% endblock %}

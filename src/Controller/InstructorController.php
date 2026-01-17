@@ -15,6 +15,7 @@ use App\Form\InstructorFilterType;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Repository\InstructorRepository;
 use App\Form\EditInstructorType;
+use App\Form\InstructorInterventionsFilterType;
 
 class InstructorController extends AbstractController
 {
@@ -33,7 +34,7 @@ class InstructorController extends AbstractController
 
             // verifi si au moins un filtre est rempli
             if ($lastname || $firstname || $email) {
-                $instructors = $instructorRepository->findByFilters($lastname, $firstname, $email);
+                $instructors = $instructorRepository->findInstructorByFilters($lastname, $firstname, $email);
             } else {
                 $instructors = $instructorRepository->findAll();
             }
@@ -45,6 +46,36 @@ class InstructorController extends AbstractController
             'instructors' => $instructors,
             'form' => $form,
             'count' => count($instructors)
+        ]);
+    }
+
+    #[Route('/instructor/{id}/show_interventions', name: 'app_instructor_interventions')]
+    public function showInterventions($id, InstructorRepository $instructorRepository, Request $request): Response
+    {
+        $instructor = $instructorRepository->find($id);
+        $form = $this->createForm(InstructorInterventionsFilterType::class);
+        $form->handleRequest($request);
+
+        $interventions = [];
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $start_date = $form->get('start_date')->getData();
+            $end_date = $form->get('end_date')->getData();
+            $module = $form->get('module')->getData();
+
+            if ($start_date || $end_date || $module) {
+                $interventions = $instructorRepository->findInstructorInterventionsByFilters($id, $start_date, $end_date, $module);
+            } else {
+                $interventions = $instructorRepository->findInstructorInterventionsByFilters($id, null, null, null);
+            }
+        } else {
+            $interventions = $instructorRepository->findInstructorInterventionsByFilters($id, null, null, null);
+        }
+
+        return $this->render('instructor/interventions.html.twig', [
+            'interventions' => $interventions,
+            'form' => $form,
+            'instructor' => $instructor
         ]);
     }
 

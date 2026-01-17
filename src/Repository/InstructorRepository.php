@@ -42,7 +42,7 @@ class InstructorRepository extends ServiceEntityRepository
     //    }
 
     // Recherche les instructors par nom, prénom et/ou email
-    public function findByFilters(?string $lastname, ?string $firstname, ?string $email): array
+    public function findInstructorByFilters(?string $lastname, ?string $firstname, ?string $email): array
     {
         $qb = $this->createQueryBuilder('i')
             ->leftJoin('i.user', 'u')
@@ -64,6 +64,35 @@ class InstructorRepository extends ServiceEntityRepository
         }
 
         return $qb->orderBy('u.lastname', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findInstructorInterventionsByFilters(int $instructorId, ?\DateTimeInterface $start_date, ?\DateTimeInterface $end_date, ?\App\Entity\Module $module): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('i')
+            ->from('App\Entity\Intervention', 'i')
+            ->join('i.instructors', 'inst')
+            ->where('inst.id = :instructorId')
+            ->setParameter('instructorId', $instructorId);
+
+        if ($start_date) {
+            $qb->andWhere('i.start_date >= :start_date')
+                ->setParameter('start_date', $start_date);
+        }
+
+        if ($end_date) {
+            $qb->andWhere('i.end_date <= :end_date')
+                ->setParameter('end_date', $end_date);
+        }
+
+        if ($module) {
+            $qb->andWhere('i.module = :module')
+                ->setParameter('module', $module);
+        }
+
+        return $qb->orderBy('i.start_date', 'DESC')
             ->getQuery()
             ->getResult();
     }
