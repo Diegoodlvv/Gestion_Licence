@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des interventions{% endblock %}
+
+{% block body %}
+	<main class="flex-1 bg-white p-12">
+
+		<h1 class="text-[#1F384C]-lg font-semibold text-2xl mb-6">Ajouter une nouvelle intervention</h1>
+
+		<div class="max-w-xl">
+			{{ form_start(form) }}
+
+			<div class="mb-4">
+				{{ form_row(form.module) }}
+			</div>
+			<div class="flex gap-4 mb-4">
+				<div class="w-1/2">
+					{{ form_row(form.start_date) }}
+				</div>
+				<div class="w-1/2">
+					{{ form_row(form.end_date) }}
+				</div>
+			</div>
+			<div class="flex gap-4 mb-4">
+				<div class="w-1/2">
+					{{ form_row(form.intervention_type) }}
+				</div>
+				<div class="w-1/2">
+					{{ form_row(form.course_period) }}
+				</div>
+			</div>
+			<div class="mb-4">
+				{{ form_row(form.instructors) }}
+			</div>
+
+			<div class="mb-4">
+				{{ form_row(form.remotely) }}
+			</div>
+		
+
+			<div class="mt-8 flex gap-4">
+				<a href="{{ path('app_intervention') }}">
+					<twig:Button label="Retour" variant="grey" type="button"/>
+				</a>
+				<twig:Button label="Sauvegarder" type="submit"/>
+			</div>
+
+			{{ form_end(form) }}
+		</div>
+	</main>
+{% endblock %}
