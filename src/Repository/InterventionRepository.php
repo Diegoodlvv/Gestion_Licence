@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Intervention;
+use App\Entity\Module;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,24 +18,24 @@ class InterventionRepository extends ServiceEntityRepository
         parent::__construct($registry, Intervention::class);
     }
 
-    public function findByFilters(?string $startDate, ?string $endDate, ?string $module): array
+    public function queryFilters(?\DateTime $startDate, ?\DateTime $endDate, ?Module $module): QueryBuilder
     {
         $qb = $this->createQueryBuilder('i');
 
         if (!empty($startDate) && !empty($endDate)) {
 
-            $qb->andWhere('i.date >= :startDate')
-                ->andWhere('i.date <= :endDate')
-                ->setParameter('startDate', new \DateTime($startDate))
-                ->setParameter('endDate', new \DateTime($endDate));
+            $qb->andWhere('i.start_date >= :startDate')
+                ->andWhere('i.end_date <= :endDate')
+                ->setParameter('startDate', $startDate)
+                ->setParameter('endDate', $endDate);
         } elseif (!empty($startDate)) {
 
-            $qb->andWhere('i.date >= :startDate')
-                ->setParameter('startDate', new \DateTime($startDate));
+            $qb->andWhere('i.start_date >= :startDate')
+                ->setParameter('startDate', $startDate);
         } elseif (!empty($endDate)) {
 
-            $qb->andWhere('i.date <= :endDate')
-                ->setParameter('endDate', new \DateTime($endDate));
+            $qb->andWhere('i.end_date <= :endDate')
+                ->setParameter('endDate', $endDate);
         }
 
         if (!empty($module)) {
@@ -41,6 +43,6 @@ class InterventionRepository extends ServiceEntityRepository
                 ->setParameter('module', $module);
         }
 
-        return $qb->getQuery()->getResult();
+        return $qb;
     }
 }

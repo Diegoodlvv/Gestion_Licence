@@ -32,7 +32,6 @@ class InstructorController extends AbstractController
             $firstname = $form->get('firstname')->getData();
             $email = $form->get('email')->getData();
 
-            // verifi si au moins un filtre est rempli
             if ($lastname || $firstname || $email) {
                 $instructors = $instructorRepository->findInstructorByFilters($lastname, $firstname, $email);
             } else {
