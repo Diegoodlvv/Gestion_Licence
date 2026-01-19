@@ -100,7 +100,7 @@ class InterventionType
     {
         if (!$this->interventions->contains($intervention)) {
             $this->interventions->add($intervention);
-            $intervention->setInterventonType($this);
+            $intervention->setInterventionType($this);
         }
 
         return $this;
@@ -110,8 +110,8 @@ class InterventionType
     {
         if ($this->interventions->removeElement($intervention)) {
             // set the owning se to null (unless already changed)
-            if ($intervention->getInterventonType() === $this) {
-                $intervention->setInterventonType(null);
+            if ($intervention->getInterventionType() === $this) {
+                $intervention->setInterventionType(null);
             }
         }
 

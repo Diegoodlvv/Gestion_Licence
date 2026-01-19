@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Form\InterventionsFilterType;
 use App\Repository\InterventionRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,11 +16,20 @@ final class InterventionController extends AbstractController
     #[Route(name: 'app_intervention', methods: ['GET'])]
     public function index(InterventionRepository $interventionRepository, Request $request, PaginatorInterface $paginationInterface): Response
     {
-        $start_date = $request->query->get('start_date');
-        $end_date = $request->query->get('end_date');
-        $module = $request->query->get('module');
+        $form = $this->createForm(InterventionsFilterType::class);
+        $form->handleRequest($request);
 
-        $interventions = $interventionRepository->findByFilters($start_date, $end_date, $module);
+        $interventions = []; 
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $startDate = $form->get('start_date')->getData();
+            $endDate = $form->get('end_date')->getData();
+            $module = $form->get('module')->getData(); 
+
+            $interventions = $interventionRepository->queryFilters($startDate, $endDate, $module);
+        }  else {
+            $interventions = $interventionRepository->findAll();
+        }
 
         $pagination = $paginationInterface->paginate(
             $interventions,
@@ -31,7 +41,8 @@ final class InterventionController extends AbstractController
 
         return $this->render('intervention/index.html.twig', [
             'pagination' => $pagination,
-            'title' => $title
+            'title' => $title,
+            'form' => $form,
         ]);
     }
 }

@@ -1,15 +1,104 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{% endblock %}
+{% block title %}Interventions
+{% endblock %}
 
 {% block body %}
+<div class="flex-1 p-8 bg-gray-50">
+	<div class="flex justify-between items-center mb-8">
+		<h1 class="text-2xl font-semibold text-[#1F384C]">Interventions</h1>
+		<twig:Button variant="blue" label="Ajouter une nouvelle intervention"/>
+	</div>
 
-	<h1>
-		Interventions
-	</h1>
-	<form method="get" class="mb-4 flex gap-2">
-		<twig:Input/>
-		<button type="submit" class="px-4 py-2 text-white">Rechercher</button>
-	</form>
+	<div class="mb-8">
+		<h2 class="text-[#FFBD01] font-semibold mb-4">Filtres</h2>
+		{{ form_start(form, {'attr': {'class': 'flex flex-wrap items-end gap-4'}}) }}
+		<div class="flex-1 min-w-48">
+			{{ form_label(form.start_date) }}
+			{{ form_widget(form.start_date) }}
+		</div>
+		<div class="flex-1 min-w-48">	
+			{{ form_label(form.end_date) }}	
+		    {{ form_widget(form.end_date) }}
+		</div>
+		<div class="flex-1 min-w-48">
+			{{ form_label(form.module) }}	
+			{{ form_widget(form.module) }}
+		</div>
+		<div class="min-w-48">
+			<twig:Button type="submit" variant="yellow" label="Filtrer"/>
+		</div>
 
-{% endblock %}
+		{{ form_end(form, {'render_rest': false}) }}
+	</div>
+
+	<hr class="border-gray-200 mb-6">
+
+	<div>
+		<h2 class="text-lg font-semibold text-gray-800 mb-4">{{ pagination|length }} intervention trouvée{{ pagination|length > 1 ? 's' : '' }}</h2>
+
+		<div class="bg-white rounded-lg shadow-sm overflow-hidden">
+			<table class="w-full">
+				<thead>
+					<tr class="bg-[#F1F2F799] border-b border-gray-200">
+						<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Date de l'intervention</th>
+						<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Module</th>
+						<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Type</th>
+						<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Intervenants</th>
+                        <th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">En visio</th>
+						<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600"></th>
+					</tr>
+				</thead>
+				<tbody class="text-slate-800">
+					{% for intervention in pagination %}
+						<tr class="border-b border-slate-100 hover:bg-slate-50">
+							<td class="p-4">
+							{{ intervention.startDate|date('d/m/Y H:i') }}
+							à {{ intervention.endDate|date('H:i') }}
+							</td>
+							<td class="p-4">{{ intervention.module.name }}</td>
+							<td class="p-4">
+								{{ intervention.interventionType ? intervention.interventionType.name : 'N/A' }}
+							</td>
+							<td class="p-4">
+								{% for instr in intervention.instructors %}
+									{{ instr.user.firstname|first|upper }}. {{ instr.user.lastname|upper }}{% if not loop.last %}, {% endif %}
+								{% endfor %}
+							</td>
+							<td class="p-4 text-center">
+								{% if intervention.remotely %}
+									<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+											d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+									</svg>
+								{% else %}
+									<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mx-auto text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+											d="M18.364 18.364L5.636 5.636"/>
+									</svg>
+								{% endif %}
+							</td>
+							<td colspan="5" class="py-4 px-6">
+									<a href="{{ path('app_instructor_edit', {'id': intervention.id}) }}" class="inline-flex items-center gap-2 text-gray-500 hover:text-amber-500 transition-colors text-sm">
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+											<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+											<circle cx="12" cy="12" r="3"></circle>
+										</svg>
+										Accéder à la fiche
+									</a>
+							</td>
+						</tr>
+
+					{% else %}
+						<tr>
+							<td colspan="5" class="p-4 text-center text-slate-500">
+								Aucune intervention trouvée.
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{% endblock%}

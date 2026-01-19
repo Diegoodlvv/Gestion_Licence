@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: InterventionRepository::class)]
 class Intervention
@@ -16,10 +17,14 @@ class Intervention
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\NotNull]
+    #[Assert\DateTime(format:"dd/mm/YYYY H:i")]
     private ?\DateTime $start_date = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\NotNull]
+    #[Assert\DateTime(format:"dd/mm/YYYY H:i")]
     private ?\DateTime $end_date = null;
 
     #[ORM\ManyToOne(inversedBy: 'interventions')]
@@ -32,6 +37,7 @@ class Intervention
     private ?Module $module = null;
 
     #[ORM\Column]
+    #[Assert\NotNull]
     private ?bool $remotely = null;
 
 
