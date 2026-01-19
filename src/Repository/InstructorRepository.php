@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Instructor;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -42,7 +43,7 @@ class InstructorRepository extends ServiceEntityRepository
     //    }
 
 
-    public function findInstructorByFilters(?string $lastname, ?string $firstname, ?string $email): array
+    public function queryInstructorByFilters(?string $lastname, ?string $firstname, ?string $email): ?QueryBuilder
     {
         $qb = $this->createQueryBuilder('i')
             ->leftJoin('i.user', 'u')
@@ -63,12 +64,10 @@ class InstructorRepository extends ServiceEntityRepository
                 ->setParameter('email', '%' . $email . '%');
         }
 
-        return $qb->orderBy('u.lastname', 'ASC')
-            ->getQuery()
-            ->getResult();
+        return $qb;
     }
 
-    public function findInstructorInterventionsByFilters(int $instructorId, ?\DateTimeInterface $start_date, ?\DateTimeInterface $end_date, ?\App\Entity\Module $module): array
+    public function queryInstructorInterventionsByFilters(int $instructorId, ?\DateTimeInterface $start_date, ?\DateTimeInterface $end_date, ?\App\Entity\Module $module): ?QueryBuilder
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('i')
@@ -92,8 +91,6 @@ class InstructorRepository extends ServiceEntityRepository
                 ->setParameter('module', $module);
         }
 
-        return $qb->orderBy('i.start_date', 'DESC')
-            ->getQuery()
-            ->getResult();
+        return $qb;
     }
 }

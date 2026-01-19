@@ -38,7 +38,7 @@
 	<hr class="border-gray-200 mb-6">
 
 	<div>
-		<h2 class="text-lg font-semibold text-gray-800 mb-4">{{ count }} enseignant{{ count > 1 ? 's' : '' }} trouvé{{ count > 1 ? 's' : '' }}</h2>
+		<h2 class="text-lg font-semibold text-gray-800 mb-4">{{ instructors|length }} enseignant{{ instructors|length > 1 ? 's' : '' }} trouvé{{ instructors|length > 1 ? 's' : '' }}</h2>
 		
 		<div class="bg-white rounded-lg shadow-sm overflow-hidden">
 			<table class="w-full">
@@ -89,6 +89,10 @@
 					{% endfor %}
 				</tbody>
 			</table>
+		</div>
+
+		<div class="pagination">
+			{{ knp_pagination_render(instructors, 'pagination/knp_pagination.html.twig') }}
 		</div>
 	</div>
 {% endblock %}

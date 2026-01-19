@@ -16,11 +16,12 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Repository\InstructorRepository;
 use App\Form\EditInstructorType;
 use App\Form\InstructorInterventionsFilterType;
+use Knp\Component\Pager\PaginatorInterface;
 
 class InstructorController extends AbstractController
 {
     #[Route('/instructor', name: 'app_instructor')]
-    public function index(Request $request, InstructorRepository $instructorRepository): Response
+    public function index(Request $request, InstructorRepository $instructorRepository, PaginatorInterface $pagination): Response
     {
         $form = $this->createForm(InstructorFilterType::class);
         $form->handleRequest($request);
@@ -33,7 +34,7 @@ class InstructorController extends AbstractController
             $email = $form->get('email')->getData();
 
             if ($lastname || $firstname || $email) {
-                $instructors = $instructorRepository->findInstructorByFilters($lastname, $firstname, $email);
+                $instructors = $instructorRepository->queryInstructorByFilters($lastname, $firstname, $email);
             } else {
                 $instructors = $instructorRepository->findAll();
             }
@@ -41,15 +42,20 @@ class InstructorController extends AbstractController
             $instructors = $instructorRepository->findAll();
         }
 
+          $pagination = $pagination->paginate(
+            $instructors,
+            $request->query->getInt('page', 1),
+            10
+        );
+        
         return $this->render('instructor/index.html.twig', [
-            'instructors' => $instructors,
+            'instructors' => $pagination,
             'form' => $form,
-            'count' => count($instructors)
         ]);
     }
 
     #[Route('/instructor/{id}/show_interventions', name: 'app_instructor_interventions')]
-    public function showInterventions($id, InstructorRepository $instructorRepository, Request $request): Response
+    public function showInterventions($id, InstructorRepository $instructorRepository, Request $request, PaginatorInterface $pagination): Response
     {
         $instructor = $instructorRepository->find($id);
         $form = $this->createForm(InstructorInterventionsFilterType::class);
@@ -63,16 +69,21 @@ class InstructorController extends AbstractController
             $module = $form->get('module')->getData();
 
             if ($start_date || $end_date || $module) {
-                $interventions = $instructorRepository->findInstructorInterventionsByFilters($id, $start_date, $end_date, $module);
-            } else {
-                $interventions = $instructorRepository->findInstructorInterventionsByFilters($id, null, null, null);
+                $interventions = $instructorRepository->queryInstructorInterventionsByFilters($id, $start_date, $end_date, $module);
             }
+
         } else {
-            $interventions = $instructorRepository->findInstructorInterventionsByFilters($id, null, null, null);
+            $interventions = $instructorRepository->queryInstructorInterventionsByFilters($id, null, null, null);
         }
 
+            $pagination = $pagination->paginate(
+            $interventions,
+            $request->query->getInt('page', 1),
+            10
+        );
+
         return $this->render('instructor/interventions.html.twig', [
-            'interventions' => $interventions,
+            'interventions' => $pagination,
             'form' => $form,
             'instructor' => $instructor
         ]);
