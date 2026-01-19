@@ -9,9 +9,7 @@
 		{# Header with title and button #}
 		<div class="flex justify-between items-center mb-6">
 			<h1 class="text-3xl font-bold text-gray-900">Années scolaire</h1>
-			<a href="{{ path('app_school_year_new') }}">
-				<twig:Button label="Ajouter une année" variant="blue" type="button"/>
-			</a>
+			<twig:Button label="Ajouter une année" variant="blue" type="button" href="{{ path('app_school_year_new') }}"/>
 		</div>
 
 		{# Description text #}
