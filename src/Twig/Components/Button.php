@@ -11,6 +11,8 @@ final class Button
 
     public string $variant = 'blue';
 
+    public ?string $href = null;
+
     /**
      * button | submit | reset
      */
