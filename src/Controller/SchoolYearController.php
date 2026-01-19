@@ -58,4 +58,32 @@ final class SchoolYearController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    #[Route('/schoolyear/{id}/edit', name: 'app_school_year_edit')]
+    public function edit($id, SchoolYearRepository $schoolYearRepository, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $course = $schoolYearRepository->findByCourseYear($id);
+
+        $year = $schoolYearRepository->find($id);
+        $form = $this->createForm(SchoolYearType::class, $year);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Année scolaire modifiée avec succès !');
+                return $this->redirectToRoute('app_school_year');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la modification de l\'année scolaire : ' . $e->getMessage());
+                return $this->redirectToRoute('app_school_year');
+            }
+        }
+
+        return $this->render('school_year/edit.html.twig', [
+            'form' => $form,
+            'year' => $year,
+            'course' => $course
+        ]);
+    }
 }

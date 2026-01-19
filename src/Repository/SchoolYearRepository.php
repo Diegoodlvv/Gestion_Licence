@@ -40,4 +40,16 @@ class SchoolYearRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findByCourseYear($year)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select('cp')
+            ->from('App\Entity\CoursePeriod', 'cp')
+            ->where('cp.school_year = :year')
+            ->setParameter('year', $year);
+
+        return $qb->getQuery()->getResult();
+    }
 }
