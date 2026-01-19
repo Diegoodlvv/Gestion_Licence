@@ -30,15 +30,9 @@
 
 			{# Buttons Section #}
 			<div class="flex gap-4 mb-12">
-				<a href="{{ path('app_school_year') }}" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-md font-medium hover:bg-gray-300 transition">
-					Retour à la liste
-				</a>
-				<button type="button" class="px-6 py-3 bg-red-500 text-white rounded-md font-medium hover:bg-red-600 transition">
-					Supprimer
-				</button>
-				<button type="submit" class="px-6 py-3 bg-slate-800 text-white rounded-md font-medium hover:bg-slate-900 transition">
-					Enregistrer les informations
-				</button>
+				<twig:Button label="Retour à la liste" variant="grey" href="{{ path('app_school_year') }}"/>
+				<twig:Button label="Supprimer" variant="red" type="button"/>
+				<twig:Button label="Enregistrer les informations" variant="blue" type="submit"/>
 			</div>
 
 			{{ form_end(form) }}
@@ -84,9 +78,7 @@
 
 			{# Add Button #}
 			<div class="mt-6">
-				<button type="button" class="px-6 py-3 bg-slate-800 text-white rounded-md font-medium hover:bg-slate-900 transition">
-					Ajouter une semaine de cours
-				</button>
+				<twig:Button label="Ajouter une semaine de cours" variant="blue" type="button" href="#"/>
 			</div>
 		</div>
 	</main>
