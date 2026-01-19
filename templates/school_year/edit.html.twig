@@ -4,6 +4,7 @@
 {% endblock %}
 
 {% block body %}
+
 	<main
 		class="flex-1 bg-white p-12 font-sans">
 		{# Header Section #}
@@ -31,7 +32,9 @@
 			{# Buttons Section #}
 			<div class="flex gap-4 mb-12">
 				<twig:Button label="Retour à la liste" variant="grey" href="{{ path('app_school_year') }}"/>
-				<twig:Button label="Supprimer" variant="red" type="button"/>
+				<button type="button" id="deleteButton" class="bg-red-600 text-white hover:bg-red-700 focus:ring-red-600 inline-flex items-center justify-center rounded-lg px-12 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-offset-2">
+					Supprimer
+				</button>
 				<twig:Button label="Enregistrer les informations" variant="blue" type="submit"/>
 			</div>
 
@@ -82,4 +85,79 @@
 			</div>
 		</div>
 	</main>
+
+	{# Delete Confirmation PopUp #}
+	<div id="deletePopUp" class="fixed inset-0 bg-red bg-opacity-50 items-center justify-center z-50 hidden">
+		<div
+			class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+			{# PopUp Header #}
+			<div class="flex items-start justify-between p-6 border-b border-gray-200">
+				<div class="flex items-start gap-4">
+					<div class="shrink-0 w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center">
+						<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+						</svg>
+					</div>
+					<div>
+						<h3 class="text-lg font-semibold text-slate-900">Supprimer l'année scolaire</h3>
+						<p class="text-sm text-slate-500 mt-1">Confirmation de l'action</p>
+					</div>
+				</div>
+				<button type="button" id="closePopUp" class="text-gray-400 hover:text-gray-600 transition">
+					<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+					</svg>
+				</button>
+			</div>
+
+			{# PopUp Body #}
+			<div class="p-6">
+				<p class="text-slate-700 leading-relaxed">
+					Vous vous apprêtez à supprimer l'année scolaire, cette action est irrévocable. 
+																																																																																																																																																											A noter qu'aucune intervention ne doit être liée à cette année pour pouvoir la supprimer.
+				</p>
+				<p class="text-slate-700 font-medium mt-4">
+					Confirmez-vous l'action ?
+				</p>
+			</div>
+
+			{# PopUp Footer #}
+			<div class="flex gap-3 p-6 border-t border-gray-200">
+				<twig:Button label="Annuler" variant="grey"/>
+				<twig:Button label="Confirmer" variant="red" type="submit" href="{{ path('app_school_year_delete', {'id': year.id}) }}"/>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		// indentation bizarre
+document.addEventListener("DOMContentLoaded", function () {
+const deleteButton = document.getElementById("deleteButton");
+const deletePopUp = document.getElementById("deletePopUp");
+const closePopUp = document.getElementById("closePopUp");
+const cancelButton = document.getElementById("cancelButton");
+
+// Open
+deleteButton.addEventListener("click", function () {
+deletePopUp.classList.remove("hidden");
+deletePopUp.classList.add("flex");
+});
+
+// Close
+function hidePopUp() {
+deletePopUp.classList.add("hidden");
+deletePopUp.classList.remove("flex");
+}
+
+closePopUp.addEventListener("click", hidePopUp);
+cancelButton.addEventListener("click", hidePopUp);
+
+// Close clique côté
+deletePopUp.addEventListener("click", function (e) {
+if (e.target === deletePopUp) {
+hidePopUp();
+}
+});
+});
+	</script>
 {% endblock %}

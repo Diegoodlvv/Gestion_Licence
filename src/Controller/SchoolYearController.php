@@ -86,4 +86,25 @@ final class SchoolYearController extends AbstractController
             'course' => $course
         ]);
     }
+
+    #[Route('/schoolyear/{id}/delete', name: 'app_school_year_delete')]
+    public function delete($id, SchoolYearRepository $schoolYearRepository, EntityManagerInterface $entityManager)
+    {
+        $year = $schoolYearRepository->find($id);
+
+        if ($year) {
+            try {
+                $entityManager->remove($year);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Année scolaire supprimée avec succès !');
+                return $this->redirectToRoute('app_school_year');
+            } catch (\Exception) {
+                $this->addFlash('error', 'Vous ne pouvez pas supprimer une année qui a des semaines de cours liées !');
+                return $this->redirectToRoute('app_school_year');
+            }
+        }
+
+        return $this->redirectToRoute('app_school_year');
+    }
 }
