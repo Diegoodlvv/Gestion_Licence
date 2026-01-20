@@ -6,6 +6,8 @@ use App\Entity\SchoolYear;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
+
 /**
  * @extends ServiceEntityRepository<SchoolYear>
  */
@@ -45,9 +47,9 @@ class SchoolYearRepository extends ServiceEntityRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-        $qb->select('cp')
-            ->from('App\Entity\CoursePeriod', 'cp')
-            ->where('cp.school_year = :year')
+        $qb->select('cy')
+            ->from('App\Entity\CoursePeriod', 'cy')
+            ->where('cy.school_year = :year')
             ->setParameter('year', $year);
 
         return $qb->getQuery()->getResult();

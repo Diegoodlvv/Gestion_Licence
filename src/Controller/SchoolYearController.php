@@ -10,6 +10,8 @@ use App\Repository\SchoolYearRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\SchoolYearType;
+use App\Entity\CoursePeriod;
+use App\Form\CoursePeriodType;
 use App\Entity\SchoolYear;
 
 final class SchoolYearController extends AbstractController
@@ -106,5 +108,35 @@ final class SchoolYearController extends AbstractController
         }
 
         return $this->redirectToRoute('app_school_year');
+    }
+
+    #[Route('/schoolyear/{id}/newWeek', name: 'app_school_year_newWeek')]
+    public function newWeek($id, SchoolYearRepository $schoolYearRepository, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $year = $schoolYearRepository->find($id);
+
+        $week = new CoursePeriod();
+        $week->setSchoolYearId($year);
+
+        $form = $this->createForm(CoursePeriodType::class, $week);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                $entityManager->persist($week);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Semaine de cours ajoutée avec succès !');
+                return $this->redirectToRoute('app_school_year_edit', ['id' => $id]);
+            } catch (\Exception) {
+                $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout de la semaine de cours');
+                return $this->redirectToRoute('app_school_year_edit', ['id' => $id]);
+            }
+        }
+
+        return $this->render('school_year/newWeek.html.twig', [
+            'form' => $form,
+            'year' => $year,
+        ]);
     }
 }

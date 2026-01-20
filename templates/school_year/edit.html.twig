@@ -80,8 +80,7 @@
 			</div>
 
 			{# Add Button #}
-			<div class="mt-6">
-				<twig:Button label="Ajouter une semaine de cours" variant="blue" type="button" href="#"/>
+			<div class="mt-6"><twig:Button label="Ajouter une semaine de cours" variant="blue" type="button" href="{{ path('app_school_year_newWeek', {'id': year.id}) }}"/>
 			</div>
 		</div>
 	</main>
@@ -113,8 +112,7 @@
 			{# PopUp Body #}
 			<div class="p-6">
 				<p class="text-slate-700 leading-relaxed">
-					Vous vous apprêtez à supprimer l'année scolaire, cette action est irrévocable. 
-																																																																																																																																																											A noter qu'aucune intervention ne doit être liée à cette année pour pouvoir la supprimer.
+					Vous vous apprêtez à supprimer l'année scolaire, cette action est irrévocable. A noter qu'aucune intervention ne doit être liée à cette année pour pouvoir la supprimer.
 				</p>
 				<p class="text-slate-700 font-medium mt-4">
 					Confirmez-vous l'action ?
