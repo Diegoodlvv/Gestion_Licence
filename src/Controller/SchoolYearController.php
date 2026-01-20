@@ -143,7 +143,7 @@ final class SchoolYearController extends AbstractController
         ]);
     }
 
-    #[Route('/schoolyear/{id}/newWeek/{weekId}/edit', name: 'app_school_year_editWeek')]
+    #[Route('/schoolyear/{id}/Week/{weekId}/edit', name: 'app_school_year_editWeek')]
     public function editWeek($id, $weekId, SchoolYearRepository $schoolYearRepository, CoursePeriodRepository $coursePeriodRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
         $year = $schoolYearRepository->find($id);
