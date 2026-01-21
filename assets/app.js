@@ -10,7 +10,6 @@ import './styles/app.css';
 // any CSS you import will output into a single css file (app.css in this case)
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
-import weekSelectPlugin from "flatpickr/dist/plugins/weekSelect/weekSelect.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     const interventionForm = document.querySelector('#intervention-form');
@@ -23,7 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!coursePeriodSelect || !startInput || !endInput) return;
 
-    // Pickers Flatpickr existants
     const startPicker = flatpickr(startInput, {
         enableTime: true,
         dateFormat: "Y-d-m H:i",

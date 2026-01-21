@@ -31,7 +31,10 @@ final class InterventionController extends AbstractController
 
             $interventions = $interventionRepository->queryFilters($startDate, $endDate, $module);
         }  else {
-            $interventions = $interventionRepository->findAll();
+            $interventions = $interventionRepository->findBy(
+                [],
+                array('id' => 'DESC')
+            );
         }
 
         $pagination = $paginationInterface->paginate(

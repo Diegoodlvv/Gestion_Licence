@@ -159,5 +159,4 @@ class Intervention
 
         return $this;
     }
-
 }

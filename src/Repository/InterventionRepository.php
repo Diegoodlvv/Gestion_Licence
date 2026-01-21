@@ -43,6 +43,8 @@ class InterventionRepository extends ServiceEntityRepository
                 ->setParameter('module', $module);
         }
 
+        $qb->orderBy('i.id','desc');
+
         return $qb;
     }
 }
