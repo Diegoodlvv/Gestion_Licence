@@ -61,9 +61,11 @@ final class InterventionController extends AbstractController
                 $this->addFlash('success', 'Intervention ajouté avec succès');
                 $entityManager->persist($intervention);
                 $entityManager->flush();
+                
+                return $this->redirectToRoute('app_intervention');
             } catch (\Exception $e) {
                 $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout de l\'enseignant : ' . $e->getMessage());
-                return $this->redirectToRoute('app_instructor');
+                return $this->redirectToRoute('app_intervention');
             }
         }
 

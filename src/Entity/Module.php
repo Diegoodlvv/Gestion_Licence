@@ -253,4 +253,11 @@ class Module
 
         return $this;
     }
+
+   public function getFullName(): string
+    {
+        return $this->parent
+            ?  $this->parent->getFullName() . ' — ' . $this->name
+            : $this->name;
+    }
 }

@@ -7,9 +7,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContext;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity(repositoryClass: InterventionRepository::class)]
+#[UniqueEntity(
+    fields:['start_date'],
+    message:'Une intervention existe déjà à cette date.'
+)]
 class Intervention
 {
     #[ORM\Id]
@@ -18,13 +25,12 @@ class Intervention
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Assert\NotNull]
-    #[Assert\DateTime(format:"dd/mm/YYYY H:i")]
+    #[Assert\NotNull(message:'Veuillez renseigner la date de début')]
     private ?\DateTime $start_date = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Assert\NotNull]
-    #[Assert\DateTime(format:"dd/mm/YYYY H:i")]
+    #[Assert\NotNull(message:'Veuillez renseigner la date de début')]
+    #[Assert\GreaterThan(propertyPath:'start_date', message:'La date de début doit être inférieure à la date de fin')]
     private ?\DateTime $end_date = null;
 
     #[ORM\ManyToOne(inversedBy: 'interventions')]
@@ -153,4 +159,5 @@ class Intervention
 
         return $this;
     }
+
 }
