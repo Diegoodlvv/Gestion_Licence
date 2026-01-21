@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Form\InterventionTypeFilterType;
+use App\Form\filter\InterventionTypeFilterType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
