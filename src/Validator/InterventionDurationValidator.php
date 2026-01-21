@@ -2,28 +2,31 @@
 
 namespace App\Validator;
 
+namespace App\Validator;
+
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-final class InterventionDurationValidator extends ConstraintValidator
+class InterventionDurationValidator extends ConstraintValidator
 {
-    public function validate(mixed $value, Constraint $constraint): void
+    public function validate(mixed $entity, Constraint $constraint): void
     {
-        /* @var InterventionDuration $constraint */
-
-        if (!$value->getStartDate() || !$value->getEndDate()) {
+        if (!$entity->getStartDate() || !$entity->getEndDate()) {
             return;
         }
 
-       $duration = $value->getEndDate()->getTimestamp() - $value->getStartDate()->getTimestamp();
+        $diffInSeconds = $entity->getEndDate()->getTimestamp()
+            - $entity->getStartDate()->getTimestamp();
 
-       $maxDuration = 4;
-       
-       if($maxDuration > $duration)
-        {
-             $this->context->buildViolation($constraint->message)
-            ->setParameter('{{ value }}', $value)
-            ->addViolation();   
+        $maxSeconds = $constraint->maxHours * 3600;
+
+        if ($diffInSeconds > $maxSeconds) {
+            $this->context
+                ->buildViolation($constraint->message)
+                ->atPath('start_date')
+                ->setParameter('{{ hours }}', $constraint->maxHours)
+                ->addViolation();
         }
     }
 }
+

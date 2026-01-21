@@ -5,9 +5,9 @@ namespace App\Validator;
 use Symfony\Component\Validator\Constraint;
 
 #[\Attribute]
-class InCoursePeriod extends Constraint
+class InstructorHasModule extends Constraint
 {
-    public string $message = 'L\'intervention doit se dérouler dans la période du cours.';
+    public string $message = "Vous devez choisir un ou plusieurs intervenants qui ne s'occupe pas du module choisi";
 
     public function getTargets(): string
     {

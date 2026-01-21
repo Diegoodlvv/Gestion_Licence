@@ -49,7 +49,7 @@ final class InterventionController extends AbstractController
             'pagination' => $pagination,
             'title' => $title,
             'form' => $form,
-        ]);
+        ]); 
     }
 
     #[Route('/intervention/new', name: 'app_intervention_new')]

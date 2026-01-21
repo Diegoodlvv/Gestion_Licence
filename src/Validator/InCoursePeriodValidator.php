@@ -5,20 +5,28 @@ namespace App\Validator;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-final class InCoursePeriodValidator extends ConstraintValidator
+class InCoursePeriodValidator extends ConstraintValidator
 {
-    public function validate(mixed $value, Constraint $constraint): void
+    public function validate(mixed $entity, Constraint $constraint): void
     {
-        /* @var InCoursePeriod $constraint */
+        $coursePeriod = $entity->getCoursePeriod();
 
-        if (null === $value || '' === $value) {
+        if (
+            !$coursePeriod ||
+            !$entity->getStartDate() ||
+            !$entity->getEndDate()
+        ) {
             return;
         }
 
-        // TODO: implement the validation here
-        $this->context->buildViolation($constraint->message)
-            ->setParameter('{{ value }}', $value)
-            ->addViolation()
-        ;
+        if (
+            $entity->getStartDate() < $coursePeriod->getStartDate() ||
+            $entity->getEndDate() > $coursePeriod->getEndDate()
+        ) {
+            $this->context
+                ->buildViolation($constraint->message)
+                ->atPath('course_period') 
+                ->addViolation();
+        }
     }
 }

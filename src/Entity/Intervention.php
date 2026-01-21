@@ -11,12 +11,16 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use App\Validator as AssertCustom;
 
 #[ORM\Entity(repositoryClass: InterventionRepository::class)]
 #[UniqueEntity(
     fields:['start_date'],
     message:'Une intervention existe déjà à cette date.'
 )]
+#[AssertCustom\InterventionDuration]
+#[AssertCustom\InCoursePeriod]
+#[AssertCustom\InstructorHasModule]
 class Intervention
 {
     #[ORM\Id]
