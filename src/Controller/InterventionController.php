@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Intervention;
 use App\Form\InterventionsFilterType;
+use App\Form\NewInterventionType;
 use App\Repository\InterventionRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +31,10 @@ final class InterventionController extends AbstractController
 
             $interventions = $interventionRepository->queryFilters($startDate, $endDate, $module);
         }  else {
-            $interventions = $interventionRepository->findAll();
+            $interventions = $interventionRepository->findBy(
+                [],
+                array('id' => 'DESC')
+            );
         }
 
         $pagination = $paginationInterface->paginate(
@@ -43,6 +49,32 @@ final class InterventionController extends AbstractController
             'pagination' => $pagination,
             'title' => $title,
             'form' => $form,
+        ]); 
+    }
+
+    #[Route('/intervention/new', name: 'app_intervention_new')]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $intervention = new Intervention();
+        $form = $this->createForm(NewInterventionType::class, $intervention);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                $this->addFlash('success', 'Intervention ajouté avec succès');
+                $entityManager->persist($intervention);
+                $entityManager->flush();
+                
+                return $this->redirectToRoute('app_intervention');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout de l\'enseignant : ' . $e->getMessage());
+                return $this->redirectToRoute('app_intervention');
+            }
+        }
+
+        return $this->render('intervention/new.html.twig', [
+            'form' => $form,
+            'intervention' => $intervention
         ]);
     }
 }

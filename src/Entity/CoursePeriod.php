@@ -23,13 +23,11 @@ class CoursePeriod
     private ?SchoolYear $school_year = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Assert\DateTime(format: 'dd/MM/YYYY')]
     #[Assert\NotNull()]
     #[Assert\NotBlank()]
     private ?\DateTime $start_date = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Assert\DateTime(format: 'dd/MM/YYYY')]
     #[Assert\NotNull()]
     #[Assert\NotBlank()]
     private ?\DateTime $end_date = null;
@@ -114,5 +112,10 @@ class CoursePeriod
         }
 
         return $this;
+    }
+
+    public function getCoursePeriod()
+    {
+        return $this->start_date->format('m/d/Y') . ' - ' . $this->end_date->format('m/d/Y');
     }
 }

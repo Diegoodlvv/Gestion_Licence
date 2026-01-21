@@ -67,8 +67,8 @@
 							</td>
 							<td class="py-4 px-6 text-gray-800">
 								{% set totalHours = 0 %}
-								{% for intervention in instructor.interventions %}
-									{% set totalHours = totalHours + (intervention.hours|default(0)) %}
+								{% for module in instructor.module %}
+									{% set totalHours = totalHours + module.hoursCount %}
 								{% endfor %}
 								{{ totalHours > 0 ? totalHours ~ 'h' : '-' }}
 							</td>

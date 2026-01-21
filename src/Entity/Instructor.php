@@ -53,6 +53,11 @@ class Instructor
         return $this;
     }
 
+    public function getUserName()
+    {
+        return $this->user->getFirstname() . " " . $this->user->getLastname(); 
+    }
+
     /**
      * @return Collection<int, Module>
      */
