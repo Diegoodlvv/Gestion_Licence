@@ -4,71 +4,74 @@
 {% endblock %}
 
 {% block body %}
-	<div class="mb-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-		<h1 class="text-3xl font-bold text-slate-800">Types d'intervention</h1>
-		<a href="#" class="bg-slate-700 text-white font-medium px-6 py-2.5 rounded-md hover:bg-slate-800 transition shadow-sm">
-			Ajouter un type
-		</a>
-	</div>
+	<div class="flex-1 p-8 bg-gray-50">
 
-	{# Filter Section #}
-	<div class="mb-10">
-		<h2 class="text-amber-400 text-xl font-bold mb-4">Filtres</h2>
-
-		{{ form_start(form, {'attr': {'class': 'w-full'}}) }}
-		<div class="flex items-end gap-x-4 max-w-2xl">
-			<div class="flex-grow">
-				{{ form_row(form.name, {'attr': {'class': 'w-full border-gray-200 rounded-md focus:ring-amber-400 focus:border-amber-400', 'placeholder': 'Saisissez le nom'}}) }}
-			</div>
-			<button type="submit" class="bg-amber-400 text-slate-900 font-bold px-10 py-2.5 rounded-md hover:bg-amber-500 transition shadow-sm h-[42px] mb-px">
-				Filtrer
-			</button>
+		<div class="flex justify-between items-center mb-8">
+			<h1 class="text-2xl font-bold text-gray-800">Types d'intervention</h1>
+			<twig:Button variant="blue" label="Ajouter un type" :href="path('app_index_interventionType')"/>
 		</div>
-		{{ form_end(form) }}
 
-		<div class="border-b-2 border-amber-100/50 mt-8 w-full"></div>
-	</div>
 
-	{# Results Section #}
-	<div>
-		<h3 class="text-xl font-bold mb-6 text-slate-900">{{ interventionType.getTotalItemCount }}
-			types</h3>
-
-		<div
-			class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100">
-			{# Table Header #}
-			<div class="grid grid-cols-12 gap-4 px-6 py-4 text-sm font-semibold text-gray-500 bg-gray-50/50 border-b border-gray-100">
-				<div class="col-span-3">Nom</div>
-				<div class="col-span-4">Descriptif</div>
-				<div class="col-span-2">Couleur</div>
-				<div class="col-span-3"></div>
+		<div class="mb-8">
+			<h2 class="text-amber-500 font-semibold mb-4">Filtres</h2>
+			{{ form_start(form, {'attr': {'class': 'flex flex-wrap items-end gap-4'}}) }}
+			<div class="flex-1 min-w-48">
+				{{ form_label(form.name)}}
+				{{ form_widget(form.name) }}
+			</div>
+			<div class="min-w-48">
+				<twig:Button type="submit" variant="yellow" label="Filtrer"/>
 			</div>
 
-			{# Items #}
-			{% for item in interventionType %}
-				<div class="grid grid-cols-12 gap-4 px-6 py-5 items-center bg-white border-b border-gray-100 last:border-0 hover:bg-gray-50/50 transition">
-					<div class="col-span-3 font-medium text-slate-900">{{ item.name }}</div>
-					<div class="col-span-4 text-slate-600">{{ item.description }}</div>
-					<div class="col-span-2 font-medium" style="color: {{ item.color }}">{{ item.color }}</div>
-					<div class="col-span-3 flex justify-end">
-						<a href="#" class="inline-flex items-center text-slate-900 font-medium hover:text-slate-700 transition group">
-							<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2 text-slate-900 group-hover:text-slate-700">
-								<path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/>
-								<path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z" clip-rule="evenodd"/>
-							</svg>
-							Accèder à la fiche
-						</a>
-					</div>
-				</div>
-			{% else %}
-				<div class="px-6 py-12 text-center text-gray-500">
-					Aucun résultat trouvé
-				</div>
-			{% endfor %}
+			{{ form_end(form, {'render_rest': false}) }}
 		</div>
 
-		<div class="mt-8 flex justify-center">
-			{{ knp_pagination_render(interventionType, 'pagination/knp_pagination.html.twig') }}
+
+		<hr class="border-gray-200 mb-6">
+
+		<div>
+			<h2 class="text-lg font-semibold text-gray-800 mb-4">{{ interventionType|length }}
+				type{{ interventionType|length > 1 ? 's' : '' }}</h2>
+
+			<div class="bg-white rounded-lg shadow-sm overflow-hidden">
+				<table class="w-full">
+					<thead>
+						<tr class="bg-[#F1F2F799] border-b border-gray-200">
+							<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Nom</th>
+							<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Descriptif</th>
+							<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Couleur</th>
+							<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600"></th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for type in interventionType %}
+							<tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+								<td class="py-4 px-6 text-gray-800">{{ type.name }}</td>
+								<td class="py-4 px-6 text-gray-600 text-sm">{{ type.description ?: '-' }}</td>
+								<td class="py-4 px-6">
+									<span class="text-sm font-medium" style="color: {{ type.color }};">{{ type.color }}</span>
+								</td>
+								<td class="py-4 px-6">
+									<a href="{{ path('app_index_interventionType') }}" class="inline-flex items-center gap-2 text-gray-500 hover:text-amber-500 transition-colors text-sm">
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+											<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+											<circle cx="12" cy="12" r="3"></circle>
+										</svg>
+										Accéder à la fiche
+									</a>
+								</td>
+							</tr>
+						{% else %}
+							<tr>
+								<td colspan="4" class="py-8 px-6 text-center text-gray-500">Aucun type d'intervention trouvé</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+
+			<div class="pagination">
+				{{ knp_pagination_render(interventionType, 'pagination/knp_pagination.html.twig') }}
+			</div>
 		</div>
-	</div>
-{% endblock %}
+	{% endblock %}
