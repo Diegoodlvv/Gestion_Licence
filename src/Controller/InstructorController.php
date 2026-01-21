@@ -34,7 +34,7 @@ class InstructorController extends AbstractController
             $email = $form->get('email')->getData();
 
             if ($lastname || $firstname || $email) {
-                $instructors = $instructorRepository->queryInstructorByFilters($lastname, $firstname, $email);
+                $instructors = $instructorRepository->InstructorByFilters($lastname, $firstname, $email);
             } else {
                 $instructors = $instructorRepository->findAll();
             }
@@ -42,12 +42,12 @@ class InstructorController extends AbstractController
             $instructors = $instructorRepository->findAll();
         }
 
-          $pagination = $pagination->paginate(
+        $pagination = $pagination->paginate(
             $instructors,
             $request->query->getInt('page', 1),
             10
         );
-        
+
         return $this->render('instructor/index.html.twig', [
             'instructors' => $pagination,
             'form' => $form,
@@ -69,14 +69,13 @@ class InstructorController extends AbstractController
             $module = $form->get('module')->getData();
 
             if ($start_date || $end_date || $module) {
-                $interventions = $instructorRepository->queryInstructorInterventionsByFilters($id, $start_date, $end_date, $module);
+                $interventions = $instructorRepository->InstructorInterventionsByFilters($id, $start_date, $end_date, $module);
             }
-
         } else {
-            $interventions = $instructorRepository->queryInstructorInterventionsByFilters($id, null, null, null);
+            $interventions = $instructorRepository->InstructorInterventionsByFilters($id, null, null, null);
         }
 
-            $pagination = $pagination->paginate(
+        $pagination = $pagination->paginate(
             $interventions,
             $request->query->getInt('page', 1),
             10

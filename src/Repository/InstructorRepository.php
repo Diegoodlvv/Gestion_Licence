@@ -43,19 +43,20 @@ class InstructorRepository extends ServiceEntityRepository
     //    }
 
 
-    public function queryInstructorByFilters(?string $lastname, ?string $firstname, ?string $email): ?QueryBuilder
+
+    public function InstructorByFilters(?string $lastname, ?string $firstname, ?string $email): ?QueryBuilder
     {
         $qb = $this->createQueryBuilder('i')
             ->leftJoin('i.user', 'u')
             ->addSelect('u');
 
         if ($lastname) {
-            $qb->andWhere('LOWER(u.lastname) LIKE LOWER(:lastname)') 
+            $qb->andWhere('LOWER(u.lastname) LIKE LOWER(:lastname)')
                 ->setParameter('lastname', '%' . $lastname . '%');
         }
 
         if ($firstname) {
-            $qb->andWhere('LOWER(u.firstname) LIKE LOWER(:firstname)') 
+            $qb->andWhere('LOWER(u.firstname) LIKE LOWER(:firstname)')
                 ->setParameter('firstname', '%' . $firstname . '%');
         }
 
@@ -67,7 +68,7 @@ class InstructorRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function queryInstructorInterventionsByFilters(int $instructorId, ?\DateTimeInterface $start_date, ?\DateTimeInterface $end_date, ?\App\Entity\Module $module): ?QueryBuilder
+    public function InstructorInterventionsByFilters(int $instructorId, ?\DateTimeInterface $start_date, ?\DateTimeInterface $end_date, ?\App\Entity\Module $module): ?QueryBuilder
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('i')

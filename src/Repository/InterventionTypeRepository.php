@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\InterventionType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<InterventionType>
@@ -40,4 +41,17 @@ class InterventionTypeRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findInstructorByName(string $name): ?QueryBuilder
+    {
+
+        $qb = $this->createQueryBuilder('i');
+
+        if ($name) {
+            $qb->andWhere('LOWER(i.name) LIKE LOWER(:name)')
+                ->setParameter('name', '%' . $name . '%');
+        }
+
+        return $qb;
+    }
 }
