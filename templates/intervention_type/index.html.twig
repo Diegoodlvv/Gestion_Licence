@@ -8,7 +8,7 @@
 
 		<div class="flex justify-between items-center mb-8">
 			<h1 class="text-2xl font-bold text-gray-800">Types d'intervention</h1>
-			<twig:Button variant="blue" label="Ajouter un type" :href="path('app_index_interventionType')"/>
+			<twig:Button variant="blue" label="Ajouter un type" href="{{ path('app_index_interventionType') }}"/>
 		</div>
 
 
@@ -52,7 +52,7 @@
 									<span class="text-sm font-medium" style="color: {{ type.color }};">{{ type.color }}</span>
 								</td>
 								<td class="py-4 px-6">
-									<a href="{{ path('app_index_interventionType') }}" class="inline-flex items-center gap-2 text-gray-500 hover:text-amber-500 transition-colors text-sm">
+									<a href="{{ path('app_interventionType_edit', {'id': type.id}) }}" class="inline-flex items-center gap-2 text-gray-500 hover:text-amber-500 transition-colors text-sm">
 										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 											<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
 											<circle cx="12" cy="12" r="3"></circle>
