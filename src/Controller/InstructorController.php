@@ -122,8 +122,8 @@ class InstructorController extends AbstractController
                 $entityManager->flush();
                 $this->addFlash('success', 'Enseignant ajouté avec succès !');
                 return $this->redirectToRoute('app_instructor');
-            } catch (\Exception $e) {
-                $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout de l\'enseignant : ' . $e->getMessage());
+            } catch (\Exception) {
+                $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout de l\'enseignant : ');
                 return $this->redirectToRoute('app_instructor');
             }
         }
@@ -146,8 +146,8 @@ class InstructorController extends AbstractController
                 $entityManager->flush();
                 $this->addFlash('success', 'Enseignant modifié avec succès !');
                 return $this->redirectToRoute('app_instructor');
-            } catch (\Exception $e) {
-                $this->addFlash('error', 'Une erreur est survenue lors de la modification de l\'enseignant : ' . $e->getMessage());
+            } catch (\Exception) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la modification de l\'enseignant : ');
                 return $this->redirectToRoute('app_instructor');
             }
         }

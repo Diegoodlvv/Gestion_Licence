@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Form\filter\InterventionTypeFilterType;
+use App\Form\InterventionTypeEditType;
+use App\Repository\InterventionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,5 +48,38 @@ final class InterventionTypeController extends AbstractController
             'interventionType' => $interventionType,
             'form' => $form,
         ]);
+    }
+
+    #[Route('/interventionType/{id}/edit', name: 'app_interventionType_edit')]
+    public function edit($id, Request $request, InterventionTypeRepository $interventionTypeRepository, EntityManagerInterface $em): Response
+    {
+        $interventionType = $interventionTypeRepository->find($id);
+        $form = $this->createForm(InterventionTypeEditType::class, $interventionType);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                $em->flush();
+                $this->addFlash('success', 'Type d\'intervention modifie avec succes !');
+                return $this->redirectToRoute('app_index_interventionType');
+            } catch (\Exception) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la modification du type d\'intervention');
+                return $this->redirectToRoute('app_index_interventionType');
+            }
+        }
+
+
+        return $this->render('intervention_type/edit.html.twig', [
+            'form' => $form,
+            'interventionType' => $interventionType,
+        ]);
+    }
+
+    #[Route('/interventionType/{id}/delete', name: 'app_interventionType_delete')]
+    public function delete($id, InterventionTypeRepository $interventionTypeRepository, EntityManagerInterface $em): Response
+    {
+
+
+        return $this->redirectToRoute('app_index_interventionType');
     }
 }
