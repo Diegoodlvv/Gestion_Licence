@@ -78,7 +78,20 @@ final class InterventionTypeController extends AbstractController
     #[Route('/interventionType/{id}/delete', name: 'app_interventionType_delete')]
     public function delete($id, InterventionTypeRepository $interventionTypeRepository, EntityManagerInterface $em): Response
     {
+        $interventionType = $interventionTypeRepository->find($id);
 
+        if ($interventionType) {
+            try {
+                $em->remove($interventionType);
+                $em->flush();
+
+                $this->addFlash('success', 'Type d\'intervention supprimée avec succès !');
+                return $this->redirectToRoute('app_index_interventionType');
+            } catch (\Exception) {
+                $this->addFlash('error', 'Vous ne pouvez pas supprimer un type d\'intervention qui a des interventions liés');
+                return $this->redirectToRoute('app_index_interventionType');
+            }
+        }
 
         return $this->redirectToRoute('app_index_interventionType');
     }
