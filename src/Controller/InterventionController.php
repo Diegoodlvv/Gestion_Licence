@@ -22,15 +22,15 @@ final class InterventionController extends AbstractController
         $form = $this->createForm(InterventionsFilterType::class);
         $form->handleRequest($request);
 
-        $interventions = []; 
+        $interventions = [];
 
         if ($form->isSubmitted() && $form->isValid()) {
             $startDate = $form->get('start_date')->getData();
             $endDate = $form->get('end_date')->getData();
-            $module = $form->get('module')->getData(); 
+            $module = $form->get('module')->getData();
 
             $interventions = $interventionRepository->queryFilters($startDate, $endDate, $module);
-        }  else {
+        } else {
             $interventions = $interventionRepository->findBy(
                 [],
                 array('id' => 'DESC')
@@ -49,10 +49,10 @@ final class InterventionController extends AbstractController
             'pagination' => $pagination,
             'title' => $title,
             'form' => $form,
-        ]); 
+        ]);
     }
 
-    #[Route('/intervention/new', name: 'app_intervention_new')]
+    #[Route('/new', name: 'app_intervention_new')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $intervention = new Intervention();
@@ -64,7 +64,7 @@ final class InterventionController extends AbstractController
                 $this->addFlash('success', 'Intervention ajouté avec succès');
                 $entityManager->persist($intervention);
                 $entityManager->flush();
-                
+
                 return $this->redirectToRoute('app_intervention');
             } catch (\Exception $e) {
                 $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout de l\'enseignant : ' . $e->getMessage());
