@@ -2,13 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\TeachingBlock;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Form\TeachingBlockFilterType;
+use App\Form\TeachingBlockType;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\TeachingBlockRepository;
 use Knp\Component\Pager\PaginatorInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
 final class TeachingBlockController extends AbstractController
 {
@@ -42,6 +45,32 @@ final class TeachingBlockController extends AbstractController
         return $this->render('teaching_block/index.html.twig', [
             'teachingBlock' => $pagination,
             'form' => $form,
+        ]);
+    }
+
+    #[Route('/teachingBlock/{id}/edit', name: 'app_teaching_block_edit')]
+    public function new($id, Request $request, EntityManagerInterface $em, TeachingBlockRepository $teachingBlockRepository)
+    {
+
+        $teachingBlock = $teachingBlockRepository->find($id);
+        $form = $this->createForm(TeachingBlockType::class, $teachingBlock);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                $em->flush();
+
+                $this->addFlash('success', 'Bloc d\'enseignement ajouté avec succes !');
+                return $this->redirectToRoute('app_teaching_block');
+            } catch (\Exception) {
+                $this->addFlash('error', 'Une erreur est survenur lors de l\'ajout du bloc d\'enseignement');
+                return $this->redirectToRoute('app_teaching_block');
+            }
+        };
+
+        return $this->render('teaching_block/edit.html.twig', [
+            'form' => $form,
+            'teachingBlock' => $teachingBlock,
         ]);
     }
 }

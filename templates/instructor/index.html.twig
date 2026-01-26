@@ -5,13 +5,13 @@
 
 {% block body %}
 	<div class="flex-1 p-8 bg-gray-50">
-		
+
 		<div class="flex justify-between items-center mb-8">
 			<h1 class="text-2xl font-bold text-gray-800">Corps enseignant</h1>
 			<twig:Button variant="blue" label="Ajouter un enseignant" :href="path('app_instructor_new')"/>
 		</div>
 
-		
+
 		<div class="mb-8">
 			<h2 class="text-amber-500 font-semibold mb-4">Filtres</h2>
 			{{ form_start(form, {'attr': {'class': 'flex flex-wrap items-end gap-4'}}) }}
@@ -25,74 +25,76 @@
 			</div>
 			<div class="flex-1 min-w-48">
 				{{ form_label(form.email)}}
-             	{{ form_widget(form.email) }}
+				{{ form_widget(form.email) }}
 			</div>
 			<div class="min-w-48">
 				<twig:Button type="submit" variant="yellow" label="Filtrer"/>
 			</div>
-			
-		{{ form_end(form, {'render_rest': false}) }}
-	</div>
 
-
-	<hr class="border-gray-200 mb-6">
-
-	<div>
-		<h2 class="text-lg font-semibold text-gray-800 mb-4">{{ instructors|length }} enseignant{{ instructors|length > 1 ? 's' : '' }} trouvé{{ instructors|length > 1 ? 's' : '' }}</h2>
-		
-		<div class="bg-white rounded-lg shadow-sm overflow-hidden">
-			<table class="w-full">
-				<thead>
-					<tr class="bg-[#F1F2F799] border-b border-gray-200">
-						<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Nom de famille</th>
-						<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Prénom</th>
-						<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Modules enseignés</th>
-						<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Nombre d'heures</th>
-						<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600"></th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for instructor in instructors %}
-						<tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-							<td class="py-4 px-6 text-gray-800">{{ instructor.user.lastname }}</td>
-							<td class="py-4 px-6 text-gray-800">{{ instructor.user.firstname }}</td>
-							<td class="py-4 px-6 text-gray-600 text-sm">
-								{% set moduleNames = [] %}
-								{% for module in instructor.module %}
-									{% set moduleNames = moduleNames|merge([module.name]) %}
-									{# merge permet de fusionner les tableaux des modules #}
-								{% endfor %}
-								{{ moduleNames|join(', ') ?: '-' }}
-								{# join permet de joindre les modules avec une virgule #}
-							</td>
-							<td class="py-4 px-6 text-gray-800">
-								{% set totalHours = 0 %}
-								{% for module in instructor.module %}
-									{% set totalHours = totalHours + module.hoursCount %}
-								{% endfor %}
-								{{ totalHours > 0 ? totalHours ~ 'h' : '-' }}
-							</td>
-							<td class="py-4 px-6">
-								<a href="{{ path('app_instructor_edit', {'id': instructor.id}) }}" class="inline-flex items-center gap-2 text-gray-500 hover:text-amber-500 transition-colors text-sm">
-									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-										<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-										<circle cx="12" cy="12" r="3"></circle>
-									</svg>
-									Accéder à la fiche
-								</a>
-							</td>
-						</tr>
-	                {% else %}
-						<tr>
-							<td colspan="5" class="py-8 px-6 text-center text-gray-500">Aucun enseignant trouvé</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
+			{{ form_end(form, {'render_rest': false}) }}
 		</div>
 
-		<div class="pagination">
-			{{ knp_pagination_render(instructors, 'pagination/knp_pagination.html.twig') }}
+
+		<hr class="border-gray-200 mb-6">
+
+		<div>
+			<h2 class="text-lg font-semibold text-gray-800 mb-4">{{ instructors|length }}
+				enseignant{{ instructors|length > 1 ? 's' : '' }}
+				trouvé{{ instructors|length > 1 ? 's' : '' }}</h2>
+
+			<div class="bg-white rounded-lg shadow-sm overflow-hidden">
+				<table class="w-full">
+					<thead>
+						<tr class="bg-[#F1F2F799] border-b border-gray-200">
+							<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Nom de famille</th>
+							<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Prénom</th>
+							<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Modules enseignés</th>
+							<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Nombre d'heures</th>
+							<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600"></th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for instructor in instructors %}
+							<tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+								<td class="py-4 px-6 text-gray-800">{{ instructor.user.lastname }}</td>
+								<td class="py-4 px-6 text-gray-800">{{ instructor.user.firstname }}</td>
+								<td class="py-4 px-6 text-gray-600 text-sm">
+									{% set moduleNames = [] %}
+									{% for module in instructor.module %}
+										{% set moduleNames = moduleNames|merge([module.name]) %}
+										{# merge permet de fusionner les tableaux des modules #}
+									{% endfor %}
+									{{ moduleNames|join(', ') ?: '-' }}
+									{# join permet de joindre les modules avec une virgule #}
+								</td>
+								<td class="py-4 px-6 text-gray-800">
+									{% set totalHours = 0 %}
+									{% for module in instructor.module %}
+										{% set totalHours = totalHours + module.hoursCount %}
+									{% endfor %}
+									{{ totalHours > 0 ? totalHours ~ 'h' : '-' }}
+								</td>
+								<td class="py-4 px-6">
+									<a href="{{ path('app_instructor_edit', {'id': instructor.id}) }}" class="inline-flex items-center gap-2 text-gray-500 hover:text-amber-500 transition-colors text-sm">
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+											<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+											<circle cx="12" cy="12" r="3"></circle>
+										</svg>
+										Accéder à la fiche
+									</a>
+								</td>
+							</tr>
+						{% else %}
+							<tr>
+								<td colspan="5" class="py-8 px-6 text-center text-gray-500">Aucun enseignant trouvé</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+
+			<div class="pagination">
+				{{ knp_pagination_render(instructors, 'pagination/knp_pagination.html.twig') }}
+			</div>
 		</div>
-	</div>
-{% endblock %}
+	{% endblock %}
