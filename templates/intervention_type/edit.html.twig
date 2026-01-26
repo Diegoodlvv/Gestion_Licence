@@ -32,6 +32,7 @@
 
 		<div class="flex gap-4">
 			<twig:Button label="Retour a la liste" type="button" variant="grey" href="{{ path('app_index_interventionType') }}"/>
+			<div data-controller="modal"></div>
 			<button type="button" id="deleteButton" class="bg-red-600 text-white hover:bg-red-700 focus:ring-red-600 inline-flex items-center justify-center rounded-lg px-12 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-offset-2">
 				Supprimer
 			</button>
@@ -84,35 +85,4 @@
 			</div>
 		</div>
 	</div>
-
-	<script>
-		document.addEventListener("DOMContentLoaded", function () {
-const deleteButton = document.getElementById("deleteButton");
-const deletePopUp = document.getElementById("deletePopUp");
-const closePopUp = document.getElementById("closePopUp");
-const cancelButton = document.getElementById("cancelButton");
-
-// Open
-deleteButton.addEventListener("click", function () {
-deletePopUp.classList.remove("hidden");
-deletePopUp.classList.add("flex");
-});
-
-// Close
-function hidePopUp() {
-deletePopUp.classList.add("hidden");
-deletePopUp.classList.remove("flex");
-}
-
-closePopUp.addEventListener("click", hidePopUp);
-cancelButton.addEventListener("click", hidePopUp);
-
-// Close clique côté
-deletePopUp.addEventListener("click", function (e) {
-if (e.target === deletePopUp) {
-hidePopUp();
-}
-});
-});
-	</script>
 {% endblock %}
