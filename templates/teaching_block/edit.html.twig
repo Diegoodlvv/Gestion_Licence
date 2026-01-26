@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ teachingBlock.code }}
+	:
+	{{ teachingBlock.name }}
+{% endblock %}
+
+{% block body %}
+<main
+	class="flex-1 bg-white p-12 font-sans">
+	{# Header Section #}
+	<div class="mb-8">
+		<h1 class="text-3xl font-semibold text-slate-800 mb-2">{{ teachingBlock.code }}
+			:
+			{{ teachingBlock.name }}</h1>
+	</div>
+
+	{# Form Section #}
+	<div class="mb-6">
+		{{ form_start(form) }}
+
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+			<div>
+				{{ form_label(form.code, 'Code du bloc - champ obligatoire') }}
+				{{ form_widget(form.code, )}}
+				{{ form_errors(form.code) }}
+			</div>
+
+			<div>
+				{{ form_label(form.name, 'Nom du bloc - champ obligatoire') }}
+				{{ form_widget(form.name, ) }}
+				{{ form_errors(form.name) }}
+			</div>
+		</div>
+
+		<div class="mb-6">
+			{{ form_label(form.hours_count, 'Nombre d\'heures - champ obligatoire') }}
+				{{ form_widget(form.hours_count) }}
+				{{ form_errors(form.hours_count) }}
+			</div>
+
+			<div class="mb-8">
+				{{ form_label(form.description, 'Description - champ obligatoire') }}
+				{{ form_widget(form.description) }}
+				{{ form_errors(form.description) }}
+			</div>
+
+			<div class="mt-8 flex gap-4">
+				<twig:Button label="Sauvegarder" type="submit"/>
+				<a href="{{ path('app_teaching_block') }}">
+					<twig:Button label="Retour" variant="grey" type="button"/>
+				</a>
+			</div>
+
+			{{ form_end(form) }}
+		</div>
+	</main>
+{% endblock %}

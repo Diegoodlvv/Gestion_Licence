@@ -57,7 +57,7 @@
 								<td class="py-4 px-6 text-gray-600 text-sm">{{ block.description ?: '-' }}</td>
 								<td class="py-4 px-6 text-gray-800">{{ block.hoursCount ? block.hoursCount ~ 'h' : '-' }}</td>
 								<td class="py-4 px-6">
-									<a href="#" class="inline-flex items-center gap-2 text-gray-500 hover:text-amber-500 transition-colors text-sm">
+									<a href="{{ path('app_teaching_block_edit', {'id': block.id}) }}" class="inline-flex items-center gap-2 text-gray-500 hover:text-amber-500 transition-colors text-sm">
 										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 											<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
 											<circle cx="12" cy="12" r="3"></circle>

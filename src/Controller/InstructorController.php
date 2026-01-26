@@ -123,7 +123,7 @@ class InstructorController extends AbstractController
                 $this->addFlash('success', 'Enseignant ajouté avec succès !');
                 return $this->redirectToRoute('app_instructor');
             } catch (\Exception) {
-                $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout de l\'enseignant : ');
+                $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout de l\'enseignant');
                 return $this->redirectToRoute('app_instructor');
             }
         }

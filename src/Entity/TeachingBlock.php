@@ -18,8 +18,6 @@ class TeachingBlock
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT, length: 50, unique: true)]
-    #[Assert\Unique()]
-    #[Assert\Type('string')]
     #[Assert\NotNull()]
     #[Assert\NotBlank()]
     private ?string $code = null;
