@@ -21,6 +21,7 @@ use App\Validator as AssertCustom;
 #[AssertCustom\InterventionDuration]
 #[AssertCustom\InCoursePeriod]
 #[AssertCustom\InstructorHasModule]
+#[AssertCustom\AutonomieHasInstructors]
 class Intervention
 {
     #[ORM\Id]

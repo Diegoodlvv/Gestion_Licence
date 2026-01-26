@@ -14,30 +14,32 @@ final class InstructorHasModuleValidator extends ConstraintValidator
             return;
         }
 
+        if($value->getInterventionType()->getName() == "Autonomie")
+        {
+            return;
+        } 
+
         $instructors = $value->getInstructors();
 
-        $result = false;
+        $result = [];
 
         foreach($instructors as $instructor){
             $modules = $instructor->getModule();
 
             foreach($modules as $module){
                 if($module->getName() === $value->getModule()->getName()){
-                    $result = true;
-                } else{
-                    $result = false;
-                }
+                    $result[$instructor->getId()] = true;
+                    break;
+                } 
             }
         }
 
-        if($value->getInterventionType()->getName() != "Autonomie")
-        {
-            if(!$result){
-                $this->context->buildViolation($constraint->message)
-                    ->atPath('instructors')
-                    ->addViolation()
-                ;
-            }
+
+        if(count($instructors) !== count($result)){
+        
+            $this->context->buildViolation($constraint->message)
+                ->atPath('instructors')
+                ->addViolation();
         }
       
     }

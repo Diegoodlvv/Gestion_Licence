@@ -94,6 +94,7 @@ class NewInterventionType extends AbstractType
             ->add('instructors', EntityType::class, [
                 'class' => Instructor::class,
                 'choice_label' => 'UserName',
+                'required' => false,
                 'label' => 'Instructeurs',
                 'multiple' => true,
                 'expanded' => false,
