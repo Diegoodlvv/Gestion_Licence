@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\TeachingBlock;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<TeachingBlock>
@@ -40,4 +41,22 @@ class TeachingBlockRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+
+    public function teachingBlockByFilters(?string $code, ?string $name): ?QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('t');
+
+        if ($code) {
+            $qb->andWhere('LOWER(t.code) LIKE LOWER(:code)')
+                ->setParameter('code', '%' . $code . '%');
+        }
+
+        if ($name) {
+            $qb->andWhere('LOWER(t.name) LIKE LOWER(:name)')
+                ->setParameter('name', '%' . $name . '%');
+        }
+
+        return $qb;
+    }
 }
