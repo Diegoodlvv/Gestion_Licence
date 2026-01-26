@@ -23,7 +23,7 @@ class Module
     #[Assert\NotBlank()]
     private ?string $code = null;
 
-    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'modules_children', cascade: ["persist"])]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'childrens', cascade: ["persist"])]
     #[ORM\JoinColumn(onDelete: "SET NULL")]
     private ?self $parent = null;
 

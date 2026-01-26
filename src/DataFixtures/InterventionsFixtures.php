@@ -18,6 +18,7 @@ class InterventionsFixtures extends Fixture implements DependentFixtureInterface
     {
         $interventions = [
             [
+                "title" => "Spé techniques",
                 "start_date" => new DateTime("10/12/2025 13:30"),
                 "end_date" => new DateTime("10/12/2025 17:30"),
                 "remotely" => 1,
@@ -29,6 +30,7 @@ class InterventionsFixtures extends Fixture implements DependentFixtureInterface
                 ]
             ],
             [
+                "title" => "Eco-Conception",
                 "start_date" => new DateTime("8/12/2025 8:30"),
                 "end_date" => new DateTime("8/12/2025 12:30"),
                 "remotely" => 0,
@@ -40,6 +42,7 @@ class InterventionsFixtures extends Fixture implements DependentFixtureInterface
                 ]
             ],
             [
+                "title" => "Cours sur VPS",
                 "start_date" => new DateTime("9/12/2025 13:30"),
                 "end_date" => new DateTime("9/12/2025 17:30"),
                 "remotely" => 1,
@@ -56,6 +59,7 @@ class InterventionsFixtures extends Fixture implements DependentFixtureInterface
                 ]
             ],
             [
+                "title" => "Projet en autonomie",
                 "start_date" => new DateTime("9/12/2025 8:30"),
                 "end_date" => new DateTime("9/12/2025 12:30"),
                 "remotely" => 1,
@@ -69,6 +73,7 @@ class InterventionsFixtures extends Fixture implements DependentFixtureInterface
 
         foreach ($interventions as $data) {
             $intervention = new Intervention();
+            $intervention->setTitle($data['title']);
             $intervention->setStartDate($data["start_date"]);
             $intervention->setEndDate($data["end_date"]);
             $intervention->setRemotely($data["remotely"]);

@@ -1,2 +1,8 @@
 @import "tailwindcss";
 @source not "../../public";
+
+ul li{
+    color: red;
+    font-size: 14px;
+    padding-bottom: 6px;
+}

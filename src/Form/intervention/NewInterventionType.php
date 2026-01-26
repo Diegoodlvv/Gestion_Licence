@@ -25,22 +25,23 @@ class NewInterventionType extends AbstractType
         $builder
            ->add('start_date', DateTimeType::class, [
                 'label' => 'Date de début',
-                'widget' => 'single_text',
-                'html5' => false,
-                'format' => 'yyyy-MM-dd HH:mm',
+                'widget' => 'choice',
+                'hours' => [8,9,10,11,12,13,14,15,16,17],
+                'minutes' => [0,30],
                 'attr' => [
-                    'class' => 'js-datetime-start w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black',
+                    'class' => 'w-full flex px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black',
                     'placeholder' => '12 Janvier 2026, ...'
                 ],
                 'label_attr' => ['class' => 'block text-sm text-slate-700 mb-1'],
             ])
             ->add('end_date', DateTimeType::class, [
                 'label' => 'Date de fin',
-                'widget' => 'single_text',
-                'html5' => false,
-                'format' => 'yyyy-MM-dd HH:mm',
+                'widget' => 'choice',
+                'years' => [2025],
+                'hours' => [8,9,10,11,12,13,14,15,16,17],
+                'minutes' => [0,30],
                 'attr' => [
-                    'class' => 'js-datetime-end w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black',
+                    'class' => 'w-full flex px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black',
                     'placeholder' => '12 Janvier 2026, ...'
                 ],
                 'label_attr' => ['class' => 'block text-sm text-slate-700 mb-1'],
@@ -48,22 +49,6 @@ class NewInterventionType extends AbstractType
            ->add('remotely', CheckboxType::class, [
                 'label' => false, 
                 'required' => false,
-            ])
-            ->add('course_period', EntityType::class, [
-                'class' => CoursePeriod::class,
-                'choice_label' => 'getCoursePeriod',
-                'label' => "Semaine d'interventions",
-                'placeholder' => 'Sélectionnez une période',
-                'attr' => [
-                    'class' => 'js-course-period w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black',
-                    'placeholder' => 'Sélectionnez une période',
-                    ],
-                'choice_attr' => function($period) {
-                    return [
-                        'data-start' => $period->getStartDate()->format('Y-m-d H:i'),
-                        'data-end' => $period->getEndDate()->format('Y-m-d H:i'),
-                    ];
-                },
             ])
             ->add('intervention_type', EntityType::class, [
                 'class' => InterventionType::class,

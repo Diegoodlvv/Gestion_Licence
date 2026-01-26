@@ -39,7 +39,7 @@ class InterventionType
     /**
      * @var Collection<int, Intervention>
      */
-    #[ORM\OneToMany(targetEntity: Intervention::class, mappedBy: 'interventon_type_id')]
+    #[ORM\OneToMany(targetEntity: Intervention::class, mappedBy: 'intervention_type')]
     private Collection $interventions;
 
     public function __construct()
