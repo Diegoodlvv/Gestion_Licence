@@ -27,7 +27,6 @@ export default class extends Controller {
                 deletePopUp.classList.add("hidden");
                 deletePopUp.classList.remove("flex");
             }
-            console.log("hello");
 
             closePopUp.addEventListener("click", hidePopUp);
 
