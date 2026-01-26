@@ -4,7 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Intervention;
 use App\Form\InterventionsFilterType;
-use App\Form\NewInterventionType;
+use App\Form\Intervention\NewInterventionType;
+use App\Repository\CoursePeriodRepository;
 use App\Repository\InterventionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -53,7 +54,7 @@ final class InterventionController extends AbstractController
     }
 
     #[Route('/new', name: 'app_intervention_new')]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, CoursePeriodRepository $coursePeriodRepository): Response
     {
         $intervention = new Intervention();
         $form = $this->createForm(NewInterventionType::class, $intervention);

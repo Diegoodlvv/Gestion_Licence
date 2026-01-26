@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\SchoolYearRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -98,5 +99,19 @@ class SchoolYear
         }
 
         return $this;
+    }
+
+    public static function getActualYear(): ?string 
+    {
+        $date = new DateTime();
+
+        $month = (int)$date->format('m');
+
+        $year = $date->format('Y');
+
+        if($month > 8 ){
+            $year = (int)$year + 1;
+        } 
+        return $year;
     }
 }

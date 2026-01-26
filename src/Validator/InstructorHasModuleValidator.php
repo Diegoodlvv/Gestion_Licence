@@ -30,11 +30,15 @@ final class InstructorHasModuleValidator extends ConstraintValidator
             }
         }
 
-        if(!$result){
-               $this->context->buildViolation($constraint->message)
-                ->atPath('instructors')
-                ->addViolation()
-            ;
+        if($value->getInterventionType()->getName() != "Autonomie")
+        {
+            if(!$result){
+                $this->context->buildViolation($constraint->message)
+                    ->atPath('instructors')
+                    ->addViolation()
+                ;
+            }
         }
+      
     }
 }

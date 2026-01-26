@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraint;
 #[\Attribute]
 class InstructorHasModule extends Constraint
 {
-    public string $message = "Vous devez choisir un ou plusieurs intervenants qui ne s'occupe pas du module choisi";
+    public string $message = "Vous devez choisir un ou plusieurs intervenants du module choisi";
 
     public function getTargets(): string
     {
