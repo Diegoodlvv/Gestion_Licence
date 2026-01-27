@@ -15,9 +15,12 @@
 
 			<div class="space-y-2 mb-4 text-slate-900 font-medium">
 				{% for module in instructor.module %}
+					{% set used = usedHours[module.id] ?? 0 %}
+					{% set remaining = module.hoursCount - used %}
 					<li class="list-none">{{ module.name }}
 						:
-						{{ module.hoursCount }}h00 (dont 0 restantes pour cette année)</li>
+						{{ module.hoursCount }}h00 (dont
+						{{ remaining }}h restantes pour cette année)</li>
 				{% endfor %}
 			</div>
 
