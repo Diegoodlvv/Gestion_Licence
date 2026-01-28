@@ -29,9 +29,7 @@
 				{% endfor %}
 			</div>
 
-			<button class="bg-slate-800 text-white px-4 py-2 rounded text-sm font-medium">
-				Exporter le récapitulatif (fichier .xls)
-			</button>
+			<twig:Button label="Exporter le récapitulatif (fichier .xls)" type=" button" variant="blue"/>
 		</div>
 
 		{# Divider #}
@@ -39,12 +37,8 @@
 
 		{# Tabs #}
 		<div class="flex gap-2 mb-8">
-			<button class="bg-slate-800 text-white px-3 py-2 rounded-md text-md font-medium">
-				Informations générales
-			</button>
-			<a href="{{ path('app_instructor_interventions', {'id': instructor.id}) }}" class="bg-white border border-slate-200 text-slate-800 px-3 py-2 rounded-md text-md font-medium hover:bg-slate-50 transition">
-				Interventions
-			</a>
+			<twig:Button label="Informations générales" type=" button" variant="blue"/>
+			<twig:Button label="Interventions" type="button" variant="white" href="{{ path('app_instructor_interventions', {'id': instructor.id}) }}"/>
 		</div>
 
 		{# Form Section #}
