@@ -5,6 +5,12 @@
 	{{ instructor.user.lastname }}
 {% endblock %}
 
+{% block breadcrumb %}
+	<twig:BreadcrumbItem label="Corps enseignant" href="{{ path('app_instructor') }}"/>
+	<twig:BreadcrumbItem label="{{ instructor.user.firstname }} {{ instructor.user.lastname }}" href="{{ path('app_instructor_edit', {'id': instructor.id}) }}"/>
+	<twig:BreadcrumbItem label="Interventions"/>
+{% endblock %}
+
 {% block body %}
 	<main
 		class="flex-1 bg-white p-12 font-sans">

@@ -3,6 +3,11 @@
 {% block title %}Gestion des enseignants
 {% endblock %}
 
+{% block breadcrumb %}
+	<twig:BreadcrumbItem label="Corps enseignant" href="{{ path('app_instructor') }}"/>
+	<twig:BreadcrumbItem label="Ajouter un nouvel enseignant"/>
+{% endblock %}
+
 {% block body %}
 	<main class="flex-1 bg-white p-12">
 		<h1 class="text-2xl font-bold text-slate-900 mb-8">Gestion des enseignants</h1>

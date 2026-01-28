@@ -6,6 +6,11 @@
 	{{ teachingBlock.name }}
 {% endblock %}
 
+{% block breadcrumb %}
+	<twig:BreadcrumbItem label="Blocs d'enseignement" href="{{ path('app_teaching_block') }}"/>
+	<twig:BreadcrumbItem label="{{ teachingBlock.name }}"/>
+{% endblock %}
+
 {% block body %}
 <main
 	class="flex-1 bg-white p-12 font-sans">
