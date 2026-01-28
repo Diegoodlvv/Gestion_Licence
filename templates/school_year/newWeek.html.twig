@@ -3,6 +3,12 @@
 {% block title %}Gestion des semaines de cours
 {% endblock %}
 
+{% block breadcrumb %}
+	<twig:BreadcrumbItem label="Années scolaire" href="{{ path('app_school_year') }}"/>
+	<twig:BreadcrumbItem label="Promotion {{ year.year }}" href="{{ path('app_school_year_edit', {'id': year.id}) }}"/>
+	<twig:BreadcrumbItem label="Ajouter une semaine de cours"/>
+{% endblock %}
+
 {% block body %}
 	<main class="flex-1 bg-white p-12">
 		<h1 class="text-2xl font-bold text-slate-900 mb-8">Gestion des semaines de cours</h1>

@@ -3,6 +3,12 @@
 {% block title %}Modifier une semaine de cours
 {% endblock %}
 
+{% block breadcrumb %}
+	<twig:BreadcrumbItem label="Années scolaire" href="{{ path('app_school_year') }}"/>
+	<twig:BreadcrumbItem label="Promotion {{ year.year }}" href="{{ path('app_school_year_edit', {'id': year.id}) }}"/>
+	<twig:BreadcrumbItem label="Modifier une semaine de cours"/>
+{% endblock %}
+
 {% block body %}
 	<main
 		class="flex-1 bg-white p-12 font-sans">
@@ -75,7 +81,7 @@
 			<div class="p-6">
 				<p class="text-slate-700 leading-relaxed">
 					Vous vous apprêtez à supprimer la semaine de cours, cette action est irrévocable.
-																																																																	A noter qu'aucune intervention ne doit être liée à cette semaine de cours pour pouvoir la supprimer.
+																																																																						A noter qu'aucune intervention ne doit être liée à cette semaine de cours pour pouvoir la supprimer.
 				</p>
 				<p class="text-slate-700 font-medium mt-4">
 					Confirmez-vous l'action ?

@@ -1,6 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gestion des interventions{% endblock %}
+{% block title %}Gestion des interventions
+{% endblock %}
+
+{% block breadcrumb %}
+	<twig:BreadcrumbItem label="Interventions" href="{{ path('app_intervention') }}"/>
+	<twig:BreadcrumbItem label="Ajouter une nouvelle intervention"/>
+{% endblock %}
 
 {% block body %}
 	<main class="flex-1 bg-white p-12" id="intervention-form">
@@ -10,7 +16,7 @@
 		<div class="max-w-2xl">
 			{{ form_start(form) }}
 
-            <div class="mb-4">
+			<div class="mb-4">
 				{{ form_row(form.title) }}
 			</div>
 
@@ -26,48 +32,48 @@
 				<div class="w-1/2">
 					{{ form_row(form.intervention_type) }}
 				</div>
-                <div class="w-1/2">
-				    {{ form_row(form.module) }}
-			    </div>
+				<div class="w-1/2">
+					{{ form_row(form.module) }}
+				</div>
 			</div>
 			<div class="mb-4">
 				{{ form_row(form.instructors) }}
 			</div>
 
 			<div class="flex items-center">
-                    <div class="flex items-center gap-3">
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            {{ form_widget(form.remotely, {
+				<div class="flex items-center gap-3">
+					<label class="relative inline-flex items-center cursor-pointer">
+						{{ form_widget(form.remotely, {
                                 attr: { class: 'sr-only peer' }
                             }) }}
 
-                            <div class="
-                                w-10 h-5 
-                                bg-gray-300 
-                                rounded-full 
-                                peer 
-                                peer-checked:bg-blue-900 
-                                transition-colors
-                                after:content-['']
-                                after:absolute
-                                after:top-0.5
-                                after:left-0.5
-                                after:w-4
-                                after:h-4
-                                after:bg-white
-                                after:rounded-full
-                                after:transition-transform
-                                peer-checked:after:translate-x-5
-                            "></div>
-                        </label>
+						<div class="
+														                                w-10 h-5
+														                                bg-gray-300
+														                                rounded-full
+														                                peer
+														                                peer-checked:bg-blue-900
+														                                transition-colors
+														                                after:content-['']
+														                                after:absolute
+														                                after:top-0.5
+														                                after:left-0.5
+														                                after:w-4
+														                                after:h-4
+														                                after:bg-white
+														                                after:rounded-full
+														                                after:transition-transform
+														                                peer-checked:after:translate-x-5
+														                            "></div>
+					</label>
 
-                        <span class="text-sm text-gray-800">
-                           Intervention effectuée en visio
-                        </span>
-                    </div>
+					<span class="text-sm text-gray-800">
+						Intervention effectuée en visio
+					</span>
+				</div>
 
-                    {{ form_errors(form.remotely) }}
-            </div>
+				{{ form_errors(form.remotely) }}
+			</div>
 
 			<div class="mt-8 flex gap-4">
 				<a href="{{ path('app_intervention') }}">

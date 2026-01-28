@@ -3,6 +3,11 @@
 {% block title %}Modifier une année scolaire
 {% endblock %}
 
+{% block breadcrumb %}
+	<twig:BreadcrumbItem label="Années scolaire" href="{{ path('app_school_year') }}"/>
+	<twig:BreadcrumbItem label="Promotion {{ year.year }}"/>
+{% endblock %}
+
 {% block body %}
 
 	<main

@@ -3,6 +3,11 @@
 {% block title %}Modifier un enseignant
 {% endblock %}
 
+{% block breadcrumb %}
+	<twig:BreadcrumbItem label="Corps enseignant" href="{{ path('app_instructor') }}"/>
+	<twig:BreadcrumbItem label="{{ instructor.user.firstname }} {{ instructor.user.lastname }}"/>
+{% endblock %}
+
 {% block body %}
 	<main
 		class="flex-1 bg-white p-12 font-sans">

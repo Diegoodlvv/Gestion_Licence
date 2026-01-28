@@ -3,76 +3,85 @@
 {% block title %}Interventions
 {% endblock %}
 
+{% block breadcrumb %}
+	<twig:BreadcrumbItem label="Interventions"/>
+{% endblock %}
+
 {% block body %}
-<div class="flex-1 p-8 bg-gray-50">
-	<div class="flex justify-between items-center mb-8">
-		<h1 class="text-2xl font-semibold text-[#1F384C]">Interventions</h1>
-		<twig:Button variant="blue" label="Ajouter une nouvelle intervention" :href="path('app_intervention_new')"/>
-	</div>
-
-	<div class="mb-8">
-		<h2 class="text-[#FFBD01] font-semibold mb-4">Filtres</h2>
-		{{ form_start(form, {'attr': {'class': 'flex flex-wrap items-end gap-4'}}) }}
-		<div class="flex-1 min-w-48">
-			{{ form_label(form.start_date) }}
-			{{ form_widget(form.start_date) }}
-		</div>
-		<div class="flex-1 min-w-48">	
-			{{ form_label(form.end_date) }}	
-		    {{ form_widget(form.end_date) }}
-		</div>
-		<div class="flex-1 min-w-48">
-			{{ form_label(form.module) }}	
-			{{ form_widget(form.module) }}
-		</div>
-		<div class="min-w-48">
-			<twig:Button type="submit" variant="yellow" label="Filtrer"/>
+	<div class="flex-1 p-8 bg-white">
+		<div class="flex justify-between items-center mb-8">
+			<h1 class="text-2xl font-bold text-[#1F384C]">Interventions</h1>
+			<twig:Button variant="blue" label="Ajouter une nouvelle intervention" :href="path('app_intervention_new')"/>
 		</div>
 
-		{{ form_end(form, {'render_rest': false}) }}
-	</div>
+		<div class="mb-8">
+			<h2 class="text-[#FFBD01] font-semibold mb-4">Filtres</h2>
+			{{ form_start(form, {'attr': {'class': 'flex flex-wrap items-end gap-4'}}) }}
+			<div class="flex-1 min-w-48">
+				{{ form_label(form.start_date) }}
+				{{ form_widget(form.start_date) }}
+			</div>
+			<div class="flex-1 min-w-48">
+				{{ form_label(form.end_date) }}
+				{{ form_widget(form.end_date) }}
+			</div>
+			<div class="flex-1 min-w-48">
+				{{ form_label(form.module) }}
+				{{ form_widget(form.module) }}
+			</div>
+			<div class="min-w-48">
+				<twig:Button type="submit" variant="yellow" label="Filtrer"/>
+			</div>
 
-	<hr class="border-gray-200 mb-6">
+			{{ form_end(form, {'render_rest': false}) }}
+		</div>
 
-	<div>
-		<h2 class="text-lg font-semibold text-gray-800 mb-4">{{ pagination|length }} intervention trouvée{{ pagination|length > 1 ? 's' : '' }}</h2>
+		<hr class="border-gray-200 mb-6">
 
-		<div class="bg-white rounded-lg shadow-sm overflow-hidden">
-			<table class="w-full">
-				<thead>
-					<tr class="bg-[#F1F2F799] border-b border-gray-200">
-						<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Date de l'intervention</th>
-						<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Module</th>
-						<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Type</th>
-						<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Intervenants</th>
-                        <th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">En visio</th>
-						<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600"></th>
-					</tr>
-				</thead>
-				<tbody class="text-slate-800">
-					{% for intervention in pagination %}
-						<tr class="border-b border-slate-100 hover:bg-slate-50">
-							<td class="p-4">
-							{{ intervention.startDate|date('d/m/Y H:i') }}
-							à {{ intervention.endDate|date('H:i') }}
-							</td>
-							<td class="p-4">{{ intervention.module.name }}</td>
-							<td class="p-4">
-								{{ intervention.interventionType ? intervention.interventionType.name : 'N/A' }}
-							</td>
-							<td class="p-4">
-								{% for instr in intervention.instructors %}
-									{{ instr.user.firstname|first|upper }}. {{ instr.user.lastname|upper }}{% if not loop.last %}, {% endif %}
-								{% endfor %}
-							</td>
-							<td class="p-4 text-center">
-								{% if intervention.remotely %}
-									<img src="{{ asset('icones/Frame.png') }}" class="pl-4">
-								{% else %}
-									<img src="{{ asset('icones/Vector.png') }}" class="pl-4">
-								{% endif %}
-							</td>
-							<td colspan="5" class="py-4 px-6">
+		<div>
+			<h2 class="text-lg font-semibold text-gray-800 mb-4">{{ pagination|length }}
+				intervention trouvée{{ pagination|length > 1 ? 's' : '' }}</h2>
+
+			<div class="bg-white rounded-lg shadow-sm overflow-hidden">
+				<table class="w-full">
+					<thead>
+						<tr class="bg-[#F1F2F799] border-b border-gray-200">
+							<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Date de l'intervention</th>
+							<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Module</th>
+							<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Type</th>
+							<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Intervenants</th>
+							<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">En visio</th>
+							<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600"></th>
+						</tr>
+					</thead>
+					<tbody class="text-slate-800">
+						{% for intervention in pagination %}
+							<tr class="border-b border-slate-100 hover:bg-slate-50">
+								<td class="p-4">
+									{{ intervention.startDate|date('d/m/Y H:i') }}
+									à
+									{{ intervention.endDate|date('H:i') }}
+								</td>
+								<td class="p-4">{{ intervention.module.name }}</td>
+								<td class="p-4">
+									{{ intervention.interventionType ? intervention.interventionType.name : 'N/A' }}
+								</td>
+								<td class="p-4">
+									{% for instr in intervention.instructors %}
+										{{ instr.user.firstname|first|upper }}.
+										{{ instr.user.lastname|upper }}
+										{% if not loop.last %},
+										{% endif %}
+									{% endfor %}
+								</td>
+								<td class="p-4 text-center">
+									{% if intervention.remotely %}
+										<img src="{{ asset('icones/Frame.png') }}" class="pl-4">
+									{% else %}
+										<img src="{{ asset('icones/Vector.png') }}" class="pl-4">
+									{% endif %}
+								</td>
+								<td colspan="5" class="py-4 px-6">
 									<a href="{{ path('app_instructor_edit', {'id': intervention.id}) }}" class="inline-flex items-center gap-2 text-gray-500 hover:text-amber-500 transition-colors text-sm">
 										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 											<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
@@ -80,23 +89,23 @@
 										</svg>
 										Accéder à la fiche
 									</a>
-							</td>
-						</tr>
+								</td>
+							</tr>
 
-					{% else %}
-						<tr>
-							<td colspan="5" class="p-4 text-center text-slate-500">
-								Aucune intervention trouvée.
-							</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
+						{% else %}
+							<tr>
+								<td colspan="5" class="p-4 text-center text-slate-500">
+									Aucune intervention trouvée.
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="pagination">
+			{{ knp_pagination_render(pagination, 'pagination/knp_pagination.html.twig') }}
 		</div>
 	</div>
-
-	<div class="pagination">
-		{{ knp_pagination_render(pagination, 'pagination/knp_pagination.html.twig') }}
-	</div>
-</div>
 {% endblock %}
