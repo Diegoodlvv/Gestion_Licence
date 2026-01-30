@@ -17,12 +17,12 @@ class TeachingBlockType extends AbstractType
         $builder
             ->add('code', TextType::class, [
                 'label' => 'Code du bloc',
-                'attr' => ['class' => 'w-full px-4 py-3 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500'],
+                'attr' => ['class' => 'w-full bg-[#DFE4EA] px-4 py-3 border border-slate-200 rounded-md', 'readonly' => true,],
                 'label_attr' => ['class' => 'block text-sm text-slate-700 mb-1'],
             ])
             ->add('name', TextType::class, [
                 'label' => 'Nom du bloc',
-                'attr' => ['class' => 'w-full px-4 py-3 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500'],
+                'attr' => ['class' => 'w-full bg-[#DFE4EA] px-4 py-3 border border-slate-200 rounded-md', 'readonly' => true,],
                 'label_attr' => ['class' => 'block text-sm text-slate-700 mb-1'],
             ])
             ->add('hours_count', NumberType::class, [

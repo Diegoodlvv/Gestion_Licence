@@ -45,7 +45,7 @@ class NewInterventionType extends AbstractType
                 'hours' => [8,9,10,11,12,13,14,15,16,17],
                 'minutes' => [0,30],
                 'months' => [1,2,3,4,5,6,7,9,10,11,12],
-                'years' => [$year, 2025],
+                'years' => [$year],
                 'attr' => [
                     'class' => 'w-full flex px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black',
                     'placeholder' => '12 Janvier 2026, ...'
@@ -58,7 +58,7 @@ class NewInterventionType extends AbstractType
                 'hours' => [8,9,10,11,12,13,14,15,16,17],
                 'minutes' => [0,30],
                 'months' => [1,2,3,4,5,6,7,9,10,11,12],
-                'years' => [$year, 2025],
+                'years' => [$year],
                 'attr' => [
                     'class' => 'w-full flex px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black',
                     'placeholder' => '12 Janvier 2026, ...'
