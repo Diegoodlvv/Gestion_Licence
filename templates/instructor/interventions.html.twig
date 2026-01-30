@@ -5,6 +5,12 @@
 	{{ instructor.user.lastname }}
 {% endblock %}
 
+{% block breadcrumb %}
+	<twig:BreadcrumbItem label="Corps enseignant" href="{{ path('app_instructor') }}"/>
+	<twig:BreadcrumbItem label="{{ instructor.user.firstname }} {{ instructor.user.lastname }}" href="{{ path('app_instructor_edit', {'id': instructor.id}) }}"/>
+	<twig:BreadcrumbItem label="Interventions"/>
+{% endblock %}
+
 {% block body %}
 	<main
 		class="flex-1 bg-white p-12 font-sans">
@@ -17,15 +23,18 @@
 
 			<div class="space-y-2 mb-4 text-slate-900 font-medium">
 				{% for module in instructor.module %}
+					{% set used = usedHours[module.id] ?? 0 %}
+					{# variable temp $used, on check le tableau usedHours, si y a pas de module alors = 0 car pas d'intervention, sinon on recupere l'id #}
+					{% set remaining = module.hoursCount - used %}
+					{# on calcul le reste, heures total = heure du module - heures deja faites #}
 					<li class="list-none">{{ module.name }}
 						:
-						{{ module.hoursCount }}h00 (dont 0 restantes pour cette année)</li>
+						{{ module.hoursCount }}h00 (dont
+						{{ remaining }}h restantes pour cette année)</li>
 				{% endfor %}
 			</div>
 
-			<button class="bg-slate-800 text-white px-4 py-2 rounded text-sm font-medium">
-				Exporter le récapitulatif
-			</button>
+			<twig:Button label="Exporter le récapitulatif (fichier .xls)" type=" button" variant="blue"/>
 		</div>
 
 		{# Divider #}
@@ -33,12 +42,8 @@
 
 		{# Tabs #}
 		<div class="flex gap-2 mb-8">
-			<a href="{{ path('app_instructor_edit', {'id': instructor.id}) }}" class="bg-white border border-slate-200 text-slate-800 px-3 py-2 rounded-md text-md font-medium hover:bg-slate-50 transition no-underline">
-				Informations générales
-			</a>
-			<button class="bg-slate-800 text-white px-3 py-2 rounded-md text-md font-medium">
-				Interventions
-			</button>
+			<twig:Button label="Informations générales" type=" button" variant="white" href="{{ path('app_instructor_edit', {'id': instructor.id}) }}"/>
+			<twig:Button label="Interventions" type="button" variant="blue"/>
 		</div>
 
 		{# Filter Section #}
@@ -88,7 +93,9 @@
 						{% for intervention in interventions %}
 							<tr class="border-b border-slate-100 hover:bg-slate-50">
 								<td class="p-4">
-									{{ intervention.startDate|date('d/m/Y') }}
+									{{ intervention.startDate|date('d/m/Y H\\hi') }}
+									à
+									{{ intervention.endDate|date('H\\hi') }}
 								</td>
 								<td class="p-4">{{ intervention.module.name }}</td>
 								<td class="p-4">{{ intervention.interventionType ? intervention.interventionType.name : 'N/A' }}</td>

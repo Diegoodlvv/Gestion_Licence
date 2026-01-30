@@ -81,10 +81,13 @@ class InstructorController extends AbstractController
             10
         );
 
+        $usedHours = $instructorRepository->getUsedHoursPerModuleForInstructor($id);
+
         return $this->render('instructor/interventions.html.twig', [
             'interventions' => $pagination,
             'form' => $form,
-            'instructor' => $instructor
+            'instructor' => $instructor,
+            'usedHours' => $usedHours,
         ]);
     }
 
@@ -154,9 +157,15 @@ class InstructorController extends AbstractController
 
 
 
+
+
+
+        $usedHours = $instructorRepository->getUsedHoursPerModuleForInstructor($id);
+
         return $this->render('instructor/edit.html.twig', [
             'form' => $form,
-            'instructor' => $instructor
+            'instructor' => $instructor,
+            'usedHours' => $usedHours
         ]);
     }
 
