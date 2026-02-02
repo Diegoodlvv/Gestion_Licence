@@ -34,7 +34,7 @@
 				{% endfor %}
 			</div>
 
-			<twig:Button label="Exporter le récapitulatif (fichier .xls)" type=" button" variant="blue"/>
+			<twig:Button label="Exporter le récapitulatif (fichier .xls)" type="button" variant="blue" href="{{ path('app_instructor_export', {'id': instructor.id}) }}"/>
 		</div>
 
 		{# Divider #}
