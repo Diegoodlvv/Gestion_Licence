@@ -17,6 +17,12 @@ use App\Repository\InstructorRepository;
 use App\Form\EditInstructorType;
 use App\Form\InstructorInterventionsFilterType;
 use Knp\Component\Pager\PaginatorInterface;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class InstructorController extends AbstractController
 {
@@ -180,5 +186,195 @@ class InstructorController extends AbstractController
         }
 
         return $this->redirectToRoute('app_instructor');
+    }
+
+    #[Route('/instructor/{id}/export', name: 'app_instructor_export')]
+    public function export($id, InstructorRepository $instructorRepository): StreamedResponse
+    {
+        $instructor = $instructorRepository->find($id);
+
+        $interventionsQuery = $instructorRepository->InstructorInterventionsByFilters($id, null, null, null); // recuperation de toutes le interventions
+        $interventions = $interventionsQuery->getQuery()->getResult(); // execute la requete sql pour obtenir la liste des objets
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // definition de la largeur des colonnes
+        $sheet->getColumnDimension('A')->setWidth(15);
+        $sheet->getColumnDimension('B')->setWidth(15);
+        $sheet->getColumnDimension('C')->setWidth(15);
+        $sheet->getColumnDimension('D')->setWidth(60);
+        $sheet->getColumnDimension('E')->setWidth(15);
+
+        $currentRow = 1;
+
+        // groupe les interventions par module
+        $interventionsByModule = [];
+        foreach ($interventions as $intervention) {
+            $module = $intervention->getModule();
+            if (!$module) {
+                continue;
+            }
+            $moduleName = $module->getName();
+            if (!isset($interventionsByModule[$moduleName])) {
+                $interventionsByModule[$moduleName] = [];
+            }
+            $interventionsByModule[$moduleName][] = $intervention;
+        }
+
+        // année académique
+        $currentYear = date('Y');
+        $nextYear = $currentYear + 1;
+        $academicYear = $currentYear . '-' . $nextYear;
+
+        // titre
+        $sheet->mergeCells('A' . $currentRow . ':E' . $currentRow);
+        $sheet->setCellValue('A' . $currentRow, 'RÉPARTITION DES INTERVENTIONS PAR INTERVENANT ' . $academicYear);
+        $sheet->getStyle('A' . $currentRow)->getFont()->setBold(true)->setSize(14);
+        $sheet->getStyle('A' . $currentRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A' . $currentRow)->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->getStartColor()->setARGB('FF9BC2E6');
+        $currentRow += 2;
+
+        // traiter chaque module
+        foreach ($interventionsByModule as $moduleName => $moduleInterventions) {
+            $module = $moduleInterventions[0]->getModule();
+            $instructorInitials = strtoupper(substr($instructor->getUser()->getFirstname(), 0, 1)) . '. ' .
+                strtoupper($instructor->getUser()->getLastname());
+
+            // header du module
+            $sheet->mergeCells('A' . $currentRow . ':E' . $currentRow);
+            $sheet->setCellValue('A' . $currentRow, $instructorInitials . ' : ' . $moduleName);
+            $sheet->getStyle('A' . $currentRow)->getFont()->setBold(true)->setSize(12);
+            $sheet->getStyle('A' . $currentRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
+            $currentRow++;
+
+            // headers
+            $headers = ['', '', '', '', ''];
+            $sheet->fromArray($headers, null, 'A' . $currentRow);
+            $currentRow++;
+
+            // trier les interventions par date
+            usort($moduleInterventions, function ($a, $b) {
+                return $a->getStartDate() <=> $b->getStartDate();
+            });
+
+            $totalHours = 0;
+
+            // ajouter les interventions
+            foreach ($moduleInterventions as $intervention) {
+                $startDate = $intervention->getStartDate();
+                $endDate = $intervention->getEndDate();
+
+                $dayOfWeek = $this->getDayOfWeek($startDate->format('N'));
+                $dayMonth = $startDate->format('j') . '-' . $this->getMonth($startDate->format('n')) . '.';
+
+                // calculer le créneau horaire selon les heures de début et de fin
+                $startHour = (int)$startDate->format('H');
+                $endHour = (int)$endDate->format('H');
+
+                $timeSlot = '';
+                if ($startHour < 12 && $endHour <= 13) {
+                    $timeSlot = 'Matin';
+                } elseif ($startHour >= 13) {
+                    $timeSlot = 'Après-midi';
+                } elseif ($startHour < 12 && $endHour > 13) {
+                    $timeSlot = 'Journée';
+                }
+
+                $title = $intervention->getTitle() ?? '';
+
+                // calculer les heures
+                $durationSeconds = $endDate->getTimestamp() - $startDate->getTimestamp();
+                $hours = $durationSeconds / 3600;
+                $totalHours += $hours;
+
+                $sheet->setCellValue('A' . $currentRow, $dayOfWeek);
+                $sheet->setCellValue('B' . $currentRow, $dayMonth);
+                $sheet->setCellValue('C' . $currentRow, $timeSlot);
+                $sheet->setCellValue('D' . $currentRow, $title);
+                $sheet->setCellValue('E' . $currentRow, $hours);
+
+                $currentRow++;
+            }
+
+            $currentRow++;
+
+            // nombre total d'heures pour ce module
+            $sheet->setCellValue('D' . $currentRow, 'Total heures');
+            $sheet->setCellValue('E' . $currentRow, $totalHours);
+            $sheet->getStyle('D' . $currentRow . ':E' . $currentRow)->getFont()->setBold(true);
+            $currentRow++;
+
+            // heures restantes
+            $moduleHours = $module->getHoursCount();
+            $remainingHours = $moduleHours - $totalHours;
+            $sheet->setCellValue('D' . $currentRow, 'Heures restantes à effectuer');
+            $sheet->setCellValue('E' . $currentRow, $remainingHours);
+            $sheet->getStyle('D' . $currentRow . ':E' . $currentRow)->getFont()->setBold(true);
+            $currentRow += 3;
+        }
+
+        // appliquer les bordures à toutes les cellules avec du contenu
+        $highestRow = $currentRow - 1;
+        $styleArray = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color' => ['argb' => 'FF000000'],
+                ],
+            ],
+        ];
+        $sheet->getStyle('A2:E' . $highestRow)->applyFromArray($styleArray);
+
+        // créer le nom de fichier
+        $filename = 'Recapitulatif_' . $instructor->getUser()->getLastname() . '_' .
+            $instructor->getUser()->getFirstname() . '_' . $academicYear . '.xlsx';
+
+        // créer la réponse
+        $response = new StreamedResponse(function () use ($spreadsheet) {
+            $writer = new Xlsx($spreadsheet);
+            $writer->save('php://output');
+        });
+
+        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
+        $response->headers->set('Cache-Control', 'max-age=0');
+
+        return $response;
+    }
+
+    private function getDayOfWeek(int $dayNumber): string
+    {
+        $days = [
+            1 => 'Lundi',
+            2 => 'Mardi',
+            3 => 'Mercredi',
+            4 => 'Jeudi',
+            5 => 'Vendredi',
+            6 => 'Samedi',
+            7 => 'Dimanche'
+        ];
+        return $days[$dayNumber] ?? '';
+    }
+
+    private function getMonth(string $monthNumber): string
+    {
+        $months = [
+            '1' => 'janv',
+            '2' => 'févr',
+            '3' => 'mars',
+            '4' => 'avr',
+            '5' => 'mai',
+            '6' => 'juin',
+            '7' => 'juil',
+            '8' => 'août',
+            '9' => 'sept',
+            '10' => 'oct',
+            '11' => 'nov',
+            '12' => 'déc'
+        ];
+        return $months[$monthNumber] ?? '';
     }
 }
