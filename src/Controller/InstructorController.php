@@ -18,9 +18,10 @@ use App\Form\EditInstructorType;
 use App\Form\InstructorInterventionsFilterType;
 use Knp\Component\Pager\PaginatorInterface;
 
+#[Route("/instructor")]
 class InstructorController extends AbstractController
 {
-    #[Route('/instructor', name: 'app_instructor')]
+    #[Route('/', name: 'app_instructor')]
     public function index(Request $request, InstructorRepository $instructorRepository, PaginatorInterface $pagination): Response
     {
         $form = $this->createForm(InstructorFilterType::class);
@@ -54,7 +55,7 @@ class InstructorController extends AbstractController
         ]);
     }
 
-    #[Route('/instructor/{id}/show_interventions', name: 'app_instructor_interventions')]
+    #[Route('/{id}/show_interventions', name: 'app_instructor_interventions')]
     public function showInterventions($id, InstructorRepository $instructorRepository, Request $request, PaginatorInterface $pagination): Response
     {
         $instructor = $instructorRepository->find($id);
@@ -91,7 +92,7 @@ class InstructorController extends AbstractController
         ]);
     }
 
-    #[Route('/instructor/new', name: 'app_instructor_new')]
+    #[Route('/new', name: 'app_instructor_new')]
     public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher): Response
     {
         $instructor = new Instructor();
@@ -137,7 +138,7 @@ class InstructorController extends AbstractController
         ]);
     }
 
-    #[Route('/instructor/{id}/edit', name: 'app_instructor_edit')]
+    #[Route('/{id}/edit', name: 'app_instructor_edit')]
     public function edit($id, InstructorRepository $instructorRepository, Request $request, EntityManagerInterface $entityManager)
     {
         $instructor = $instructorRepository->find($id);
@@ -169,7 +170,7 @@ class InstructorController extends AbstractController
         ]);
     }
 
-    #[Route('/instructor/{id}/delete', name: 'app_instructor_delete')]
+    #[Route('/{id}/delete', name: 'app_instructor_delete')]
     public function delete($id, InstructorRepository $instructorRepository, EntityManagerInterface $entityManager)
     {
         $instructor = $instructorRepository->find($id);
