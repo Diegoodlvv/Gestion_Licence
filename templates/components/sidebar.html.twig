@@ -1,6 +1,4 @@
-<aside
-	class="w-72 h-screen bg-slate-50 border-r border-slate-200 flex flex-col">
-	{# Header #}
+<aside class="w-72 h-screen bg-slate-50 border-r border-slate-200 flex flex-col">
 	<div class="px-6 py-5">
 		<div class="flex items-center gap-3">
 			<img src="{{ asset('icones/logoprojet.png') }}">
@@ -11,36 +9,61 @@
 		</div>
 	</div>
 
-	{# Navigation #}
+	{% set current_route = app.request.attributes.get('_route') %}
+	{% set menu1 = [
+		{
+			name: 'Calendrier',
+			route: 'app_home',
+			icone: 'Calendar.png'
+		},
+		{
+			name: 'Interventions',
+			route: 'app_intervention',
+			icone: 'Interventions.png'
+		},
+		{
+			name: 'Corps enseignant',
+			route: 'app_instructor',
+			icone: 'Enseignants.png'
+		},
+	]%}
+	{% set menu2 = [
+		{
+			name: 'Modules',
+			route: 'app_module',
+			icone: 'Modules.png'
+		},
+		{
+			name: "Blocs d'enseignements",
+			route: 'app_teaching_block',
+			icone: 'BlocsEnseignements.png'
+		},
+		{
+			name: 'Années scolaire',
+			route: 'app_school_year',
+			icone: 'AnnéesScolaires.png'
+		},
+		{
+			name: "Types d'interventions",
+			route: 'app_interventiontype',
+			icone: 'TypesInterventions.png'
+		},
+	]%}
+	
 	<nav class="flex-1 px-4">
 		<p class="mt-6 mb-2 px-2 text-xs font-semibold text-slate-400 uppercase">
 			Menu
 		</p>
 
 		<ul class="space-y-1">
-			<li>
-				<a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium
-																																																																																																																																																												                          bg-slate-800 text-white">
-					<span><img src="{{ asset('icones/Calendar.png') }}"></span>
-					<span>Calendrier</span>
-				</a>
-			</li>
-
-			<li>
-				<a href="{{ path('app_intervention') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium
-																																																																																																																																																												                          text-slate-600 hover:bg-slate-200 hover:text-slate-900">
-					<span><img src="{{ asset('icones/Interventions.png') }}"></span>
-					<span>Interventions</span>
-				</a>
-			</li>
-
-			<li>
-				<a href="{{ path('app_instructor')}}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium
-																																																																																																																																																												                          text-slate-600 hover:bg-slate-200 hover:text-slate-900">
-					<span><img src="{{ asset('icones/Enseignants.png') }}"></span>
-					<span>Corps enseignant</span>
-				</a>
-			</li>
+			{% for item in menu1 %}
+				<li>
+					<a href="{{ path(item.route)}}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 {{ current_route == item.route ? 'bg-slate-800 text-white' : '' }}">
+						<span><img src="{{ asset('icones/'~ item.icone) }}"></span>
+						<span>{{ item.name }}</span>
+					</a>
+				</li>
+			{% endfor %}
 		</ul>
 
 		<p class="mt-8 mb-2 px-2 text-xs font-semibold text-slate-400 uppercase">
@@ -48,37 +71,14 @@
 		</p>
 
 		<ul class="space-y-1">
-			<li>
-				<a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium
-																																																																																																																																																												                          text-slate-600 hover:bg-slate-200 hover:text-slate-900">
-					<span><img src="{{ asset('icones/Modules.png') }}"></span>
-					<span>Modules</span>
-				</a>
-			</li>
-
-			<li>
-				<a href="{{ path('app_teaching_block') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium
-																																																																																																																																																												                          text-slate-600 hover:bg-slate-200 hover:text-slate-900">
-					<span><img src="{{ asset('icones/BlocsEnseignements.png') }}"></span>
-					<span>Blocs d’enseignement</span>
-				</a>
-			</li>
-
-			<li>
-				<a href="{{ path('app_school_year')}}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium
-																																																																																																																																											                          text-slate-600 hover:bg-slate-200 hover:text-slate-900">
-					<span><img src="{{ asset('icones/AnnéesScolaires.png') }}"></span>
-					<span>Années scolaire</span>
-				</a>
-			</li>
-
-			<li>
-				<a href="{{ path('app_index_interventionType') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium
-																																																																																																																																																												                          text-slate-600 hover:bg-slate-200 hover:text-slate-900">
-					<span><img src="{{ asset('icones/TypesInterventions.png') }}"></span>
-					<span>Types d’intervention</span>
-				</a>
-			</li>
+			{% for item in menu2 %}
+				<li>
+					<a href="{{ path(item.route)}}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 {{ current_route == item.route ? 'bg-slate-800 text-white' : '' }}">
+						<span><img src="{{ asset('icones/' ~ item.icone) }}"></span>
+						<span>{{ item.name }}</span>
+					</a>
+				</li>
+			{% endfor %}
 		</ul>
 	</nav>
 
