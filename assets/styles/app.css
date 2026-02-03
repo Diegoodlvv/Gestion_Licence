@@ -7,6 +7,22 @@ ul li{
     padding-bottom: 6px;
 }
 
+.fc-event-main {
+  display: flex;
+  align-items: left;
+}
+
+.fc-header-toolbar{
+  padding-bottom: 60px !important;
+  position: relative;
+}
+
+.weeks_number{
+  text-align: center !important;
+  color: black !important;
+  font-size: bold !important;
+}
+
 .fc-toolbar button {
   border-radius: 10px !important;
   padding: 6px 14px  !important;
@@ -16,9 +32,16 @@ ul li{
   font-weight: 500  !important;
 }
 
+.fc-toolbar-title{
+  position: absolute;
+  top: 60%;
+  z-index: 10;
+  font-size: 35px;
+  font-weight: bold;
+}
+
 tbody tr{
-    width: 50px;
-    height: 65px;
+  height: 65px;
 }
 
 .fc-toolbar button.fc-button-active {
@@ -28,6 +51,14 @@ tbody tr{
 
 .fc-timegrid-slot {
   border-color: #f1f3f5  !important;
+}
+
+.fc-day-today{
+  background-color: red !important;
+}
+
+.fc-day-today.fc-timegrid-col-frame{
+  background-color: red !important;
 }
 
 .fc-timegrid-axis {

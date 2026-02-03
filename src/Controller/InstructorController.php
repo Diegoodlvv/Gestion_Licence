@@ -162,11 +162,6 @@ class InstructorController extends AbstractController
             }
         }
 
-
-
-
-
-
         $usedHours = $instructorRepository->getUsedHoursPerModuleForInstructor($id);
 
         return $this->render('instructor/edit.html.twig', [
@@ -200,7 +195,6 @@ class InstructorController extends AbstractController
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        // definition de la largeur des colonnes
         $sheet->getColumnDimension('A')->setWidth(15);
         $sheet->getColumnDimension('B')->setWidth(15);
         $sheet->getColumnDimension('C')->setWidth(15);
@@ -209,7 +203,6 @@ class InstructorController extends AbstractController
 
         $currentRow = 1;
 
-        // groupe les interventions par module
         $interventionsByModule = [];
         foreach ($interventions as $intervention) {
             $module = $intervention->getModule();
@@ -223,12 +216,10 @@ class InstructorController extends AbstractController
             $interventionsByModule[$moduleName][] = $intervention;
         }
 
-        // année académique
         $currentYear = date('Y');
         $nextYear = $currentYear + 1;
         $academicYear = $currentYear . '-' . $nextYear;
 
-        // titre
         $sheet->mergeCells('A' . $currentRow . ':E' . $currentRow);
         $sheet->setCellValue('A' . $currentRow, 'RÉPARTITION DES INTERVENTIONS PAR INTERVENANT ' . $academicYear);
         $sheet->getStyle('A' . $currentRow)->getFont()->setBold(true)->setSize(14);
@@ -238,32 +229,27 @@ class InstructorController extends AbstractController
             ->getStartColor()->setARGB('FF9BC2E6');
         $currentRow += 2;
 
-        // traiter chaque module
         foreach ($interventionsByModule as $moduleName => $moduleInterventions) {
             $module = $moduleInterventions[0]->getModule();
             $instructorInitials = strtoupper(substr($instructor->getUser()->getFirstname(), 0, 1)) . '. ' .
                 strtoupper($instructor->getUser()->getLastname());
 
-            // header du module
             $sheet->mergeCells('A' . $currentRow . ':E' . $currentRow);
             $sheet->setCellValue('A' . $currentRow, $instructorInitials . ' : ' . $moduleName);
             $sheet->getStyle('A' . $currentRow)->getFont()->setBold(true)->setSize(12);
             $sheet->getStyle('A' . $currentRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
             $currentRow++;
 
-            // headers
             $headers = ['', '', '', '', ''];
             $sheet->fromArray($headers, null, 'A' . $currentRow);
             $currentRow++;
 
-            // trier les interventions par date
             usort($moduleInterventions, function ($a, $b) {
                 return $a->getStartDate() <=> $b->getStartDate();
             });
 
             $totalHours = 0;
 
-            // ajouter les interventions
             foreach ($moduleInterventions as $intervention) {
                 $startDate = $intervention->getStartDate();
                 $endDate = $intervention->getEndDate();
@@ -271,7 +257,6 @@ class InstructorController extends AbstractController
                 $dayOfWeek = $this->getDayOfWeek($startDate->format('N'));
                 $dayMonth = $startDate->format('j') . '-' . $this->getMonth($startDate->format('n')) . '.';
 
-                // calculer le créneau horaire selon les heures de début et de fin
                 $startHour = (int)$startDate->format('H');
                 $endHour = (int)$endDate->format('H');
 
@@ -286,7 +271,6 @@ class InstructorController extends AbstractController
 
                 $title = $intervention->getTitle() ?? '';
 
-                // calculer les heures
                 $durationSeconds = $endDate->getTimestamp() - $startDate->getTimestamp();
                 $hours = $durationSeconds / 3600;
                 $totalHours += $hours;
@@ -302,13 +286,11 @@ class InstructorController extends AbstractController
 
             $currentRow++;
 
-            // nombre total d'heures pour ce module
             $sheet->setCellValue('D' . $currentRow, 'Total heures');
             $sheet->setCellValue('E' . $currentRow, $totalHours);
             $sheet->getStyle('D' . $currentRow . ':E' . $currentRow)->getFont()->setBold(true);
             $currentRow++;
 
-            // heures restantes
             $moduleHours = $module->getHoursCount();
             $remainingHours = $moduleHours - $totalHours;
             $sheet->setCellValue('D' . $currentRow, 'Heures restantes à effectuer');
@@ -317,7 +299,6 @@ class InstructorController extends AbstractController
             $currentRow += 3;
         }
 
-        // appliquer les bordures à toutes les cellules avec du contenu
         $highestRow = $currentRow - 1;
         $styleArray = [
             'borders' => [
@@ -329,11 +310,9 @@ class InstructorController extends AbstractController
         ];
         $sheet->getStyle('A2:E' . $highestRow)->applyFromArray($styleArray);
 
-        // créer le nom de fichier
         $filename = 'Recapitulatif_' . $instructor->getUser()->getLastname() . '_' .
             $instructor->getUser()->getFirstname() . '_' . $academicYear . '.xlsx';
 
-        // créer la réponse
         $response = new StreamedResponse(function () use ($spreadsheet) {
             $writer = new Xlsx($spreadsheet);
             $writer->save('php://output');
