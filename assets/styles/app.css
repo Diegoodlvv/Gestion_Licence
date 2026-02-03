@@ -54,11 +54,11 @@ tbody tr{
 }
 
 .fc-day-today{
-  background-color: red !important;
+  background-color: rgba(255,220,40,.15) !important;
 }
 
-.fc-day-today.fc-timegrid-col-frame{
-  background-color: red !important;
+.fc-day-today .fc-timegrid-col-frame{
+  background-color: rgba(255,220,40,.15) !important;
 }
 
 .fc-timegrid-axis {
