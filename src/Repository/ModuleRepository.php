@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Module;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Module>
@@ -41,4 +42,29 @@ class ModuleRepository extends ServiceEntityRepository
     //        ;
     //    }
 
+    /**
+     * Finds all top-level modules (those without a parent) grouped by their teaching block
+     * @return array Array of teaching blocks with their top-level modules
+     */
+    public function findModulesGroupedByTeachingBlock(): array
+    {
+        return $this->createQueryBuilder('m')
+            ->leftJoin('m.teaching_block', 'tb')
+            ->leftJoin('m.childrens', 'children')
+            ->where('m.parent IS NULL')
+            ->orderBy('tb.code', 'ASC')
+            ->addOrderBy('m.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        // SELECT m.*
+        // FROM module m
+        // LEFT JOIN teaching_block tb ON m.teaching_block_id = tb.id
+        // LEFT JOIN module children ON children.parent_id = m.id
+        // WHERE m.parent_id IS NULL
+        // ORDER BY tb.code ASC, m.name ASC;
+
+        // recupere tous les modules sans parents (evite les doublons avec le findAll), 
+        // classés par bloc d'enseignement et par nom
+    }
 }
