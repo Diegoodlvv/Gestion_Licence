@@ -55,7 +55,7 @@
 						{% for block in teachingBlock %}
 							<tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
 								<td class="py-4 px-6 text-gray-800">{{ block.code }}</td>
-								<td class="py-4 px-6 text-gray-800">{{ block.name }}</td>
+								<td class="py-4 px-6 text-gray-800">{{ block.name|split(' ')|first}}</td>
 								<td class="py-4 px-6 text-gray-600 text-sm">{{ block.description ?: '-' }}</td>
 								<td class="py-4 px-6 text-gray-800">{{ block.hoursCount ? block.hoursCount ~ 'h' : '-' }}</td>
 								<td class="py-4 px-6">
