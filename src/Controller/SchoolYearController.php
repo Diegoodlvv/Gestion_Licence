@@ -24,11 +24,10 @@ final class SchoolYearController extends AbstractController
 
         $query = $em->createQuery($dql);
 
-        // Pagination
         $schoolYears = $paginator->paginate(
             $query,
-            $request->query->getInt('page', 1), // page courante
-            10 // nombre d’éléments par page
+            $request->query->getInt('page', 1), 
+            10 
         );
 
         return $this->render('school_year/index.html.twig', [

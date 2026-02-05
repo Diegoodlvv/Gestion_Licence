@@ -38,7 +38,6 @@ final class InterventionTypeController extends AbstractController
             $interventionType = $interventionTypeRepository->findAll();
         }
 
-        //Pagination
         $interventionType = $paginator->paginate(
             $interventionType,
             $request->query->getInt('page', 1),
