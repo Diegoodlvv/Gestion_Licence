@@ -10,14 +10,12 @@
 
 {% block body %}
 
-	<main
-		class="flex-1 bg-white p-12 font-sans">
-		{# Header Section #}
+	<main class="flex-1 bg-white p-12 font-sans">
 		<div class="mb-8">
-			<h1 class="text-3xl font-semibold text-slate-800 mb-6">Promotion
-				{{ year.year }}</h1>
+			<h1 class="text-3xl font-medium text-[#2C416E] mb-6">Promotion
+				{{ year.year }}
+			</h1>
 
-			{# Form Section #}
 			{{ form_start(form) }}
 
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -34,7 +32,6 @@
 				</div>
 			</div>
 
-			{# Buttons Section #}
 			<div class="flex gap-4 mb-12">
 				<twig:Button label="Retour à la liste" variant="grey" href="{{ path('app_school_year') }}"/>
 				<div data-controller="modal"></div>
@@ -47,26 +44,22 @@
 			{{ form_end(form) }}
 		</div>
 
-		{# Course Weeks Section #}
 		<div class="mt-8">
 			<h2 class="text-2xl font-semibold text-amber-400 mb-4">Semaines de cours</h2>
 			<p class="text-slate-600 mb-6">
 				Les semaines de cours permettent de contrôler l'ajout des interventions. Une intervention a lieu uniquement pendant les semaines de cours.
 			</p>
 
-			{# Course Weeks Table #}
 			<div class="bg-white rounded-lg overflow-hidden border border-slate-200">
 				{% if course is empty %}
 					<p class="text-slate-500 text-center py-8">Aucune semaine de cours ajoutée pour cette année.</p>
 				{% else %}
-					{# Table Header #}
 					<div class="grid grid-cols-3 gap-4 bg-gray-50 px-6 py-4 border-b border-slate-200">
 						<div class="text-sm font-medium text-slate-700">Date début</div>
 						<div class="text-sm font-medium text-slate-700">Date de fin</div>
 						<div></div>
 					</div>
 
-					{# Table Rows #}
 					{% for courseWeek in course %}
 						<div class="grid grid-cols-3 gap-4 px-6 py-5 border-b border-slate-200 hover:bg-gray-50 transition items-center">
 							<div class="text-slate-900">{{ courseWeek.startDate|date('d/m/Y') }}</div>
@@ -85,17 +78,13 @@
 				{% endif %}
 			</div>
 
-			{# Add Button #}
 			<div class="mt-6"><twig:Button label="Ajouter une semaine de cours" variant="blue" type="button" href="{{ path('app_school_year_newWeek', {'id': year.id}) }}"/>
 			</div>
 		</div>
 	</main>
 
-	{# Delete Confirmation PopUp #}
 	<div id="deletePopUp" class="fixed inset-0 bg-red bg-opacity-50 items-center justify-center z-50 hidden">
-		<div
-			class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
-			{# PopUp Header #}
+		<div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
 			<div class="flex items-start justify-between p-6 border-b border-gray-200">
 				<div class="flex items-start gap-4">
 					<div class="shrink-0 w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center">
@@ -115,7 +104,6 @@
 				</button>
 			</div>
 
-			{# PopUp Body #}
 			<div class="p-6">
 				<p class="text-slate-700 leading-relaxed">
 					Vous vous apprêtez à supprimer l'année scolaire, cette action est irrévocable. A noter qu'aucune intervention ne doit être liée à cette année pour pouvoir la supprimer.
@@ -125,7 +113,6 @@
 				</p>
 			</div>
 
-			{# PopUp Footer #}
 			<div class="flex gap-3 p-6 border-t border-gray-200">
 				<twig:Button label="Annuler" variant="grey"/>
 				<twig:Button label="Confirmer" variant="red" type="submit" href="{{ path('app_school_year_delete', {'id': year.id}) }}"/>

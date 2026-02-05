@@ -17,69 +17,72 @@ import locale from '@fullcalendar/core/locales/fr';
 
 let calendarEl = document.getElementById('calendar');
 
-let calendar = new Calendar(calendarEl, {
-  plugins: [ dayGridPlugin, timeGridPlugin, listPlugin ],
-  initialView: 'timeGridWeek',
-  locale,
-  firstDay:1,
-  weekends:false,
-  allDaySlot:false,
-  slotMinTime:'08:00:00',
-  slotMaxTime:'19:00:00',
-  slotDuration:'01:00:00',
-  height:'auto',
-  weekNumbers: true,
-  weekNumberFormat: {week: 'long'},
-  dayHeaderFormat: { weekday: 'short', day: 'numeric', omitCommas: false },
-  
-  headerToolbar: {
-    left: 'prev title',
-    center: 'timeGridDay, timeGridWeek, dayGridMonth',
-    right: 'next'
-  },
+if(calendarEl){
 
-  buttonText: {
-    timeGridDay: 'Jour',
-    timeGridWeek: 'Semaine',
-    dayGridMonth: 'Mois'
-  },
-
-  events: '/api/calendar',
-
+    let calendar = new Calendar(calendarEl, {
+    plugins: [ dayGridPlugin, timeGridPlugin, listPlugin ],
+    initialView: 'timeGridWeek',
+    locale,
+    firstDay:1,
+    weekends:false,
+    allDaySlot:false,
+    slotMinTime:'08:00:00',
+    slotMaxTime:'19:00:00',
+    slotDuration:'01:00:00',
+    height:'auto',
+    weekNumbers: true,
+    weekNumberFormat: {week: 'long'},
+    dayHeaderFormat: { weekday: 'short', day: 'numeric', omitCommas: false },   
     
+    headerToolbar: {
+        left: 'prev title',
+        center: 'timeGridDay, timeGridWeek, dayGridMonth',
+        right: 'next'
+    },
 
-    eventContent(arg) {
-        const intervenants = arg.event.extendedProps.intervenants || [];
-        let remotely = arg.event.extendedProps.remotely;
-        const typeIntervention = arg.event.extendedProps.interventionType;
+    buttonText: {
+        timeGridDay: 'Jour',
+        timeGridWeek: 'Semaine',
+        dayGridMonth: 'Mois'
+    },
+
+    events: '/api/calendar',
+
+        
+
+        eventContent(arg) {
+            const intervenants = arg.event.extendedProps.intervenants || [];
+            let remotely = arg.event.extendedProps.remotely;
+            const typeIntervention = arg.event.extendedProps.interventionType;
 
 
-        if(remotely){
-            remotely = "<img src='/icones/Frame.png' width='16' height='16'>"
-        } else{
-            remotely = ""
+            if(remotely){
+                remotely = "<img src='/icones/Frame.png' width='16' height='16'>"
+            } else{
+                remotely = ""
+            }
+
+            return {
+            html: `
+                <div class="pl-1">
+                    <div class="flex gap-2">
+                        ${arg.timeText}
+                        ${remotely} 
+                    </div>
+                    <strong class="text-lg">${arg.event.title}</strong><br>
+                    <strong class="text-base">${intervenants.map(i => i.nom).join(', ')}</strong>
+                    <div class="pb-2 mt-3">
+                        ${typeIntervention}
+                    </div>
+                </div>
+            `
+            };
         }
+    });
 
-        return {
-        html: `
-            <div class="pl-1">
-                <div class="flex gap-2">
-                    ${arg.timeText}
-                    ${remotely} 
-                </div>
-                <strong>${arg.event.title}</strong><br>
-                <strong>${intervenants.map(i => i.nom).join(', ')}</strong>
-                <div class="mt-4">
-                    ${typeIntervention}
-                </div>
-            </div>
-        `
-        };
-    }
+    calendar.render();
 
-});
+}
 
-
-calendar.render();
 
 

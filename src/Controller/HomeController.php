@@ -37,7 +37,7 @@ final class HomeController extends AbstractController
                 'title' => $intervention->getTitle(),
                 'start' => $intervention->getStartDate()->format('Y-m-d H:i:s'),
                 'end' => $intervention->getEndDate()->format('Y-m-d H:i:s'),
-                'backgroundColor' => $color .'1A',
+                'backgroundColor' => $color .'1A',     
                 'borderColor' => $color,
                 'textColor' => $color,
                 'intervenants' => $intervenants,

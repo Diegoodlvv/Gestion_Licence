@@ -12,16 +12,15 @@
 {% endblock %}
 
 {% block body %}
-<main
-	class="flex-1 bg-white p-12 font-sans">
-	{# Header Section #}
+<main class="flex-1 bg-white p-12 font-sans">
+
 	<div class="mb-8">
-		<h1 class="text-3xl font-semibold text-slate-800 mb-2">{{ teachingBlock.code }}
+		<h1 class="text-3xl font-medium text-[#2C416E]0 mb-2">{{ teachingBlock.code }}
 			:
-			{{ teachingBlock.name }}</h1>
+			{{ teachingBlock.name }}
+		</h1>
 	</div>
 
-	{# Form Section #}
 	<div class="mb-6">
 		{{ form_start(form) }}
 

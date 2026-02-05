@@ -9,11 +9,9 @@
 {% endblock %}
 
 {% block body %}
-	<main
-		class="flex-1 bg-white p-12 font-sans">
-		{# Header Section #}
+	<main class="flex-1 bg-white p-12 font-sans">
 		<div class="mb-8">
-			<h1 class="text-3xl font-semibold text-slate-800 mb-2">{{ instructor.user.firstname }}
+			<h1 class="text-3xl font-medium text-[#2C416E] mb-2">{{ instructor.user.firstname }}
 				{{ instructor.user.lastname }}</h1>
 
 			<h2 class="text-lg font-semibold text-amber-400 mb-4">Modules enseignés</h2>
@@ -32,16 +30,13 @@
 			<twig:Button label="Exporter le récapitulatif (fichier .xls)" type="button" variant="blue" href="{{ path('app_instructor_export', {'id': instructor.id}) }}"/>
 		</div>
 
-		{# Divider #}
 		<div class="border-t-2 border-amber-200 mb-8 w-full"></div>
 
-		{# Tabs #}
 		<div class="flex gap-2 mb-8">
 			<twig:Button label="Informations générales" type=" button" variant="blue"/>
 			<twig:Button label="Interventions" type="button" variant="white" href="{{ path('app_instructor_interventions', {'id': instructor.id}) }}"/>
 		</div>
 
-		{# Form Section #}
 		<div class="mb-6">
 			<h3 class="text-xl font-semibold text-amber-400 mb-6">Informations générales</h3>
 
