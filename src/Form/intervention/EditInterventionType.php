@@ -12,21 +12,19 @@ use App\Repository\CoursePeriodRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Event\PostSubmitEvent;
-use Symfony\Component\Form\Event\SubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class NewInterventionType extends AbstractType
+class EditInterventionType extends AbstractType
 {
     public function __construct(private readonly CoursePeriodRepository $course_period_repository)
     {}
 
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $year = SchoolYear::getActualYear();
 
@@ -45,7 +43,7 @@ class NewInterventionType extends AbstractType
                 'hours' => [8,9,10,11,12,13,14,15,16,17],
                 'minutes' => [0,30],
                 'months' => [1,2,3,4,5,6,7,9,10,11,12],
-                'years' => [$year, $year-1, $year+1],
+                'years' => [$year],
                 'attr' => [
                     'class' => 'w-full flex px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black',
                     'placeholder' => '12 Janvier 2026, ...'
@@ -58,7 +56,7 @@ class NewInterventionType extends AbstractType
                 'hours' => [8,9,10,11,12,13,14,15,16,17],
                 'minutes' => [0,30],
                 'months' => [1,2,3,4,5,6,7,9,10,11,12],
-                'years' => [$year, $year-1, $year+1],
+                'years' => [$year],
                 'attr' => [
                     'class' => 'w-full flex px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black',
                     'placeholder' => '12 Janvier 2026, ...'
@@ -122,7 +120,6 @@ class NewInterventionType extends AbstractType
         ;
     }
 
-    
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
