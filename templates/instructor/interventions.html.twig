@@ -48,16 +48,13 @@
 			{{ form_start(form) }}
 			<div class="flex items-end gap-4">
 				<div class="w-1/4">
-					{{ form_label(form.start_date) }}
-					{{ form_widget(form.start_date) }}
+					{{ form_row(form.start_date) }}
 				</div>
 				<div class="w-1/4">
-					{{ form_label(form.end_date) }}
-					{{ form_widget(form.end_date) }}
+					{{ form_row(form.end_date) }}
 				</div>
 				<div class="w-1/3">
-					{{ form_label(form.module) }}
-					{{ form_widget(form.module) }}
+					{{ form_row(form.module) }}
 				</div>
 				<div class="w-auto">
 					<button type="submit" class="bg-amber-400 text-slate-900 font-semibold px-8 py-2 rounded-md hover:bg-amber-500 transition h-[42px]">

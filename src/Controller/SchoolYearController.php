@@ -118,7 +118,7 @@ final class SchoolYearController extends AbstractController
         $year = $schoolYearRepository->find($id);
 
         $week = new CoursePeriod();
-        $week->setSchoolYearId($year);
+        $week->setSchoolYear($year);
 
         $form = $this->createForm(CoursePeriodType::class, $week);
         $form->handleRequest($request);

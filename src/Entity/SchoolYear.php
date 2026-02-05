@@ -83,7 +83,7 @@ class SchoolYear
     {
         if (!$this->coursePeriods->contains($coursePeriod)) {
             $this->coursePeriods->add($coursePeriod);
-            $coursePeriod->setSchoolYearId($this);
+            $coursePeriod->setSchoolYear($this);
         }
 
         return $this;
@@ -92,9 +92,9 @@ class SchoolYear
     public function removeCoursePeriod(CoursePeriod $coursePeriod): static
     {
         if ($this->coursePeriods->removeElement($coursePeriod)) {
-            // set the owning side to null (unless already changed)
-            if ($coursePeriod->getSchoolYearId() === $this) {
-                $coursePeriod->setSchoolYearId(null);
+            // set the owning re to null (unless already changed)
+            if ($coursePeriod->getSchoolYear() === $this) {
+                $coursePeriod->setSchoolYear(null);
             }
         }
 

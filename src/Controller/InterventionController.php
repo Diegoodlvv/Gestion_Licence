@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Intervention;
-use App\Form\InterventionsFilterType;
+use App\Entity\InterventionType;
+use App\Form\Intervention\EditInterventionType;
 use App\Form\Intervention\NewInterventionType;
+use App\Form\InterventionsFilterType;
 use App\Repository\CoursePeriodRepository;
 use App\Repository\InterventionRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -54,9 +56,18 @@ final class InterventionController extends AbstractController
     }
 
     #[Route('/new', name: 'app_intervention_new')]
-    public function new(Request $request, EntityManagerInterface $entityManager, CoursePeriodRepository $coursePeriodRepository): Response
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $intervention = new Intervention();
+
+        $start = str_replace(' ', '+', $request->query->get('start'));
+        $end = str_replace(' ', '+', $request->query->get('end'));
+
+        if ($start && $end) {
+            $intervention->setStartDate(new \DateTime($start));
+            $intervention->setEndDate(new \DateTime($end));
+        }
+
         $form = $this->createForm(NewInterventionType::class, $intervention);
         $form->handleRequest($request);
 
@@ -74,6 +85,30 @@ final class InterventionController extends AbstractController
         }
 
         return $this->render('intervention/new.html.twig', [
+            'form' => $form,
+            'intervention' => $intervention
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: 'app_intervention_edit')]
+    public function edit($id, InterventionRepository $interventionRepository, Request $request, EntityManagerInterface $entityManager)
+    {
+        $intervention = $interventionRepository->find($id);
+        $form = $this->createForm(EditInterventionType::class, $intervention);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                $entityManager->flush();
+                $this->addFlash('success', 'Enseignant modifié avec succès !');
+                return $this->redirectToRoute('app_intervention');
+            } catch (\Exception) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la modification de l\'enseignant : ');
+                return $this->redirectToRoute('app_intervention');
+            }
+        }
+
+        return $this->render('intervention/edit.html.twig', [
             'form' => $form,
             'intervention' => $intervention
         ]);

@@ -17,22 +17,16 @@
 
 		<div class="grid grid-cols-2 gap-6 mb-6">
 			<div>
-				{{ form_label(form.name, 'Nom - champ obligatoire') }}
-				{{ form_widget(form.name) }}
-				{{ form_errors(form.name) }}
+				{{ form_row(form.name) }}
 			</div>
 
 			<div>
-				{{ form_label(form.color, 'Code couleur (hexadecimal) - champ obligatoire') }}
-				{{ form_widget(form.color) }}
-				{{ form_errors(form.color) }}
+				{{ form_row(form.color) }}
 			</div>
 		</div>
 
 		<div class="mb-8">
-			{{ form_label(form.description, 'Description - champ obligatoire') }}
-			{{ form_widget(form.description) }}
-			{{ form_errors(form.description) }}
+			{{ form_row(form.description) }}
 		</div>
 
 		<div class="flex gap-4">
@@ -41,7 +35,7 @@
 			<button type="button" id="deleteButton" class="bg-red-600 text-white hover:bg-red-700 focus:ring-red-600 inline-flex items-center justify-center rounded-lg px-12 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-offset-2">
 				Supprimer
 			</button>
-			<twig:Button label="Enregistrer les informations" type="submit" variant="blue"/>
+			<twig:Button label="Enregistrer les informations" type="submit" variant="blue" href="{{ path('app_interventiontype') }}"/>
 		</div>
 
 		{{ form_end(form) }}
@@ -49,7 +43,6 @@
 
 	<div id="deletePopUp" class="fixed inset-0 bg-red bg-opacity-50 items-center justify-center z-50 hidden">
 		<div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
-
 			<div class="flex items-start justify-between p-6 border-b border-gray-200">
 				<div class="flex items-start gap-4">
 					<div class="shrink-0 w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center">

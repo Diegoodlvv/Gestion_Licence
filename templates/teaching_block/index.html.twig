@@ -21,12 +21,10 @@
 			<h2 class="text-amber-500 font-semibold mb-4">Filtres</h2>
 			{{ form_start(form, {'attr': {'class': 'flex flex-wrap items-end gap-4'}}) }}
 			<div class="flex-1 min-w-48">
-				{{ form_label(form.code)}}
-				{{ form_widget(form.code) }}
+				{{ form_row(form.code)}}
 			</div>
 			<div class="flex-1 min-w-48">
-				{{ form_label(form.name)}}
-				{{ form_widget(form.name) }}
+				{{ form_row(form.name)}}
 			</div>
 			<div class="min-w-48">
 				<twig:Button type="submit" variant="yellow" label="Filtrer"/>

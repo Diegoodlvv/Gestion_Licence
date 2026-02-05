@@ -26,28 +26,20 @@
 
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 			<div>
-				{{ form_label(form.code, 'Code du bloc - champ obligatoire') }}
-				{{ form_widget(form.code, )}}
-				{{ form_errors(form.code) }}
+				{{ form_row(form.code) }}
 			</div>
 
 			<div>
-				{{ form_label(form.name, 'Nom du bloc - champ obligatoire') }}
-				{{ form_widget(form.name, ) }}
-				{{ form_errors(form.name) }}
+				{{ form_row(form.name) }}
 			</div>
 		</div>
 
 		<div class="mb-6">
-			{{ form_label(form.hours_count, 'Nombre d\'heures - champ obligatoire') }}
-				{{ form_widget(form.hours_count) }}
-				{{ form_errors(form.hours_count) }}
+			{{ form_row(form.hours_count) }}
 			</div>
 
 			<div class="mb-8">
-				{{ form_label(form.description, 'Description - champ obligatoire') }}
-				{{ form_widget(form.description) }}
-				{{ form_errors(form.description) }}
+				{{ form_row(form.description) }}
 			</div>
 
 			<div class="mt-8 flex gap-4">

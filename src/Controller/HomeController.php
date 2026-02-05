@@ -34,6 +34,7 @@ final class HomeController extends AbstractController
             $color = $intervention->getInterventionType()->getColor();
 
             $data[] = [
+                'id' => $intervention->getId(),
                 'title' => $intervention->getTitle(),
                 'start' => $intervention->getStartDate()->format('Y-m-d H:i:s'),
                 'end' => $intervention->getEndDate()->format('Y-m-d H:i:s'),

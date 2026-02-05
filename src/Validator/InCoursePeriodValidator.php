@@ -25,9 +25,8 @@ class InCoursePeriodValidator extends ConstraintValidator
         $result = false;
 
         foreach($periods as $period){
-            if($entity->getStartDate()->format('d') >= $period->getStartDate()->format('d') && $entity->getEndDate()->format('d') <= $period->getEndDate()->format('d')){
+            if($entity->getStartDate() >= $period->getStartDate() && $entity->getEndDate() <= $period->getEndDate()){
                 $result = true;
-                
             }
         }
 

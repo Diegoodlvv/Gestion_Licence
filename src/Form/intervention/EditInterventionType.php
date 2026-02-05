@@ -12,21 +12,19 @@ use App\Repository\CoursePeriodRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Event\PostSubmitEvent;
-use Symfony\Component\Form\Event\SubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class NewInterventionType extends AbstractType
+class EditInterventionType extends AbstractType
 {
     public function __construct(private readonly CoursePeriodRepository $course_period_repository)
     {}
 
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $year = SchoolYear::getActualYear();
 
@@ -40,12 +38,12 @@ class NewInterventionType extends AbstractType
                 'label_attr' => ['class' => 'block text-sm text-slate-700 mb-1'],
             ])
            ->add('start_date', DateTimeType::class, [
-                'label' => 'Date de début - champ obligatoire',
+                'label' => 'Date de début',
                 'widget' => 'choice',
                 'hours' => [8,9,10,11,12,13,14,15,16,17],
                 'minutes' => [0,30],
                 'months' => [1,2,3,4,5,6,7,9,10,11,12],
-                'years' => [$year, $year-1, $year+1],
+                'years' => [$year],
                 'attr' => [
                     'class' => 'w-full flex px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black',
                     'placeholder' => '12 Janvier 2026, ...'
@@ -53,12 +51,12 @@ class NewInterventionType extends AbstractType
                 'label_attr' => ['class' => 'block text-sm text-slate-700 mb-1'],
             ])
             ->add('end_date', DateTimeType::class, [
-                'label' => 'Date de fin - champ obligatoire',
+                'label' => 'Date de fin',
                 'widget' => 'choice',
                 'hours' => [8,9,10,11,12,13,14,15,16,17],
                 'minutes' => [0,30],
                 'months' => [1,2,3,4,5,6,7,9,10,11,12],
-                'years' => [$year, $year-1, $year+1],
+                'years' => [$year],
                 'attr' => [
                     'class' => 'w-full flex px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black',
                     'placeholder' => '12 Janvier 2026, ...'
@@ -73,7 +71,7 @@ class NewInterventionType extends AbstractType
                 'class' => InterventionType::class,
                 'choice_label' => 'name',
                 'placeholder' => "Seléctionnez un type d'intervention",
-                'label' => "Type de l'intervention - champ obligatoire",
+                'label' => "Type de l'intervention",
                 'attr' => [
                     'class' => 'w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black',
                     'data-controller' => 'intervention-type',
@@ -85,7 +83,7 @@ class NewInterventionType extends AbstractType
                 'class' => Module::class,
                 'choice_label' => 'FullName',
                 'placeholder' => "Seléctionnez un module",
-                'label' => "Module de l'intervention - champ obligatoire",
+                'label' => "Module de l'intervention",
                 'attr' => [
                     'class' => 'w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black',
                 ],
@@ -95,7 +93,7 @@ class NewInterventionType extends AbstractType
                 'class' => Instructor::class,
                 'choice_label' => 'UserName',
                 'required' => false,
-                'label' => 'Instructeurs - champ obligatoire',
+                'label' => 'Instructeurs',
                 'multiple' => true,
                 'expanded' => false,
                 'placeholder' => 'Sélectionnez des intervenants...',
@@ -122,7 +120,6 @@ class NewInterventionType extends AbstractType
         ;
     }
 
-    
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
