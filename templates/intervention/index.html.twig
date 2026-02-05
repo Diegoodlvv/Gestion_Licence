@@ -10,7 +10,7 @@
 {% block body %}
 	<div class="flex-1 p-8 bg-white">
 		<div class="flex justify-between items-center mb-8">
-			<h1 class="text-2xl font-bold text-[#1F384C]">Interventions</h1>
+			<h1 class="text-3xl font-medium text-[#2C416E]">Interventions</h1>
 			<twig:Button variant="blue" label="Ajouter une nouvelle intervention" :href="path('app_intervention_new')"/>
 		</div>
 
@@ -18,16 +18,13 @@
 			<h2 class="text-[#FFBD01] font-semibold mb-4">Filtres</h2>
 			{{ form_start(form, {'attr': {'class': 'flex flex-wrap items-end gap-4'}}) }}
 			<div class="flex-1 min-w-48">
-				{{ form_label(form.start_date) }}
-				{{ form_widget(form.start_date) }}
+				{{ form_row(form.start_date) }}
 			</div>
 			<div class="flex-1 min-w-48">
-				{{ form_label(form.end_date) }}
-				{{ form_widget(form.end_date) }}
+				{{ form_row(form.end_date) }}
 			</div>
 			<div class="flex-1 min-w-48">
-				{{ form_label(form.module) }}
-				{{ form_widget(form.module) }}
+				{{ form_row(form.module) }}
 			</div>
 			<div class="min-w-48">
 				<twig:Button type="submit" variant="yellow" label="Filtrer"/>

@@ -14,7 +14,7 @@ final class AutonomieHasInstructorsValidator extends ConstraintValidator
             return;
         }
 
-        if(count($value->getInstructors()) > 0 && $value->getInterventionType()->getName()){
+        if(count($value->getInstructors()) > 0 && $value->getInterventionType()->getName() == 'Autonomie'){
 
             $this->context->buildViolation($constraint->message)
                 ->atPath('instructors')

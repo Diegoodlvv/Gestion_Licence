@@ -48,12 +48,12 @@ class CoursePeriod
         return $this->id;
     }
 
-    public function getSchoolYearId(): ?SchoolYear
+    public function getSchoolYear(): ?SchoolYear
     {
         return $this->school_year;
     }
 
-    public function setSchoolYearId(?SchoolYear $school_year): static
+    public function setSchoolYear(?SchoolYear $school_year): static
     {
         $this->school_year = $school_year;
 

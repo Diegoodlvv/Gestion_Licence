@@ -14,7 +14,7 @@ class SchoolYearType extends AbstractType
     {
         $builder
             ->add('year', TextType::class, [
-                'label' => 'Année',
+                'label' => 'Année - champ obligatoire',
                 'attr' => [
                     'class' => 'w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black',
                     'placeholder' => '2024'
@@ -22,7 +22,7 @@ class SchoolYearType extends AbstractType
                 'label_attr' => ['class' => 'block text-sm text-slate-700 mb-1'],
             ])
             ->add('saison', TextType::class, [
-                'label' => 'Saison',
+                'label' => 'Saison - champ obligatoire',
                 'attr' => [
                     'class' => 'w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black',
                     'placeholder' => '2024-2025'

@@ -17,7 +17,7 @@ use PhpParser\Node\Stmt\TryCatch;
 
 final class InterventionTypeController extends AbstractController
 {
-    #[Route('/interventionType', name: 'app_index_interventionType')]
+    #[Route('/interventionType', name: 'app_interventiontype')]
     public function index(PaginatorInterface $paginator, Request $request, EntityManagerInterface $em, InterventionTypeRepository $interventionTypeRepository): Response
     {
 
@@ -38,7 +38,6 @@ final class InterventionTypeController extends AbstractController
             $interventionType = $interventionTypeRepository->findAll();
         }
 
-        //Pagination
         $interventionType = $paginator->paginate(
             $interventionType,
             $request->query->getInt('page', 1),
