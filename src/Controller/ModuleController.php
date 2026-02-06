@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\ModuleRepository;
 use App\Repository\TeachingBlockRepository;
+use App\Repository\ModuleRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class ModuleController extends AbstractController
 {
@@ -64,5 +66,18 @@ class ModuleController extends AbstractController
         return $this->render('module/edit.html.twig', [
             'hey' => 'hey',
         ]);
+    }
+
+    #[Route('/module/{id}/delete', name: 'app_module_delete')]
+    public function delete($id,  EntityManagerInterface $em, ModuleRepository $moduleRepository): Response
+    {
+        $module = $moduleRepository->find($id);
+
+        if ($module) {
+            $em->remove($module);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('app_module');
     }
 }
