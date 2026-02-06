@@ -81,8 +81,8 @@ class ModuleController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Module modifié avec succès !');
                 return $this->redirectToRoute('app_module');
-            } catch (\Exception $e) {
-                $this->addFlash('error', 'Une erreur est survenir lors de la modification du module !' . $e);
+            } catch (\Exception) {
+                $this->addFlash('error', 'Une erreur est survenir lors de la modification du module !');
                 return $this->redirectToRoute('app_module');
             }
         }
@@ -97,9 +97,18 @@ class ModuleController extends AbstractController
     public function delete($id,  EntityManagerInterface $em, ModuleRepository $moduleRepository): Response
     {
         $module = $moduleRepository->find($id);
+
         if ($module) {
-            $em->remove($module);
-            $em->flush();
+            $moduleName = $module->getName();
+            try {
+                $em->remove($module);
+                $em->flush();
+                $this->addFlash('success', 'Module supprimé avec succès.');
+            } catch (\Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException) {
+                $this->addFlash('error', 'Impossible de supprimer le module "' . $moduleName . '" car il est lié à une ou plusieurs interventions.');
+            } catch (\Exception) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la suppression du module ');
+            }
         }
 
         return $this->redirectToRoute('app_module');
