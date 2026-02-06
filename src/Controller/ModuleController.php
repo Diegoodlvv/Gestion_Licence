@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\ModuleRepository;
 use App\Repository\TeachingBlockRepository;
-use App\Repository\ModuleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ModuleController extends AbstractController
