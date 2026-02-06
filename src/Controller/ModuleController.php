@@ -43,18 +43,26 @@ class ModuleController extends AbstractController
             'modulesByBlock' => $modulesByBlock,
         ]);
     }
+
+    // representation du tableau renvoyer
+    // $modulesByBlock = [
+    //     // Case pour le Bloc Informatique (ID 1)
+    //     1 => [
+    //         'block' => TeachingBlock { id: 1, name: "Informatique", code: "UE1" },
+    //         'modules' => [
+    //             0 => Module { id: 10, name: "Développement Web", parent: null },
+    //             1 => Module { id: 11, name: "Base de données", parent: null },
+    //             2 => Module { id: 15, name: "Réseaux", parent: null }
+    //         ]
+    //     ],
+    // ];
+
+    #[Route('/module/{id}/edit', name: 'app_module_edit')]
+    public function edit($id, ModuleRepository $moduleRepository, TeachingBlockRepository $teachingBlockRepository): Response
+    {
+
+        return $this->render('module/edit.html.twig', [
+            'hey' => 'hey',
+        ]);
+    }
 }
-
-
-// representation du tableau renvoyer
-// $modulesByBlock = [
-//     // Case pour le Bloc Informatique (ID 1)
-//     1 => [
-//         'block' => TeachingBlock { id: 1, name: "Informatique", code: "UE1" },
-//         'modules' => [
-//             0 => Module { id: 10, name: "Développement Web", parent: null },
-//             1 => Module { id: 11, name: "Base de données", parent: null },
-//             2 => Module { id: 15, name: "Réseaux", parent: null }
-//         ]
-//     ],
-// ];
