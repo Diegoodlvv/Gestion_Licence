@@ -45,7 +45,7 @@ class CoursePeriodFixtures extends Fixture implements DependentFixtureInterface
             $period = new CoursePeriod();
             $period->setStartDate($data["start_date"]);
             $period->setEndDate($data["end_date"]);
-            $period->setSchoolYearId($this->getReference($data["school_year"], SchoolYear::class));
+            $period->setSchoolYear($this->getReference($data["school_year"], SchoolYear::class));
 
             $manager->persist($period);
 

@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\ModuleRepository;
 use App\Repository\TeachingBlockRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Form\ModuleType;
 
 class ModuleController extends AbstractController
 {
@@ -68,11 +70,26 @@ class ModuleController extends AbstractController
     }
 
     #[Route('/module/{id}/edit', name: 'app_module_edit')]
-    public function edit($id, ModuleRepository $moduleRepository, TeachingBlockRepository $teachingBlockRepository): Response
+    public function edit($id, Request $request, ModuleRepository $moduleRepository, EntityManagerInterface $em): Response
     {
+        $module = $moduleRepository->find($id);
+        $form = $this->createForm(ModuleType::class, $module);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                $em->flush();
+                $this->addFlash('success', 'Module modifié avec succès !');
+                return $this->redirectToRoute('app_module');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenir lors de la modification du module !' . $e);
+                return $this->redirectToRoute('app_module');
+            }
+        }
 
         return $this->render('module/edit.html.twig', [
-            'hey' => 'hey',
+            'form' => $form,
+            'module' => $module
         ]);
     }
 
@@ -80,7 +97,6 @@ class ModuleController extends AbstractController
     public function delete($id,  EntityManagerInterface $em, ModuleRepository $moduleRepository): Response
     {
         $module = $moduleRepository->find($id);
-
         if ($module) {
             $em->remove($module);
             $em->flush();
