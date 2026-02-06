@@ -58,6 +58,15 @@ class ModuleController extends AbstractController
     //     ],
     // ];
 
+    #[Route('/module/{id}/add', name: 'app_module_add')]
+    public function add($id, ModuleRepository $moduleRepository, TeachingBlockRepository $teachingBlockRepository): Response
+    {
+
+        return $this->render('module/add.html.twig', [
+            'hey' => 'hey',
+        ]);
+    }
+
     #[Route('/module/{id}/edit', name: 'app_module_edit')]
     public function edit($id, ModuleRepository $moduleRepository, TeachingBlockRepository $teachingBlockRepository): Response
     {
