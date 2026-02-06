@@ -100,10 +100,10 @@ final class InterventionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $entityManager->flush();
-                $this->addFlash('success', 'Enseignant modifié avec succès !');
+                $this->addFlash('success', 'Intervention modifiée avec succès !');
                 return $this->redirectToRoute('app_intervention');
             } catch (\Exception) {
-                $this->addFlash('error', 'Une erreur est survenue lors de la modification de l\'enseignant : ');
+                $this->addFlash('error', 'Une erreur est survenue lors de la modification de l\'intervention : ');
                 return $this->redirectToRoute('app_intervention');
             }
         }
