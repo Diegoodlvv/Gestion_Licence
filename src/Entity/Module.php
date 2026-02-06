@@ -53,7 +53,6 @@ class Module
     #[ORM\Column(type: Types::BOOLEAN)]
     #[Assert\Type('boolean')]
     #[Assert\NotNull()]
-    #[Assert\NotBlank()]
     private ?bool $capstone_project = null;
 
     #[ORM\ManyToOne(inversedBy: 'modules')]
@@ -95,12 +94,12 @@ class Module
         return $this;
     }
 
-    public function getParentId(): ?self
+    public function getParent(): ?self
     {
         return $this->parent;
     }
 
-    public function setParentId(?self $parent): static
+    public function setParent(?self $parent): static
     {
         $this->parent = $parent;
 
@@ -119,7 +118,7 @@ class Module
     {
         if (!$this->childrens->contains($modulesChild)) {
             $this->childrens->add($modulesChild);
-            $modulesChild->setParentId($this);
+            $modulesChild->setParent($this);
         }
 
         return $this;
@@ -129,8 +128,8 @@ class Module
     {
         if ($this->childrens->removeElement($modulesChild)) {
             // set the owning side to null (unless already changed)
-            if ($modulesChild->getParentId() === $this) {
-                $modulesChild->setParentId(null);
+            if ($modulesChild->getParent() === $this) {
+                $modulesChild->setParent(null);
             }
         }
 
@@ -254,7 +253,7 @@ class Module
         return $this;
     }
 
-   public function getFullName(): string
+    public function getFullName(): string
     {
         return $this->parent
             ?  $this->parent->getFullName() . ' — ' . $this->name
