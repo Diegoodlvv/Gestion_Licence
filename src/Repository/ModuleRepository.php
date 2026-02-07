@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Module;
+use App\Entity\TeachingBlock;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
@@ -66,5 +67,25 @@ class ModuleRepository extends ServiceEntityRepository
 
         // recupere tous les modules sans parents (evite les doublons avec le findAll), 
         // classés par bloc d'enseignement et par nom
+    }
+
+    public function getTeachingBlockbyParent(?TeachingBlock $teachingBlock, ?Module $module = null): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('m')
+            ->orderBy('m.name', 'ASC');
+
+        if ($teachingBlock) {
+            $qb->where('m.teaching_block = :tb')
+                ->setParameter('tb', $teachingBlock);
+        } else {
+            $qb->where('1 = 0');
+        }
+
+        if ($module && $module->getId()) {
+            $qb->andWhere('m.id != :id')
+                ->setParameter('id', $module->getId());
+        }
+
+        return $qb;
     }
 }
