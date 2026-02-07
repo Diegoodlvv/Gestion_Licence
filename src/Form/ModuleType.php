@@ -13,6 +13,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use App\Repository\ModuleRepository;
 
 class ModuleType extends AbstractType
 {
@@ -40,17 +41,6 @@ class ModuleType extends AbstractType
                 'attr' => [
                     'class' => 'w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
                     'placeholder' => '0'
-                ],
-                'label_attr' => ['class' => 'block text-sm font-medium text-slate-700 mb-2'],
-            ])
-            ->add('parent', EntityType::class, [
-                'class' => Module::class,
-                'choice_label' => 'name',
-                'label' => 'Parent',
-                'required' => false,
-                'placeholder' => 'Sélectionnez un parent',
-                'attr' => [
-                    'class' => 'w-full px-4 py-3 border border-slate-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
                 ],
                 'label_attr' => ['class' => 'block text-sm font-medium text-slate-700 mb-2'],
             ])
@@ -88,6 +78,33 @@ class ModuleType extends AbstractType
                 'label' => 'Bloc enseignement',
                 'attr' => [
                     'class' => 'w-full px-4 py-3 border border-slate-300 rounded-lg bg-slate-100 text-slate-500 cursor-not-allowed'
+                ],
+                'label_attr' => ['class' => 'block text-sm font-medium text-slate-700 mb-2'],
+            ]);
+        });
+
+
+        // contrainte pour que la liste des parent dans l'ajout ne soit que ceux des TB
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $module = $event->getData();
+            $form = $event->getForm();
+
+            $teachingBlock = $module->getTeachingBlock();
+
+            $form->add('parent', EntityType::class, [
+                'class' => Module::class,
+                'choice_label' => 'name',
+                'label' => 'Parent',
+                'required' => false,
+                'placeholder' => 'Sélectionnez un parent',
+                // use = comme des parametre optionels
+                // Paramètres = c'est les données qui arrivent au moment de l'exécution (quand Symfony construit le formulaire).
+                // Use: c'est les données qui existent déjà autour au moment où on ecrit le code (dans le $builder).
+                'query_builder' => function (ModuleRepository $mr) use ($teachingBlock, $module) {
+                    return $mr->getTeachingBlockbyParent($teachingBlock, $module);
+                },
+                'attr' => [
+                    'class' => 'w-full px-4 py-3 border border-slate-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
                 ],
                 'label_attr' => ['class' => 'block text-sm font-medium text-slate-700 mb-2'],
             ]);
