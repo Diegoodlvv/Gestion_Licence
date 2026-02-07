@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use App\Entity\Module;
-use App\Entity\TeachingBlock;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -79,7 +78,7 @@ class ModuleType extends AbstractType
             $module = $event->getData(); // recupere l'entite module passe dans le controller
             $form = $event->getForm(); // recupere le formulaire lui meme pour modifier le champ
 
-            $teachingBlock = $module->getTeachingBlock(); // recupere les info du TB kue au module pour les combiner
+            $teachingBlock = $module->getTeachingBlock(); // recupere les info du TB lie au module pour les combiner
             $value = $teachingBlock->getCode() . ' - ' . $teachingBlock->getName();
 
             $form->add('teaching_block', TextType::class, [ // creation du formulaire basique

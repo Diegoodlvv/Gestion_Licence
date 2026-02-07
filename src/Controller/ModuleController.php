@@ -10,6 +10,7 @@ use App\Repository\ModuleRepository;
 use App\Repository\TeachingBlockRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\ModuleType;
+use App\Entity\Module;
 
 class ModuleController extends AbstractController
 {
@@ -61,13 +62,41 @@ class ModuleController extends AbstractController
     // ];
 
     #[Route('/module/{id}/add', name: 'app_module_add')]
-    public function add($id, ModuleRepository $moduleRepository, TeachingBlockRepository $teachingBlockRepository): Response
+    public function add($id, Request $request, EntityManagerInterface $em, TeachingBlockRepository $teachingBlockRepository): Response
     {
+        $teachingBlock = $teachingBlockRepository->find($id);
+
+        $module = new Module();
+        $module->setTeachingBlock($teachingBlock); // tout module a un TB,  donc on lui met celui qui est selectionne
+
+        $form = $this->createForm(ModuleType::class, $module);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                $em->persist($module);
+                $em->flush();
+
+                $this->addFlash('success', 'Module ajoute avec succes!');
+                return $this->redirectToRoute('app_module');
+            } catch (\Exception) {
+                $this->addFlash('error', 'Une erreur est survenur lors de l\'ajout du module');
+                return $this->redirectToRoute('app_module');
+            }
+        }
+
 
         return $this->render('module/add.html.twig', [
-            'hey' => 'hey',
+            'form' => $form,
+            'teachingBlock' => $teachingBlock
         ]);
     }
+
+    // dans add il faut faire $module->setTeachingBlock($teachingBlock); car le module ne connais pas son TB lors de la creation
+    // donc on lui en assimile un
+    // dans edit, il a deja un TB, donc pas besoin de $module->setTeachingBlock($teachingBlock);
+    // Puis ensuite le formulaire affiche le TB avec $value = $teachingBlock->getCode() . ' - ' . $teachingBlock->getName();
+    // la difference est entre ce que represente $id passe en parametre
 
     #[Route('/module/{id}/edit', name: 'app_module_edit')]
     public function edit($id, Request $request, ModuleRepository $moduleRepository, EntityManagerInterface $em): Response

@@ -1,15 +1,59 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Corps enseignant
+{% block title %}Ajouter un module
 {% endblock %}
 
 {% block breadcrumb %}
-	<twig:BreadcrumbItem label="Corps enseignant" href="{{ path('app_module') }}"/>
-	<twig:BreadcrumbItem label="nom du module.name"/>
+	<twig:BreadcrumbItem label="Modules" href="{{ path('app_module') }}"/>
+	<twig:BreadcrumbItem label="Ajouter un module"/>
 {% endblock %}
 
 {% block body %}
+	<div class="flex-1 bg-white p-12 font-sans">
+		<div class="mb-8">
+			<h1 class="text-3xl font-medium text-[#2C416E] mb-2">Ajouter un module</h1>
+		</div>
 
-	<h1>ajout des modules</h1>
+		{{ form_start(form) }}
 
+		<div class="mb-6">
+			{{ form_row(form.teaching_block) }}
+		</div>
+
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+			<div>
+				{{ form_row(form.code) }}
+			</div>
+
+			<div>
+				{{ form_row(form.name) }}
+			</div>
+		</div>
+
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+			<div>
+				{{ form_row(form.hoursCount) }}
+			</div>
+
+			<div>
+				{{ form_row(form.parent) }}
+			</div>
+		</div>
+
+		<div class="mb-6">
+			{{ form_row(form.description) }}
+		</div>
+
+		<div class="flex items-center mb-8">
+			{{ form_widget(form.capstoneProject) }}
+			{{ form_label(form.capstoneProject) }}
+		</div>
+
+		<div class="flex gap-4">
+			<twig:Button type="button" variant="grey" label="Retour a la liste" href="{{ path('app_module') }}"/>
+			<twig:Button label="Sauvegarder" type="submit"/>
+		</div>
+
+		{{ form_end(form) }}
+	</div>
 {% endblock %}

@@ -38,10 +38,10 @@
 
 					{# Modules liste pour les block #}
 					<div class="bg-white rounded-lg border border-gray-200 overflow-hidden mb-4">
-						<divs>
+						<div>
 							{% for module in modules %}
 								{# Module Parent #}
-								<li class=" data-module-id=" {{ module.id }} ">
+								<li data-module-id="{{ module.id }}">
 									{% if module.modulesChildren|length > 0 %}
 										<div class="flex items-center justify-between py-3 px-6 border border-gray-200 hover:bg-gray-50 cursor-pointer" onclick="toggleModule({{ module.id }})">
 											<div class="flex items-center space-x-3">
@@ -106,10 +106,9 @@
 									</ul>
 								</li>
 							{% endfor %}
-						</divs>
+						</div>
 					</div>
-
-					<twig:Button variant="blue" label="Ajouter un module" href="#"/>
+					<twig:Button variant="blue" label="Ajouter un module" href="{{ path('app_module_add', {'id': block.id} ) }}"/>
 				</div>
 			{% endfor %}
 		</div>
