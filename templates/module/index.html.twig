@@ -8,23 +8,19 @@
 {% endblock %}
 
 {% block body %}
-	<div
-		class="flex-1 p-8 bg-white">
+	<div class="flex-1 p-8 bg-white">
 
-		{# Header #}
 		<div class="flex justify-between items-center mb-8">
-			<h1 class="text-2xl font-bold text-gray-800">Modules</h1>
+			<h1 class="text-3xl font-medium text-[#2C416E]">Modules</h1>
 		</div>
 
-		{# Teaching Blocks avec modules #}
 		<div class="space-y-8">
 			{% for blockData in modulesByBlock %}
 				{% set block = blockData.block %}
 				{% set modules = blockData.modules %}
 
-				<div
-					class="mb-8">
-					{# Teaching block header #}
+				<div class="mb-8">
+
 					<div class="mb-4">
 						<h2 class="text-xl font-semibold text-amber-500">
 							{{ block.code }}
@@ -36,11 +32,9 @@
 						</h2>
 					</div>
 
-					{# Modules liste pour les block #}
 					<div class="bg-white rounded-lg border border-gray-200 overflow-hidden mb-4">
 						<div>
 							{% for module in modules %}
-								{# Module Parent #}
 								<li data-module-id="{{ module.id }}">
 									{% if module.modulesChildren|length > 0 %}
 										<div class="flex items-center justify-between py-3 px-6 border border-gray-200 hover:bg-gray-50 cursor-pointer" onclick="toggleModule({{ module.id }})">
@@ -62,7 +56,6 @@
 											</button>
 										</div>
 									{% else %}
-										{# a voir pour comment on fait les id pour les edtis #}
 										<a href=" {{ path('app_module_edit', {'id': module.id} ) }}" class="flex items-center justify-between py-3 px-6 border border-gray-200 hover:bg-gray-50 cursor-pointer">
 											<div class="flex items-center space-x-3">
 												<span class="w-4 h-4"></span>
@@ -81,7 +74,6 @@
 										</a>
 									{% endif %}
 
-									{# Module enfant #}
 									<ul class="bg-gray-50 border-t border-gray-100 hidden" id="children-{{ module.id }}">
 										{% for child in module.modulesChildren %}
 											<li class="hover:bg-gray-100">
