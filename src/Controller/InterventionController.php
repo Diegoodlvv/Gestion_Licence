@@ -113,4 +113,25 @@ final class InterventionController extends AbstractController
             'intervention' => $intervention
         ]);
     }
+
+    #[Route('/intervention/{id}/delete', name: 'app_intervention_delete')]
+    public function delete($id, InterventionRepository $interventionRepository, EntityManagerInterface $em): Response
+    {
+        $intervention = $interventionRepository->find($id);
+
+        if ($intervention) {
+            try {
+                $em->remove($intervention);
+                $em->flush();
+
+                $this->addFlash('success', 'intervention supprimée avec succès !');
+                return $this->redirectToRoute('app_intervention');
+            } catch (\Exception) {
+                $this->addFlash('error', 'Erreur lors de la suppression de l\'intervention ');
+                return $this->redirectToRoute('app_intervention');
+            }
+        }
+
+        return $this->redirectToRoute('app_intervention');
+    }
 }

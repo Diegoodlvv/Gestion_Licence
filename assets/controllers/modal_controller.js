@@ -1,41 +1,26 @@
 import { Controller } from "@hotwired/stimulus";
 
-/*
- * This is an example Stimulus controller!
- *
- * Any element with a data-controller="hello" attribute will cause
- * this controller to be executed. The name "hello" comes from the filename:
- * hello_controller.js -> "hello"
- *
- * Delete this file or adapt it for your use!
- */
 export default class extends Controller {
-    connect() {
-        document.addEventListener("DOMContentLoaded", function () {
-            const deleteButton = document.getElementById("deleteButton");
-            const deletePopUp = document.getElementById("deletePopUp");
-            const closePopUp = document.getElementById("closePopUp");
+  static targets = ["button", "popup", "close"];
 
-            // Open
-            deleteButton.addEventListener("click", function () {
-                deletePopUp.classList.remove("hidden");
-                deletePopUp.classList.add("flex");
-            });
+  connect() {
+    this.buttonTarget.addEventListener("click", () => {
+      this.popupTarget.classList.remove("hidden");
+      this.popupTarget.classList.add("flex");
+    });
 
-            // Close
-            function hidePopUp() {
-                deletePopUp.classList.add("hidden");
-                deletePopUp.classList.remove("flex");
-            }
+    this.closeTarget.addEventListener("click", () => {
+      this.hide();
+    });
 
-            closePopUp.addEventListener("click", hidePopUp);
+    this.popupTarget.addEventListener("click", (e) => {
+      if (e.target === this.popupTarget) this.hide();
+    });
+  }
 
-            // Close clique côté
-            deletePopUp.addEventListener("click", function (e) {
-                if (e.target === deletePopUp) {
-                    hidePopUp();
-                }
-            });
-        });
-    }
+  hide() {
+    this.popupTarget.classList.add("hidden");
+    this.popupTarget.classList.remove("flex");
+  }
 }
+

@@ -108,6 +108,10 @@ final class HomeController extends AbstractController
             ->getQuery()
             ->getResult();
         
+        if (empty($interventions)) {
+            throw $this->createNotFoundException("Aucune intervention trouvée pour l'année $year");
+        }
+        
         $spreadsheet = $this->createYearSpreadsheet($interventions, $year);
         
         $writer = new Xlsx($spreadsheet);
@@ -128,7 +132,7 @@ final class HomeController extends AbstractController
         $sheet = $spreadsheet->getActiveSheet();
         
         $weekEnd = (clone $weekStart)->modify('+4 days');
-        $sheet->setTitle('Semaine du ' . $weekStart->format('d-m-Y'));
+        $sheet->setTitle('Semaine du ' . $weekStart->format('d/m/Y'));
         
         $sheet->setCellValue('A1', sprintf('Semaine du %s au %s', 
             $weekStart->format('d/m/Y'), 
@@ -147,6 +151,7 @@ final class HomeController extends AbstractController
             }
         }
         
+        // Afficher la légende
         foreach ($uniqueTypes as $typeName => $color) {
             $sheet->setCellValue("A$legendRow", $typeName);
             $hexColor = ltrim($color, '#');
@@ -156,7 +161,6 @@ final class HomeController extends AbstractController
             $legendRow++;
         }
         
-        // En-têtes du tableau
         $headerRow = $legendRow + 1;
         $headers = ['', 'MATIN (8h30 - 12h00)', '', 'APRÈS-MIDI (13H30 - 17H00)', ''];
         $subHeaders = ['', 'INTERVENANT', 'OBSERVATIONS', 'INTERVENANT', 'OBSERVATIONS'];
@@ -175,11 +179,9 @@ final class HomeController extends AbstractController
             'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
         ];
         $sheet->getStyle("A" . ($headerRow - 1) . ":E$headerRow")->applyFromArray($headerStyle);
-        
-        // Organiser les interventions par jour
+
         $interventionsByDay = $this->groupInterventionsByDay($interventions);
         
-        // Remplir le tableau
         $dataRow = $headerRow + 1;
         $currentDate = clone $weekStart;
         
@@ -192,18 +194,15 @@ final class HomeController extends AbstractController
             if (isset($interventionsByDay[$dateStr])) {
                 $dayInterventions = $interventionsByDay[$dateStr];
                 
-                // Séparer matin et après-midi
                 $morning = array_filter($dayInterventions, fn($i) => $i->getStartDate()->format('H') < 13);
                 $afternoon = array_filter($dayInterventions, fn($i) => $i->getStartDate()->format('H') >= 13);
                 
-                // Matin
                 if (!empty($morning)) {
                     $intervention = reset($morning);
                     $instructors = $this->getInstructorNames($intervention);
                     $sheet->setCellValue("B$dataRow", $instructors);
                     $sheet->setCellValue("C$dataRow", $intervention->getTitle());
                     
-                    // Utiliser la couleur de l'entité
                     $color = $intervention->getInterventionType()->getColor();
                     $hexColor = ltrim($color, '#');
                     $sheet->getStyle("B$dataRow:C$dataRow")->getFill()
@@ -211,14 +210,12 @@ final class HomeController extends AbstractController
                         ->getStartColor()->setARGB($hexColor);
                 }
                 
-                // Après-midi
                 if (!empty($afternoon)) {
                     $intervention = reset($afternoon);
                     $instructors = $this->getInstructorNames($intervention);
                     $sheet->setCellValue("D$dataRow", $instructors);
                     $sheet->setCellValue("E$dataRow", $intervention->getTitle());
                     
-                    // Utiliser la couleur de l'entité
                     $color = $intervention->getInterventionType()->getColor();
                     $hexColor = ltrim($color, '#');
                     $sheet->getStyle("D$dataRow:E$dataRow")->getFill()
@@ -227,7 +224,6 @@ final class HomeController extends AbstractController
                 }
             }
             
-            // Bordures
             $sheet->getStyle("A$dataRow:E$dataRow")->getBorders()->getAllBorders()
                 ->setBorderStyle(Border::BORDER_THIN);
             
@@ -235,7 +231,6 @@ final class HomeController extends AbstractController
             $currentDate->modify('+1 day');
         }
         
-        // Largeurs des colonnes
         $sheet->getColumnDimension('A')->setWidth(12);
         $sheet->getColumnDimension('B')->setWidth(20);
         $sheet->getColumnDimension('C')->setWidth(40);
@@ -254,7 +249,6 @@ final class HomeController extends AbstractController
         $firstSheet = true;
         
         foreach ($interventionsByWeek as $weekNum => $weekData) {
-            // Utiliser la feuille par défaut pour la première semaine
             if ($firstSheet) {
                 $sheet = $spreadsheet->getActiveSheet();
                 $firstSheet = false;
@@ -267,7 +261,6 @@ final class HomeController extends AbstractController
             
             $sheet->setTitle("Semaine $weekNum");
             
-            // Titre
             $sheet->setCellValue('A1', sprintf('Semaine du %s au %s', 
                 $weekStart->format('d/m/Y'), 
                 $weekEnd->format('d/m/Y')
@@ -275,8 +268,7 @@ final class HomeController extends AbstractController
             $sheet->mergeCells('A1:G1');
             $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
             $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-            
-            // En-têtes
+
             $headerRow = 5;
             $headers = ['', 'MATIN (8h30 - 12h00)', '', 'APRÈS-MIDI (13H30 - 17H00)', ''];
             $subHeaders = ['', 'INTERVENANT', 'OBSERVATIONS', 'INTERVENANT', 'OBSERVATIONS'];
@@ -295,7 +287,6 @@ final class HomeController extends AbstractController
             ];
             $sheet->getStyle("A" . ($headerRow - 1) . ":E$headerRow")->applyFromArray($headerStyle);
             
-            // Données
             $interventionsByDay = $this->groupInterventionsByDay($weekData['interventions']);
             
             $dataRow = $headerRow + 1;
@@ -319,7 +310,6 @@ final class HomeController extends AbstractController
                         $sheet->setCellValue("B$dataRow", $instructors);
                         $sheet->setCellValue("C$dataRow", $intervention->getTitle());
                         
-                        // Utiliser la couleur de l'entité
                         $color = $intervention->getInterventionType()->getColor();
                         $hexColor = ltrim($color, '#');
                         $sheet->getStyle("B$dataRow:C$dataRow")->getFill()
@@ -333,7 +323,6 @@ final class HomeController extends AbstractController
                         $sheet->setCellValue("D$dataRow", $instructors);
                         $sheet->setCellValue("E$dataRow", $intervention->getTitle());
                         
-                        // Utiliser la couleur de l'entité
                         $color = $intervention->getInterventionType()->getColor();
                         $hexColor = ltrim($color, '#');
                         $sheet->getStyle("D$dataRow:E$dataRow")->getFill()
@@ -350,10 +339,10 @@ final class HomeController extends AbstractController
             }
             
             $sheet->getColumnDimension('A')->setWidth(12);
-            $sheet->getColumnDimension('B')->setWidth(20);
-            $sheet->getColumnDimension('C')->setWidth(40);
-            $sheet->getColumnDimension('D')->setWidth(20);
-            $sheet->getColumnDimension('E')->setWidth(40);
+            $sheet->getColumnDimension('B')->setWidth(50);
+            $sheet->getColumnDimension('C')->setWidth(60);
+            $sheet->getColumnDimension('D')->setWidth(50);
+            $sheet->getColumnDimension('E')->setWidth(60);
         }
         
         return $spreadsheet;
@@ -374,26 +363,38 @@ final class HomeController extends AbstractController
     
     private function groupInterventionsByWeek(array $interventions, int $year): array
     {
+        if (empty($interventions)) {
+            return [];
+        }
+        
         $weeks = [];
         
-        for ($week = 1; $week <= 52; $week++) {
-            $weekStart = new \DateTime();
-            $weekStart->setISODate($year, $week, 1);
-            $weekEnd = (clone $weekStart)->modify('+4 days');
+        foreach ($interventions as $intervention) {
+            $date = $intervention->getStartDate();
+            $weekNum = (int) $date->format('W'); 
+            $weekYear = (int) $date->format('o'); 
             
-            $weekInterventions = array_filter($interventions, function($intervention) use ($weekStart, $weekEnd) {
-                $date = $intervention->getStartDate();
-                return $date >= $weekStart && $date <= $weekEnd;
-            });
+            if ($weekYear != $year) {
+                continue;
+            }
             
-            if (!empty($weekInterventions)) {
-                $weeks[$week] = [
+            if (!isset($weeks[$weekNum])) {
+                $weekStart = new \DateTime();
+                $weekStart->setISODate($weekYear, $weekNum, 1); 
+                $weekEnd = clone $weekStart;
+                $weekEnd->modify('+4 days'); 
+                
+                $weeks[$weekNum] = [
                     'start' => $weekStart,
                     'end' => $weekEnd,
-                    'interventions' => array_values($weekInterventions)
+                    'interventions' => []
                 ];
             }
+            
+            $weeks[$weekNum]['interventions'][] = $intervention;
         }
+        
+        ksort($weeks);
         
         return $weeks;
     }
