@@ -60,7 +60,7 @@ final class TeachingBlockController extends AbstractController
             try {
                 $em->flush();
 
-                $this->addFlash('success', 'Bloc d\'enseignement ajouté avec succes !');
+                $this->addFlash('success', 'Bloc d\'enseignement modifié avec succes !');
                 return $this->redirectToRoute('app_teaching_block');
             } catch (\Exception) {
                 $this->addFlash('error', 'Une erreur est survenur lors de l\'ajout du bloc d\'enseignement');
