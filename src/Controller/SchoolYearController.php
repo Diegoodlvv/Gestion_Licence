@@ -26,8 +26,8 @@ final class SchoolYearController extends AbstractController
 
         $schoolYears = $paginator->paginate(
             $query,
-            $request->query->getInt('page', 1), 
-            10 
+            $request->query->getInt('page', 1),
+            10
         );
 
         return $this->render('school_year/index.html.twig', [
@@ -49,8 +49,8 @@ final class SchoolYearController extends AbstractController
 
                 $this->addFlash('success', 'Année scolaire ajoutée avec succès !');
                 return $this->redirectToRoute('app_school_year');
-            } catch (\Exception $e) {
-                $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout de l\'année scolaire : ' . $e->getMessage());
+            } catch (\Exception) {
+                $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout de l\'année scolaire : ');
                 return $this->redirectToRoute('app_school_year');
             }
         }
