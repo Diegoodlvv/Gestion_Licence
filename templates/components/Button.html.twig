@@ -2,25 +2,28 @@
     blue: '
         bg-[#2C416E] text-white
         hover:bg-slate-900
-        focus:ring-slate-700^
+        focus:ring-slate-700
+        text-[16px]
         cursor-pointer
     ',
     grey: '
         bg-slate-100 text-slate-800
         hover:bg-slate-200
+        text-[16px]
         focus:ring-slate-300
     ',
     yellow: '
         bg-[#FFBD01] text-black-900 
         hover:bg-yellow-500
         focus:ring-yellow-400
-        text-[18px]
+        text-[16px]
         cursor-pointer
     ',
     red: '
         bg-red-600 text-white
         hover:bg-red-700
         focus:ring-red-600
+        text-[16px]
         cursor-pointer
     ',
     white: '
@@ -45,12 +48,12 @@
 
 {% if href %}
 	<a href="{{ href }}">
-		<button type="{{ type }}" class="{{ classes }}" {% if disabled %} disabled {% endif %}>
+		<button type="{{ type }}" class="{{ classes }}" onclick="{{ onclick }}" {% if disabled %} disabled {% endif %}>
 			{{ label }}
 		</button>
 	</a>
 {% else %}
-	<button type="{{ type }}" class="{{ classes }}" {% if disabled %} disabled {% endif %}>
+	<button type="{{ type }}" class="{{ classes }}" onclick="{{ onclick }}" {% if disabled %} disabled {% endif %}>
 		{{ label }}
 	</button>
 {% endif %}

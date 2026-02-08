@@ -13,6 +13,8 @@ final class Button
 
     public ?string $href = null;
 
+    public ?string $onclick = null;
+
     /**
      * button | submit | reset
      */

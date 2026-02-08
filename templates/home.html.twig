@@ -11,6 +11,12 @@
         </div>
 
         <div id="calendar"></div>
+
+        <div class="mt-6 flex flex-wrap gap-4 justify-left">
+            <twig:Button onclick="exportCurrentYear()" type="button" label="Exporter le calendrier de l'année (.xls)" variant="yellow"/>
+
+            <twig:Button onclick="exportCurrentWeek()" type="button" variant="blue" label="Exporter le planning de la semaine (.xls)"/>
+        </div>
     </div>
   
 {% endblock body %}

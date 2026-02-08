@@ -105,6 +105,44 @@ function initCalendar() {
     calendar.render();
 }
 
+function exportCurrentWeek() {
+    if (!calendar) {
+        console.error('Calendrier non initialisé');
+        return;
+    }
+
+    const currentDate = calendar.getDate();
+    const monday = new Date(currentDate);
+
+    const year = monday.getFullYear();
+    const month = String(monday.getMonth() + 1).padStart(2, '0');
+    const day = String(monday.getDate()).padStart(2, '0');
+
+    const startDate = `${year}-${month}-${day}`;
+
+    console.log("Date export :", startDate);
+
+    const exportUrl = `/calendar/export/week?start=${startDate}`;
+    window.location.href = exportUrl;
+}
+
+
+function exportCurrentYear() {
+     if (!calendar) {
+        console.error('Calendrier non initialisé');
+         return;
+    }
+            
+    const currentDate = calendar.getDate();
+    const year = currentDate.getFullYear();
+    const exportUrl = `/calendar/export/year?year=${year}`;
+            
+     window.location.href = exportUrl;
+}
+
+window.exportCurrentWeek = exportCurrentWeek;
+window.exportCurrentYear = exportCurrentYear;
+
 
 document.addEventListener('DOMContentLoaded', initCalendar);
 document.addEventListener('turbo:load', initCalendar);
