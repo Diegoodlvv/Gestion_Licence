@@ -15,4 +15,3 @@ class InterventionDuration extends Constraint
         return self::CLASS_CONSTRAINT;
     }
 }
-

@@ -2,15 +2,15 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Attribute\Route;
+use App\Entity\Module;
+use App\Form\ModuleType;
 use App\Repository\ModuleRepository;
 use App\Repository\TeachingBlockRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Form\ModuleType;
-use App\Entity\Module;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ModuleController extends AbstractController
 {
@@ -23,7 +23,7 @@ class ModuleController extends AbstractController
         foreach ($teachingBlocks as $teachingBlock) {
             $modulesByBlock[$teachingBlock->getId()] = [
                 'block' => $teachingBlock,
-                'modules' => []
+                'modules' => [],
             ];
         }
 
@@ -35,13 +35,10 @@ class ModuleController extends AbstractController
             $modulesByBlock[$blockId]['modules'][] = $module;
         }
 
-
-
         return $this->render('module/index.html.twig', [
             'modulesByBlock' => $modulesByBlock,
         ]);
     }
-
 
     #[Route('/module/{id}/add', name: 'app_module_add')]
     public function add($id, Request $request, EntityManagerInterface $em, TeachingBlockRepository $teachingBlockRepository): Response
@@ -60,17 +57,18 @@ class ModuleController extends AbstractController
                 $em->flush();
 
                 $this->addFlash('success', 'Module ajoute avec succes!');
+
                 return $this->redirectToRoute('app_module');
             } catch (\Exception) {
                 $this->addFlash('error', 'Une erreur est survenur lors de l\'ajout du module');
+
                 return $this->redirectToRoute('app_module');
             }
         }
 
-
         return $this->render('module/add.html.twig', [
             'form' => $form,
-            'teachingBlock' => $teachingBlock
+            'teachingBlock' => $teachingBlock,
         ]);
     }
 
@@ -90,24 +88,24 @@ class ModuleController extends AbstractController
             try {
                 $em->flush();
                 $this->addFlash('success', 'Module modifié avec succès !');
+
                 return $this->redirectToRoute('app_module');
             } catch (\Exception) {
                 $this->addFlash('error', 'Une erreur est survenir lors de la modification du module !');
+
                 return $this->redirectToRoute('app_module');
             }
         }
 
         return $this->render('module/edit.html.twig', [
             'form' => $form,
-            'module' => $module
+            'module' => $module,
         ]);
     }
 
     #[Route('/module/{id}/delete', name: 'app_module_delete')]
-    public function delete($id,  EntityManagerInterface $em, ModuleRepository $moduleRepository): Response
+    public function delete(Module $module, EntityManagerInterface $em): Response
     {
-        $module = $moduleRepository->find($id);
-
         if ($module) {
             $moduleName = $module->getName();
             try {
@@ -115,7 +113,7 @@ class ModuleController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Module supprimé avec succès.');
             } catch (\Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException) {
-                $this->addFlash('error', 'Impossible de supprimer le module "' . $moduleName . '" car il est lié à une ou plusieurs interventions.');
+                $this->addFlash('error', 'Impossible de supprimer le module "'.$moduleName.'" car il est lié à une ou plusieurs interventions.');
             } catch (\Exception) {
                 $this->addFlash('error', 'Une erreur est survenue lors de la suppression du module ');
             }

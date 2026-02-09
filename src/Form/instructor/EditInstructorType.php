@@ -41,7 +41,7 @@ class EditInstructorType extends AbstractType
                 'expanded' => false,
                 'attr' => [
                     'class' => 'w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black',
-                    'data-controller' => 'tom-select'
+                    'data-controller' => 'tom-select',
                 ],
                 'label_attr' => ['class' => 'block text-sm text-slate-700 mb-1'],
             ])

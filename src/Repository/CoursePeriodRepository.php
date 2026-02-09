@@ -16,17 +16,15 @@ class CoursePeriodRepository extends ServiceEntityRepository
         parent::__construct($registry, CoursePeriod::class);
     }
 
+    public function queryCoursePeriod(?\DateTime $startDate, ?\DateTime $endDate)
+    {
+        $qb = $this->createQueryBuilder('c');
 
-    public function queryCoursePeriod(?\Datetime $startDate, ?\DateTime $endDate){
-
-       $qb = $this->createQueryBuilder('c');
-
-       $qb->andWhere('c.start_date <= :startDate')
-        ->andWhere('c.end_date >= :endDate')
-        ->setParameter('startDate', $startDate->format('Y-m-d'))
-        ->setParameter('endDate', $endDate->format('Y-m-d'))
-        ->setMaxResults(1);
-        
+        $qb->andWhere('c.start_date <= :startDate')
+         ->andWhere('c.end_date >= :endDate')
+         ->setParameter('startDate', $startDate->format('Y-m-d'))
+         ->setParameter('endDate', $endDate->format('Y-m-d'))
+         ->setMaxResults(1);
 
         return $qb->getQuery()->getOneOrNullResult();
     }

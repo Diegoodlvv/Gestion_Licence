@@ -3,27 +3,27 @@
 namespace App\Controller;
 
 use App\Entity\Instructor;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\User;
-use App\Form\NewInstructorType;
-use App\Form\InstructorFilterType;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use App\Repository\InstructorRepository;
 use App\Form\EditInstructorType;
+use App\Form\InstructorFilterType;
 use App\Form\InstructorInterventionsFilterType;
+use App\Form\NewInstructorType;
+use App\Repository\InstructorRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Routing\Attribute\Route;
 
-#[Route("/instructor")]
+#[Route('/instructor')]
 class InstructorController extends AbstractController
 {
     #[Route('/', name: 'app_instructor')]
@@ -126,13 +126,14 @@ class InstructorController extends AbstractController
                 $entityManager->persist($instructor);
                 $entityManager->flush();
                 $this->addFlash('success', 'Enseignant ajouté avec succès !');
+
                 return $this->redirectToRoute('app_instructor');
             } catch (\Exception) {
                 $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout de l\'enseignant');
+
                 return $this->redirectToRoute('app_instructor');
             }
         }
-
 
         return $this->render('instructor/new.html.twig', [
             'form' => $form,
@@ -149,9 +150,11 @@ class InstructorController extends AbstractController
             try {
                 $entityManager->flush();
                 $this->addFlash('success', 'Enseignant modifié avec succès !');
+
                 return $this->redirectToRoute('app_instructor');
             } catch (\Exception) {
                 $this->addFlash('error', 'Une erreur est survenue lors de la modification de l\'enseignant : ');
+
                 return $this->redirectToRoute('app_instructor');
             }
         }
@@ -161,14 +164,13 @@ class InstructorController extends AbstractController
         return $this->render('instructor/edit.html.twig', [
             'form' => $form,
             'instructor' => $instructor,
-            'usedHours' => $usedHours
+            'usedHours' => $usedHours,
         ]);
     }
 
     #[Route('/{id}/delete', name: 'app_instructor_delete')]
     public function delete(Instructor $instructor, EntityManagerInterface $entityManager)
     {
-
         if ($instructor) {
             $entityManager->remove($instructor);
             $entityManager->flush();
@@ -211,31 +213,31 @@ class InstructorController extends AbstractController
 
         $currentYear = date('Y');
         $nextYear = $currentYear + 1;
-        $academicYear = $currentYear . '-' . $nextYear;
+        $academicYear = $currentYear.'-'.$nextYear;
 
-        $sheet->mergeCells('A' . $currentRow . ':E' . $currentRow);
-        $sheet->setCellValue('A' . $currentRow, 'RÉPARTITION DES INTERVENTIONS PAR INTERVENANT ' . $academicYear);
-        $sheet->getStyle('A' . $currentRow)->getFont()->setBold(true)->setSize(14);
-        $sheet->getStyle('A' . $currentRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-        $sheet->getStyle('A' . $currentRow)->getFill()
+        $sheet->mergeCells('A'.$currentRow.':E'.$currentRow);
+        $sheet->setCellValue('A'.$currentRow, 'RÉPARTITION DES INTERVENTIONS PAR INTERVENANT '.$academicYear);
+        $sheet->getStyle('A'.$currentRow)->getFont()->setBold(true)->setSize(14);
+        $sheet->getStyle('A'.$currentRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A'.$currentRow)->getFill()
             ->setFillType(Fill::FILL_SOLID)
             ->getStartColor()->setARGB('FF9BC2E6');
         $currentRow += 2;
 
         foreach ($interventionsByModule as $moduleName => $moduleInterventions) {
             $module = $moduleInterventions[0]->getModule();
-            $instructorInitials = strtoupper(substr($instructor->getUser()->getFirstname(), 0, 1)) . '. ' .
+            $instructorInitials = strtoupper(substr($instructor->getUser()->getFirstname(), 0, 1)).'. '.
                 strtoupper($instructor->getUser()->getLastname());
 
-            $sheet->mergeCells('A' . $currentRow . ':E' . $currentRow);
-            $sheet->setCellValue('A' . $currentRow, $instructorInitials . ' : ' . $moduleName);
-            $sheet->getStyle('A' . $currentRow)->getFont()->setBold(true)->setSize(12);
-            $sheet->getStyle('A' . $currentRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
-            $currentRow++;
+            $sheet->mergeCells('A'.$currentRow.':E'.$currentRow);
+            $sheet->setCellValue('A'.$currentRow, $instructorInitials.' : '.$moduleName);
+            $sheet->getStyle('A'.$currentRow)->getFont()->setBold(true)->setSize(12);
+            $sheet->getStyle('A'.$currentRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
+            ++$currentRow;
 
             $headers = ['', '', '', '', ''];
-            $sheet->fromArray($headers, null, 'A' . $currentRow);
-            $currentRow++;
+            $sheet->fromArray($headers, null, 'A'.$currentRow);
+            ++$currentRow;
 
             usort($moduleInterventions, function ($a, $b) {
                 return $a->getStartDate() <=> $b->getStartDate();
@@ -248,10 +250,10 @@ class InstructorController extends AbstractController
                 $endDate = $intervention->getEndDate();
 
                 $dayOfWeek = $this->getDayOfWeek($startDate->format('N'));
-                $dayMonth = $startDate->format('j') . '-' . $this->getMonth($startDate->format('n')) . '.';
+                $dayMonth = $startDate->format('j').'-'.$this->getMonth($startDate->format('n')).'.';
 
-                $startHour = (int)$startDate->format('H');
-                $endHour = (int)$endDate->format('H');
+                $startHour = (int) $startDate->format('H');
+                $endHour = (int) $endDate->format('H');
 
                 $timeSlot = '';
                 if ($startHour < 12 && $endHour <= 13) {
@@ -268,27 +270,27 @@ class InstructorController extends AbstractController
                 $hours = $durationSeconds / 3600;
                 $totalHours += $hours;
 
-                $sheet->setCellValue('A' . $currentRow, $dayOfWeek);
-                $sheet->setCellValue('B' . $currentRow, $dayMonth);
-                $sheet->setCellValue('C' . $currentRow, $timeSlot);
-                $sheet->setCellValue('D' . $currentRow, $title);
-                $sheet->setCellValue('E' . $currentRow, $hours);
+                $sheet->setCellValue('A'.$currentRow, $dayOfWeek);
+                $sheet->setCellValue('B'.$currentRow, $dayMonth);
+                $sheet->setCellValue('C'.$currentRow, $timeSlot);
+                $sheet->setCellValue('D'.$currentRow, $title);
+                $sheet->setCellValue('E'.$currentRow, $hours);
 
-                $currentRow++;
+                ++$currentRow;
             }
 
-            $currentRow++;
+            ++$currentRow;
 
-            $sheet->setCellValue('D' . $currentRow, 'Total heures');
-            $sheet->setCellValue('E' . $currentRow, $totalHours);
-            $sheet->getStyle('D' . $currentRow . ':E' . $currentRow)->getFont()->setBold(true);
-            $currentRow++;
+            $sheet->setCellValue('D'.$currentRow, 'Total heures');
+            $sheet->setCellValue('E'.$currentRow, $totalHours);
+            $sheet->getStyle('D'.$currentRow.':E'.$currentRow)->getFont()->setBold(true);
+            ++$currentRow;
 
             $moduleHours = $module->getHoursCount();
             $remainingHours = $moduleHours - $totalHours;
-            $sheet->setCellValue('D' . $currentRow, 'Heures restantes à effectuer');
-            $sheet->setCellValue('E' . $currentRow, $remainingHours);
-            $sheet->getStyle('D' . $currentRow . ':E' . $currentRow)->getFont()->setBold(true);
+            $sheet->setCellValue('D'.$currentRow, 'Heures restantes à effectuer');
+            $sheet->setCellValue('E'.$currentRow, $remainingHours);
+            $sheet->getStyle('D'.$currentRow.':E'.$currentRow)->getFont()->setBold(true);
             $currentRow += 3;
         }
 
@@ -301,10 +303,10 @@ class InstructorController extends AbstractController
                 ],
             ],
         ];
-        $sheet->getStyle('A2:E' . $highestRow)->applyFromArray($styleArray);
+        $sheet->getStyle('A2:E'.$highestRow)->applyFromArray($styleArray);
 
-        $filename = 'Recapitulatif_' . $instructor->getUser()->getLastname() . '_' .
-            $instructor->getUser()->getFirstname() . '_' . $academicYear . '.xlsx';
+        $filename = 'Recapitulatif_'.$instructor->getUser()->getLastname().'_'.
+            $instructor->getUser()->getFirstname().'_'.$academicYear.'.xlsx';
 
         $response = new StreamedResponse(function () use ($spreadsheet) {
             $writer = new Xlsx($spreadsheet);
@@ -312,7 +314,7 @@ class InstructorController extends AbstractController
         });
 
         $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
         $response->headers->set('Cache-Control', 'max-age=0');
 
         return $response;
@@ -327,8 +329,9 @@ class InstructorController extends AbstractController
             4 => 'Jeudi',
             5 => 'Vendredi',
             6 => 'Samedi',
-            7 => 'Dimanche'
+            7 => 'Dimanche',
         ];
+
         return $days[$dayNumber] ?? '';
     }
 
@@ -346,8 +349,9 @@ class InstructorController extends AbstractController
             '9' => 'sept',
             '10' => 'oct',
             '11' => 'nov',
-            '12' => 'déc'
+            '12' => 'déc',
         ];
+
         return $months[$monthNumber] ?? '';
     }
 }

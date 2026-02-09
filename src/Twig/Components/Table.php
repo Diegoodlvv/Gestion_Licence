@@ -10,7 +10,6 @@ final class Table
     /** @var string[] */
     public array $columns = [];
 
-    /** @var iterable */
     public iterable $rows = [];
 
     /** @var string[] */

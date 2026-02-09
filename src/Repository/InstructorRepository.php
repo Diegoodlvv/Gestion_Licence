@@ -42,8 +42,6 @@ class InstructorRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-
-
     public function InstructorByFilters(?string $lastname, ?string $firstname, ?string $email): ?QueryBuilder
     {
         $qb = $this->createQueryBuilder('i')
@@ -52,17 +50,17 @@ class InstructorRepository extends ServiceEntityRepository
 
         if ($lastname) {
             $qb->andWhere('LOWER(u.lastname) LIKE LOWER(:lastname)')
-                ->setParameter('lastname', '%' . $lastname . '%');
+                ->setParameter('lastname', '%'.$lastname.'%');
         }
 
         if ($firstname) {
             $qb->andWhere('LOWER(u.firstname) LIKE LOWER(:firstname)')
-                ->setParameter('firstname', '%' . $firstname . '%');
+                ->setParameter('firstname', '%'.$firstname.'%');
         }
 
         if ($email) {
             $qb->andWhere('LOWER(u.email) LIKE LOWER(:email)')
-                ->setParameter('email', '%' . $email . '%');
+                ->setParameter('email', '%'.$email.'%');
         }
 
         return $qb;
@@ -94,6 +92,7 @@ class InstructorRepository extends ServiceEntityRepository
 
         return $qb;
     }
+
     public function getUsedHoursPerModuleForInstructor(int $instructorId): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -129,4 +128,3 @@ class InstructorRepository extends ServiceEntityRepository
         return $usedHours;
     }
 }
-

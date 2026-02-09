@@ -3,15 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\TeachingBlock;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
 use App\Form\TeachingBlockFilterType;
 use App\Form\TeachingBlockType;
-use Symfony\Component\HttpFoundation\Request;
 use App\Repository\TeachingBlockRepository;
-use Knp\Component\Pager\PaginatorInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class TeachingBlockController extends AbstractController
 {
@@ -51,7 +51,6 @@ final class TeachingBlockController extends AbstractController
     #[Route('/teachingBlock/{id}/edit', name: 'app_teaching_block_edit')]
     public function new(TeachingBlock $teachingBlock, Request $request, EntityManagerInterface $em)
     {
-
         $form = $this->createForm(TeachingBlockType::class, $teachingBlock);
         $form->handleRequest($request);
 
@@ -60,12 +59,14 @@ final class TeachingBlockController extends AbstractController
                 $em->flush();
 
                 $this->addFlash('success', 'Bloc d\'enseignement modifié avec succes !');
+
                 return $this->redirectToRoute('app_teaching_block');
             } catch (\Exception) {
                 $this->addFlash('error', 'Une erreur est survenur lors de l\'ajout du bloc d\'enseignement');
+
                 return $this->redirectToRoute('app_teaching_block');
             }
-        };
+        }
 
         return $this->render('teaching_block/edit.html.twig', [
             'form' => $form,

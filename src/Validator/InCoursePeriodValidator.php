@@ -15,8 +15,7 @@ class InCoursePeriodValidator extends ConstraintValidator
 
     public function validate(mixed $entity, Constraint $constraint): void
     {
-        if (!$entity->getStartDate() ||!$entity->getEndDate()) 
-        {
+        if (!$entity->getStartDate() || !$entity->getEndDate()) {
             return;
         }
 
@@ -24,17 +23,16 @@ class InCoursePeriodValidator extends ConstraintValidator
 
         $result = false;
 
-        foreach($periods as $period){
-            if($entity->getStartDate() >= $period->getStartDate() && $entity->getEndDate() <= $period->getEndDate()){
+        foreach ($periods as $period) {
+            if ($entity->getStartDate() >= $period->getStartDate() && $entity->getEndDate() <= $period->getEndDate()) {
                 $result = true;
             }
         }
 
-        if (!$result) 
-        {
+        if (!$result) {
             $this->context
                 ->buildViolation($constraint->message)
-                ->atPath('start_date') 
+                ->atPath('start_date')
                 ->addViolation();
         }
     }

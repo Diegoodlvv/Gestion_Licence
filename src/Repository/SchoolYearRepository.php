@@ -6,8 +6,6 @@ use App\Entity\SchoolYear;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
-
 /**
  * @extends ServiceEntityRepository<SchoolYear>
  */

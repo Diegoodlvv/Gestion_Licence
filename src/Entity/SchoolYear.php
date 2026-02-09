@@ -3,14 +3,12 @@
 namespace App\Entity;
 
 use App\Repository\SchoolYearRepository;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
-
 
 #[ORM\Entity(repositoryClass: SchoolYearRepository::class)]
 #[UniqueEntity('year')]
@@ -28,7 +26,7 @@ class SchoolYear
     #[Assert\NotBlank()]
     private ?string $year = null;
 
-    #[ORM\Column(type: Types::TEXT, length:9)]
+    #[ORM\Column(type: Types::TEXT, length: 9)]
     #[Assert\Type('string')]
     #[Assert\NotNull()]
     #[Assert\NotBlank()]
@@ -104,17 +102,18 @@ class SchoolYear
         return $this;
     }
 
-    public static function getActualYear(): ?string 
+    public static function getActualYear(): ?string
     {
-        $date = new DateTime();
+        $date = new \DateTime();
 
-        $month = (int)$date->format('m');
+        $month = (int) $date->format('m');
 
         $year = $date->format('Y');
 
-        if($month > 8 ){
-            $year = (int)$year + 1;
-        } 
+        if ($month > 8) {
+            $year = (int) $year + 1;
+        }
+
         return $year;
     }
 }

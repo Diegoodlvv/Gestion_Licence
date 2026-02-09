@@ -3,20 +3,18 @@
 namespace App\Entity;
 
 use App\Repository\InterventionRepository;
+use App\Validator as AssertCustom;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Context\ExecutionContext;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use App\Validator as AssertCustom;
 
 #[ORM\Entity(repositoryClass: InterventionRepository::class)]
 #[UniqueEntity(
-    fields:['start_date'],
-    message:'Une intervention existe déjà à cette date.'
+    fields: ['start_date'],
+    message: 'Une intervention existe déjà à cette date.'
 )]
 #[AssertCustom\InterventionDuration]
 #[AssertCustom\InCoursePeriod]
@@ -29,17 +27,17 @@ class Intervention
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::TEXT, length:255)]
+    #[ORM\Column(type: Types::TEXT, length: 255)]
     #[Assert\NotNull]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Assert\NotNull(message:'Veuillez renseigner la date de début')]
+    #[Assert\NotNull(message: 'Veuillez renseigner la date de début')]
     private ?\DateTime $start_date = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Assert\NotNull(message:'Veuillez renseigner la date de début')]
-    #[Assert\GreaterThan(propertyPath:'start_date', message:'La date de début doit être inférieure à la date de fin')]
+    #[Assert\NotNull(message: 'Veuillez renseigner la date de début')]
+    #[Assert\GreaterThan(propertyPath: 'start_date', message: 'La date de début doit être inférieure à la date de fin')]
     private ?\DateTime $end_date = null;
 
     #[ORM\ManyToOne(inversedBy: 'interventions')]
@@ -54,7 +52,6 @@ class Intervention
     #[ORM\Column]
     #[Assert\NotNull]
     private ?bool $remotely = null;
-
 
     /**
      * @var Collection<int, Instructor>
@@ -155,7 +152,6 @@ class Intervention
 
         return $this;
     }
-
 
     /**
      * @return Collection<int, Instructor>

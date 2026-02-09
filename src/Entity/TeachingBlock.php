@@ -45,7 +45,6 @@ class TeachingBlock
         $this->modules = new ArrayCollection();
     }
 
-
     public function getId(): ?int
     {
         return $this->id;

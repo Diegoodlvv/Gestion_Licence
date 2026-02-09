@@ -7,7 +7,6 @@ use App\Entity\Module;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use PgSql\Result;
 
 /**
  * @extends ServiceEntityRepository<Intervention>
@@ -24,17 +23,14 @@ class InterventionRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('i');
 
         if (!empty($startDate) && !empty($endDate)) {
-
             $qb->andWhere('i.start_date >= :startDate')
                 ->andWhere('i.end_date <= :endDate')
                 ->setParameter('startDate', $startDate)
                 ->setParameter('endDate', $endDate);
         } elseif (!empty($startDate)) {
-
             $qb->andWhere('i.start_date >= :startDate')
                 ->setParameter('startDate', $startDate);
         } elseif (!empty($endDate)) {
-
             $qb->andWhere('i.end_date <= :endDate')
                 ->setParameter('endDate', $endDate);
         }
@@ -44,7 +40,7 @@ class InterventionRepository extends ServiceEntityRepository
                 ->setParameter('module', $module);
         }
 
-        $qb->orderBy('i.id','desc');
+        $qb->orderBy('i.id', 'desc');
 
         return $qb;
     }
@@ -60,5 +56,4 @@ class InterventionRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
 }
