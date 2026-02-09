@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\InterventionRepository;
+use DateTime;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,6 +19,9 @@ final class HomeController extends AbstractController
     {
         $start = $request->query->get('start');
         $end = $request->query->get('end');
+
+        $start = new DateTime($start);
+        $end = new DateTime($end);
 
         $interventions = $interventionRepository->interventionByDate($start, $end);
 

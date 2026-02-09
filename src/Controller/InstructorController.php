@@ -106,14 +106,12 @@ class InstructorController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                // new user
                 $user = new User();
                 $user->setEmail($form->get('email')->getData());
                 $user->setFirstname($form->get('firstname')->getData());
                 $user->setLastname($form->get('lastname')->getData());
                 $user->setRoles(['ROLE_USER']);
 
-                // hash
                 $password = $form->get('plainPassword')->getData();
                 $user->setPassword(
                     $userPasswordHasher->hashPassword(
@@ -123,8 +121,6 @@ class InstructorController extends AbstractController
                 );
 
                 $entityManager->persist($user);
-
-                // lier l'utilisateur à l'instructeur
                 $instructor->setUser($user);
 
                 $entityManager->persist($instructor);
@@ -144,9 +140,8 @@ class InstructorController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_instructor_edit')]
-    public function edit($id, InstructorRepository $instructorRepository, Request $request, EntityManagerInterface $entityManager)
+    public function edit(Instructor $instructor, InstructorRepository $instructorRepository, Request $request, EntityManagerInterface $entityManager)
     {
-        $instructor = $instructorRepository->find($id);
         $form = $this->createForm(EditInstructorType::class, $instructor);
         $form->handleRequest($request);
 
@@ -161,7 +156,7 @@ class InstructorController extends AbstractController
             }
         }
 
-        $usedHours = $instructorRepository->getUsedHoursPerModuleForInstructor($id);
+        $usedHours = $instructorRepository->getUsedHoursPerModuleForInstructor($instructor->getId());
 
         return $this->render('instructor/edit.html.twig', [
             'form' => $form,

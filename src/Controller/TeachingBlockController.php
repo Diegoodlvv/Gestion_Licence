@@ -49,10 +49,9 @@ final class TeachingBlockController extends AbstractController
     }
 
     #[Route('/teachingBlock/{id}/edit', name: 'app_teaching_block_edit')]
-    public function new($id, Request $request, EntityManagerInterface $em, TeachingBlockRepository $teachingBlockRepository)
+    public function new(TeachingBlock $teachingBlock, Request $request, EntityManagerInterface $em)
     {
 
-        $teachingBlock = $teachingBlockRepository->find($id);
         $form = $this->createForm(TeachingBlockType::class, $teachingBlock);
         $form->handleRequest($request);
 

@@ -91,9 +91,8 @@ final class InterventionController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_intervention_edit')]
-    public function edit($id, InterventionRepository $interventionRepository, Request $request, EntityManagerInterface $entityManager)
+    public function edit(Intervention $intervention, Request $request, EntityManagerInterface $entityManager)
     {
-        $intervention = $interventionRepository->find($id);
         $form = $this->createForm(EditInterventionType::class, $intervention);
         $form->handleRequest($request);
 

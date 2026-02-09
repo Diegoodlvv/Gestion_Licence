@@ -143,13 +143,9 @@ final class SchoolYearController extends AbstractController
     }
 
     #[Route('/schoolyear/{id}/Week/{weekId}/edit', name: 'app_school_year_editWeek')]
-    public function editWeek($id, $weekId, SchoolYearRepository $schoolYearRepository, CoursePeriodRepository $coursePeriodRepository, Request $request, EntityManagerInterface $entityManager): Response
+    public function editWeek(SchoolYear $schoolYear, CoursePeriod $coursePeriod, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $year = $schoolYearRepository->find($id);
-
-        $week = $coursePeriodRepository->find($weekId);
-
-        $form = $this->createForm(CoursePeriodType::class, $week);
+        $form = $this->createForm(CoursePeriodType::class, $coursePeriod);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -157,17 +153,17 @@ final class SchoolYearController extends AbstractController
                 $entityManager->flush();
 
                 $this->addFlash('success', 'Semaine modifiée avec succès !');
-                return $this->redirectToRoute('app_school_year_edit', ['id' => $id]);
+                return $this->redirectToRoute('app_school_year_edit', ['id' => $coursePeriod->getId()]);
             } catch (\Exception) {
                 $this->addFlash('error', 'Une erreur est survenue lors de la modification de la semaine');
-                return $this->redirectToRoute('app_school_year_edit', ['id' => $id]);
+                return $this->redirectToRoute('app_school_year_edit', ['id' => $coursePeriod->getId()]);
             }
         }
 
         return $this->render('school_year/editWeek.html.twig', [
             'form' => $form,
-            'year' => $year,
-            'week' => $week,
+            'year' => $schoolYear,
+            'week' => $coursePeriod,
         ]);
     }
 

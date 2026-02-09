@@ -106,13 +106,6 @@ class InstructorRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
 
-        // SELECT i.*, m.* 
-        // FROM intervention i
-        // INNER JOIN module m ON i.module_id = m.id
-        // INNER JOIN intervention_instructor ii ON i.id = ii.intervention_id
-        // INNER JOIN instructor inst ON ii.instructor_id = inst.id
-        // WHERE inst.id = :instructorId
-
         $usedHours = [];
 
         foreach ($interventions as $intervention) {
@@ -137,20 +130,3 @@ class InstructorRepository extends ServiceEntityRepository
     }
 }
 
-// Resume de toute la fonction getUsedHoursPerModuleForInstructor en SQL uniquement
-// SELECT 
-//     m.id AS module_id, 
-//     -- On calcule la différence entre fin et début (en secondes), on divise par 3600 pour avoir les heures, et on fait la SOMME
-//     SUM(TIMESTAMPDIFF(SECOND, i.start_date, i.end_date) / 3600) AS total_heures_realisees
-// FROM 
-//     intervention i
-// -- On joint la table module pour savoir à quel module l'intervention appartient
-// JOIN 
-//     module m ON i.module_id = m.id
-// -- On joint la table de liaison entre intervention et instructor (car c'est une relation ManyToMany)
-// JOIN 
-//     intervention_instructor ii ON i.id = ii.intervention_id
-// WHERE 
-//     ii.instructor_id = :ton_instructor_id
-// GROUP BY 
-//     m.id; -- On regroupe les résultats par Module pour avoir une ligne par module
