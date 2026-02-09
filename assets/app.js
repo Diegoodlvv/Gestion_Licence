@@ -107,7 +107,6 @@ function initCalendar() {
 
 function exportCurrentWeek() {
     if (!calendar) {
-        console.error('Calendrier non initialisé');
         return;
     }
 
@@ -129,7 +128,6 @@ function exportCurrentWeek() {
 
 function exportCurrentYear() {
      if (!calendar) {
-        console.error('Calendrier non initialisé');
          return;
     }
             
@@ -145,5 +143,3 @@ window.exportCurrentYear = exportCurrentYear;
 
 
 document.addEventListener('DOMContentLoaded', initCalendar);
-document.addEventListener('turbo:load', initCalendar);
-document.addEventListener('turbo:render', initCalendar);

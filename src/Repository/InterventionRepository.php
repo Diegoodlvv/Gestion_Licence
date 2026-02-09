@@ -49,7 +49,7 @@ class InterventionRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function InterventionByDate(?\DateTime $startDate, ?\DateTime $endDate): array
+    public function interventionByDate(?\DateTime $startDate, ?\DateTime $endDate): array
     {
         return $this->createQueryBuilder('i')
             ->where('i.start_date >= :start')

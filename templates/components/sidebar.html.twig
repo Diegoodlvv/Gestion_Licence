@@ -1,4 +1,4 @@
-<aside class="w-72 h-screen bg-slate-50 border-r border-slate-200 flex flex-col">
+<aside class="w-72 min-h-screen bg-slate-50 border-r border-slate-200 flex flex-col">
 	<div class="px-6 py-5">
 		<div class="flex items-center gap-3">
 			<img src="{{ asset('icones/logoprojet.png') }}">
@@ -58,7 +58,7 @@
 		<ul class="space-y-1">
 			{% for item in menu1 %}
 				<li>
-					<a href="{{ path(item.route)}}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 {{ current_route == item.route ? 'bg-slate-800 text-white' : '' }}">
+					<a href="{{ path(item.route)}}" class="flex hover:bg-slate-800 hover:text-white transition-all duration-200 items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 {{ current_route == item.route ? 'bg-slate-800 text-white' : '' }}">
 						<span><img src="{{ asset('icones/'~ item.icone) }}"></span>
 						<span>{{ item.name }}</span>
 					</a>
@@ -73,7 +73,7 @@
 		<ul class="space-y-1">
 			{% for item in menu2 %}
 				<li>
-					<a href="{{ path(item.route)}}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 {{ current_route == item.route ? 'bg-slate-800 text-white' : '' }}">
+					<a href="{{ path(item.route)}}" class="flex hover:bg-slate-800 hover:text-white transition-all duration-200 items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 {{ current_route == item.route ? 'bg-slate-800 text-white'  : '' }}">
 						<span><img src="{{ asset('icones/' ~ item.icone) }}"></span>
 						<span>{{ item.name }}</span>
 					</a>
