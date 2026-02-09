@@ -62,12 +62,11 @@ final class SchoolYearController extends AbstractController
     }
 
     #[Route('/schoolyear/{id}/edit', name: 'app_school_year_edit')]
-    public function edit($id, SchoolYearRepository $schoolYearRepository, Request $request, EntityManagerInterface $entityManager): Response
+    public function edit(SchoolYear $schoolYear, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $course = $schoolYearRepository->findByCourseYear($id);
+        $course = $schoolYear->getCoursePeriods();
 
-        $year = $schoolYearRepository->find($id);
-        $form = $this->createForm(SchoolYearType::class, $year);
+        $form = $this->createForm(SchoolYearType::class, $schoolYear);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -84,19 +83,18 @@ final class SchoolYearController extends AbstractController
 
         return $this->render('school_year/edit.html.twig', [
             'form' => $form,
-            'year' => $year,
+            'year' => $schoolYear,
             'course' => $course
         ]);
     }
 
     #[Route('/schoolyear/{id}/delete', name: 'app_school_year_delete')]
-    public function delete($id, SchoolYearRepository $schoolYearRepository, EntityManagerInterface $entityManager)
+    public function delete(SchoolYear $schoolYear, EntityManagerInterface $entityManager)
     {
-        $year = $schoolYearRepository->find($id);
 
-        if ($year) {
+        if ($schoolYear) {
             try {
-                $entityManager->remove($year);
+                $entityManager->remove($schoolYear);
                 $entityManager->flush();
 
                 $this->addFlash('success', 'Année scolaire supprimée avec succès !');
@@ -113,12 +111,11 @@ final class SchoolYearController extends AbstractController
     // --------------- Gestion des Semaines --------------- //
 
     #[Route('/schoolyear/{id}/newWeek', name: 'app_school_year_newWeek')]
-    public function newWeek($id, SchoolYearRepository $schoolYearRepository, Request $request, EntityManagerInterface $entityManager): Response
+    public function newWeek(SchoolYear $schoolYear, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $year = $schoolYearRepository->find($id);
 
         $week = new CoursePeriod();
-        $week->setSchoolYear($year);
+        $week->setSchoolYear($schoolYear);
 
         $form = $this->createForm(CoursePeriodType::class, $week);
         $form->handleRequest($request);
@@ -129,20 +126,20 @@ final class SchoolYearController extends AbstractController
                 $entityManager->flush();
 
                 $this->addFlash('success', 'Semaine de cours ajoutée avec succès !');
-                return $this->redirectToRoute('app_school_year_edit', ['id' => $id]);
+                return $this->redirectToRoute('app_school_year_edit', ['id' => $schoolYear->getId()]);
             } catch (\Exception) {
                 $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout de la semaine de cours');
-                return $this->redirectToRoute('app_school_year_edit', ['id' => $id]);
+                return $this->redirectToRoute('app_school_year_edit', ['id' => $schoolYear->getId()]);
             }
         }
 
         return $this->render('school_year/newWeek.html.twig', [
             'form' => $form,
-            'year' => $year,
+            'year' => $schoolYear,
         ]);
     }
 
-    #[Route('/schoolyear/{id}/Week/{weekId}/edit', name: 'app_school_year_editWeek')]
+    #[Route('/schoolyear/{id}/Week/{coursePeriod}/edit', name: 'app_school_year_editWeek')]
     public function editWeek(SchoolYear $schoolYear, CoursePeriod $coursePeriod, Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(CoursePeriodType::class, $coursePeriod);
@@ -153,10 +150,10 @@ final class SchoolYearController extends AbstractController
                 $entityManager->flush();
 
                 $this->addFlash('success', 'Semaine modifiée avec succès !');
-                return $this->redirectToRoute('app_school_year_edit', ['id' => $coursePeriod->getId()]);
+                return $this->redirectToRoute('app_school_year_edit', ['id' => $schoolYear->getId()]);
             } catch (\Exception) {
                 $this->addFlash('error', 'Une erreur est survenue lors de la modification de la semaine');
-                return $this->redirectToRoute('app_school_year_edit', ['id' => $coursePeriod->getId()]);
+                return $this->redirectToRoute('app_school_year_edit', ['id' => $schoolYear->getId()]);
             }
         }
 
@@ -167,34 +164,32 @@ final class SchoolYearController extends AbstractController
         ]);
     }
 
-    #[Route('/schoolyear/{id}/week/{weekId}/delete', name: 'app_school_year_deleteWeek')]
-    public function deleteWeek($id, $weekId, CoursePeriodRepository $coursePeriodRepository, EntityManagerInterface $entityManager): Response
+    #[Route('/schoolyear/{id}/week/{coursePeriod}/delete', name: 'app_school_year_deleteWeek')]
+    public function deleteWeek(SchoolYear $schoolYear, CoursePeriod $coursePeriod, CoursePeriodRepository $coursePeriodRepository, EntityManagerInterface $entityManager): Response
     {
-        $week = $coursePeriodRepository->find($weekId);
 
-        if (!$week) {
+        if (!$coursePeriod) {
             $this->addFlash('error', 'Semaine de cours introuvable !');
-            return $this->redirectToRoute('app_school_year_edit', ['id' => $id]);
+            return $this->redirectToRoute('app_school_year_edit', ['id' => $schoolYear->getId()]);
         }
 
-        // verifie si ya des intervention liees a la semaine
-        $interventions = $week->getInterventions();
+        $interventions = $coursePeriod->getInterventions();
 
         if ($interventions->count() > 0) {
             $count = $interventions->count();
             $this->addFlash('error', "Vous ne pouvez pas supprimer cette semaine car elle est liée à {$count} intervention(s). Veuillez d'abord supprimer ou déplacer ces interventions.");
-            return $this->redirectToRoute('app_school_year_edit', ['id' => $id]);
+            return $this->redirectToRoute('app_school_year_edit', ['id' => $schoolYear->getId()]);
         }
 
         try {
-            $entityManager->remove($week);
+            $entityManager->remove($coursePeriod);
             $entityManager->flush();
 
             $this->addFlash('success', 'Semaine supprimée avec succès !');
-            return $this->redirectToRoute('app_school_year_edit', ['id' => $id]);
+            return $this->redirectToRoute('app_school_year_edit', ['id' => $schoolYear->getId()]);
         } catch (\Exception) {
             $this->addFlash('error', 'Une erreur est survenue lors de la suppression de la semaine : ');
-            return $this->redirectToRoute('app_school_year_edit', ['id' => $id]);
+            return $this->redirectToRoute('app_school_year_edit', ['id' => $schoolYear->getId()]);
         }
     }
 }
