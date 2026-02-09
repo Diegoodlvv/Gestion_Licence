@@ -35,11 +35,16 @@
 					<div class="bg-white rounded-lg border border-gray-200 overflow-hidden mb-4">
 						<div>
 							{% for module in modules %}
-								<li data-module-id="{{ module.id }}">
+								<li data-module-id="{{ module.id }}" data-controller="module">
+
 									{% if module.modulesChildren|length > 0 %}
-										<div class="flex items-center justify-between py-3 px-6 border border-gray-200 hover:bg-gray-50 cursor-pointer" onclick="toggleModule({{ module.id }})">
+										<div
+											class="flex items-center justify-between py-3 px-6 border border-gray-200 hover:bg-gray-50 cursor-pointer" data-action="click->module#toggle">
+											{# click = event, module = nom du controler, toggle = nom de la fonction #}
 											<div class="flex items-center space-x-3">
-												<svg class="w-4 h-4 text-gray-400 transition-transform duration-200 chevron" id="chevron-{{ module.id }}" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+												<svg
+													class="w-4 h-4 text-gray-400 transition-transform duration-200 chevron" id="chevron-{{ module.id }}" data-module-target="chevron" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+													{# data-module-target="chevron"== reference aux elements HTML #}
 													<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
 												</svg>
 												<span class="text-gray-800 text-sm font-medium">
@@ -74,7 +79,9 @@
 										</a>
 									{% endif %}
 
-									<ul class="bg-gray-50 border-t border-gray-100 hidden" id="children-{{ module.id }}">
+									<ul
+										class="bg-gray-50 border-t border-gray-100 hidden" id="children-{{ module.id }}" data-module-target="children">
+										{# data-module-target="children" == reference aux elements HMTL #}
 										{% for child in module.modulesChildren %}
 											<li class="hover:bg-gray-100">
 												<a href=" {{ path('app_module_edit', {'id': child.id} ) }}" class="flex items-center justify-between py-3 px-6 pl-16 group">
@@ -107,26 +114,4 @@
 
 	</div>
 
-
-	{# JavaScript#}
-	<script>
-		function toggleModule(moduleId) {
-const childrenElement = document.getElementById("children-" + moduleId,);
-const chevronElement = document.getElementById("chevron-" + moduleId,);
-
-if (childrenElement) {
-const isHidden = childrenElement.classList.contains("hidden");
-
-if (isHidden) { // Show children
-childrenElement.classList.remove("hidden");
-// Rotate chevron down
-chevronElement.style.transform = "rotate(90deg)";
-} else { // Hide children
-childrenElement.classList.add("hidden");
-// Rotate chevron back
-chevronElement.style.transform = "rotate(0deg)";
-}
-}
-}
-	</script>
 {% endblock %}
