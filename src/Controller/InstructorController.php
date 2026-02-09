@@ -166,9 +166,8 @@ class InstructorController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'app_instructor_delete')]
-    public function delete($id, InstructorRepository $instructorRepository, EntityManagerInterface $entityManager)
+    public function delete(Instructor $instructor, EntityManagerInterface $entityManager)
     {
-        $instructor = $instructorRepository->find($id);
 
         if ($instructor) {
             $entityManager->remove($instructor);
