@@ -1,4 +1,4 @@
-// import "./stimulus_bootstrap.js";
+import "./stimulus_bootstrap.js";
 import './styles/app.css';
 
 import { Calendar } from '@fullcalendar/core';
