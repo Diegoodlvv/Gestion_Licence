@@ -114,10 +114,8 @@ final class InterventionController extends AbstractController
     }
 
     #[Route('/intervention/{id}/delete', name: 'app_intervention_delete')]
-    public function delete($id, InterventionRepository $interventionRepository, EntityManagerInterface $em): Response
+    public function delete(Intervention $intervention, EntityManagerInterface $em): Response
     {
-        $intervention = $interventionRepository->find($id);
-
         if ($intervention) {
             try {
                 $em->remove($intervention);
