@@ -65,10 +65,10 @@ final class InterventionTypeController extends AbstractController
                 $em->flush();
 
                 $this->addFlash('success', 'Type d\'intervention ajoute avec succès !');
-                return $this->redirectToRoute('app_index_interventionType');
+                return $this->redirectToRoute('app_interventiontype');
             } catch (\Exception) {
                 $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout du type d\'intervention');
-                return $this->redirectToRoute('app_index_interventionType');
+                return $this->redirectToRoute('app_interventiontype');
             }
         }
 
@@ -88,10 +88,10 @@ final class InterventionTypeController extends AbstractController
             try {
                 $em->flush();
                 $this->addFlash('success', 'Type d\'intervention modifie avec succes !');
-                return $this->redirectToRoute('app_index_interventionType');
+                return $this->redirectToRoute('app_interventiontype');
             } catch (\Exception) {
                 $this->addFlash('error', 'Une erreur est survenue lors de la modification du type d\'intervention');
-                return $this->redirectToRoute('app_index_interventionType');
+                return $this->redirectToRoute('app_interventiontype');
             }
         }
 
@@ -113,13 +113,13 @@ final class InterventionTypeController extends AbstractController
                 $em->flush();
 
                 $this->addFlash('success', 'Type d\'intervention supprimée avec succès !');
-                return $this->redirectToRoute('app_index_interventionType');
+                return $this->redirectToRoute('app_interventiontype');
             } catch (\Exception) {
                 $this->addFlash('error', 'Vous ne pouvez pas supprimer un type d\'intervention qui a des interventions liés');
-                return $this->redirectToRoute('app_index_interventionType');
+                return $this->redirectToRoute('app_interventiontype');
             }
         }
 
-        return $this->redirectToRoute('app_index_interventionType');
+        return $this->redirectToRoute('app_interventiontype');
     }
 }

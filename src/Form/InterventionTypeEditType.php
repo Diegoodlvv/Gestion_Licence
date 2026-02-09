@@ -18,19 +18,15 @@ class InterventionTypeEditType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Nom - champ obligatoire',
-                'required' => true,
-                'attr' => ['class' => 'w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black'],
-                'label_attr' => ['class' => 'block text-sm text-slate-700 mb-1'],
+                'required' => true
             ])
             ->add('color', TextType::class, [
                 'label' => 'Code couleur (hexadecimal) - champ obligatoire',
                 'required' => true,
                 'attr' => [
                     'placeholder' => '#6750A4',
-                    'pattern' => '#[0-9A-Fa-f]{6}',
-                    'class' => 'w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black'
+                    'pattern' => '#[0-9A-Fa-f]{6}'
                 ],
-                'label_attr' => ['class' => 'block text-sm text-slate-700 mb-1'],
                 'constraints' => [
                     new Regex(
                         pattern: '/^#[0-9A-Fa-f]{6}$/',
@@ -40,9 +36,7 @@ class InterventionTypeEditType extends AbstractType
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description - champ obligatoire',
-                'required' => true,
-                'attr' => ['class' => 'w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black'],
-                'label_attr' => ['class' => 'block text-sm text-slate-700 mb-1'],
+                'required' => true
             ])
         ;
     }
