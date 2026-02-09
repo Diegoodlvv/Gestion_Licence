@@ -97,7 +97,6 @@ class ModuleType extends AbstractType
                 'label' => 'Parent',
                 'required' => false,
                 'placeholder' => 'Sélectionnez un parent',
-                // use = comme des parametre optionels
                 // Paramètres = c'est les données qui arrivent au moment de l'exécution (quand Symfony construit le formulaire).
                 // Use: c'est les données qui existent déjà autour au moment où on ecrit le code (dans le $builder).
                 'query_builder' => function (ModuleRepository $mr) use ($teachingBlock, $module) {
