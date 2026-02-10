@@ -29,4 +29,3 @@ class InterventionDurationValidator extends ConstraintValidator
         }
     }
 }
-

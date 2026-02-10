@@ -12,23 +12,23 @@ class SchoolYearFixtures extends Fixture
     {
         $years = [
             [
-                "year" => "2025",
-                "saison" => "2025/2026"
+                'year' => '2025',
+                'saison' => '2025/2026',
             ],
             [
-                "year" => "2026",
-                "saison" => "2026/2027"
+                'year' => '2026',
+                'saison' => '2026/2027',
             ],
             [
-                "year" => "2027",
-                "saison" => "2027/2028"
-            ]
+                'year' => '2027',
+                'saison' => '2027/2028',
+            ],
         ];
 
         foreach ($years as $data) {
             $year = new SchoolYear();
-            $year->setYear($data["year"]);
-            $year->setSaison($data["saison"]);
+            $year->setYear($data['year']);
+            $year->setSaison($data['saison']);
 
             $manager->persist($year);
 

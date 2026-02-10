@@ -55,7 +55,7 @@ class Instructor
 
     public function getUserName()
     {
-        return $this->user->getFirstname() . " " . $this->user->getLastname(); 
+        return $this->user->getFirstname().' '.$this->user->getLastname();
     }
 
     /**

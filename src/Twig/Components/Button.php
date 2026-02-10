@@ -16,7 +16,7 @@ final class Button
     public ?string $onclick = null;
 
     /**
-     * button | submit | reset
+     * button | submit | reset.
      */
     public string $type = 'button';
 

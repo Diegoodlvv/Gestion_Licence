@@ -3,11 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Intervention;
-use App\Entity\InterventionType;
 use App\Form\Intervention\EditInterventionType;
 use App\Form\Intervention\NewInterventionType;
 use App\Form\InterventionsFilterType;
-use App\Repository\CoursePeriodRepository;
 use App\Repository\InterventionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -16,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route("/intervention")]
+#[Route('/intervention')]
 final class InterventionController extends AbstractController
 {
     #[Route(name: 'app_intervention', methods: ['GET'])]
@@ -36,7 +34,7 @@ final class InterventionController extends AbstractController
         } else {
             $interventions = $interventionRepository->findBy(
                 [],
-                array('id' => 'DESC')
+                ['id' => 'DESC']
             );
         }
 
@@ -46,7 +44,7 @@ final class InterventionController extends AbstractController
             10
         );
 
-        $title = "Interventions";
+        $title = 'Interventions';
 
         return $this->render('intervention/index.html.twig', [
             'pagination' => $pagination,
@@ -79,21 +77,21 @@ final class InterventionController extends AbstractController
 
                 return $this->redirectToRoute('app_intervention');
             } catch (\Exception $e) {
-                $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout de l\'enseignant : ' . $e->getMessage());
+                $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout de l\'enseignant : '.$e->getMessage());
+
                 return $this->redirectToRoute('app_intervention');
             }
         }
 
         return $this->render('intervention/new.html.twig', [
             'form' => $form,
-            'intervention' => $intervention
+            'intervention' => $intervention,
         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_intervention_edit')]
-    public function edit($id, InterventionRepository $interventionRepository, Request $request, EntityManagerInterface $entityManager)
+    public function edit(Intervention $intervention, Request $request, EntityManagerInterface $entityManager)
     {
-        $intervention = $interventionRepository->find($id);
         $form = $this->createForm(EditInterventionType::class, $intervention);
         $form->handleRequest($request);
 
@@ -101,33 +99,35 @@ final class InterventionController extends AbstractController
             try {
                 $entityManager->flush();
                 $this->addFlash('success', 'Intervention modifiée avec succès !');
+
                 return $this->redirectToRoute('app_intervention');
             } catch (\Exception) {
                 $this->addFlash('error', 'Une erreur est survenue lors de la modification de l\'intervention : ');
+
                 return $this->redirectToRoute('app_intervention');
             }
         }
 
         return $this->render('intervention/edit.html.twig', [
             'form' => $form,
-            'intervention' => $intervention
+            'intervention' => $intervention,
         ]);
     }
 
     #[Route('/intervention/{id}/delete', name: 'app_intervention_delete')]
-    public function delete($id, InterventionRepository $interventionRepository, EntityManagerInterface $em): Response
+    public function delete(Intervention $intervention, EntityManagerInterface $em): Response
     {
-        $intervention = $interventionRepository->find($id);
-
         if ($intervention) {
             try {
                 $em->remove($intervention);
                 $em->flush();
 
                 $this->addFlash('success', 'intervention supprimée avec succès !');
+
                 return $this->redirectToRoute('app_intervention');
             } catch (\Exception) {
                 $this->addFlash('error', 'Erreur lors de la suppression de l\'intervention ');
+
                 return $this->redirectToRoute('app_intervention');
             }
         }

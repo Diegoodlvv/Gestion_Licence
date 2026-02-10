@@ -15,17 +15,17 @@ class InterventionTypeFilterType extends AbstractType
                 'required' => false,
                 'label' => 'Nom',
                 'attr' => [
-                    'class' => 'w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all'
+                    'class' => 'w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all',
                 ],
-
             ]);
     }
+
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'method' => 'GET',
             'csrf_protection' => false,
-            'validation_groups' => ['filter']
+            'validation_groups' => ['filter'],
         ]);
     }
 }

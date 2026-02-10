@@ -116,6 +116,6 @@ class CoursePeriod
 
     public function getCoursePeriod()
     {
-        return $this->start_date->format('m/d/Y') . ' - ' . $this->end_date->format('m/d/Y');
+        return $this->start_date->format('m/d/Y').' - '.$this->end_date->format('m/d/Y');
     }
 }

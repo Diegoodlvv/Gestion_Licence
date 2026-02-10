@@ -21,170 +21,169 @@ class InstructorFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-
         $data = [
             [
                 'firstname' => 'Dominique',
                 'lastname' => 'Aste',
                 'modules' => [
                     [
-                        "name" => "Gestion de projet - Méthode Agile"
-                    ]
-                ]
+                        'name' => 'Gestion de projet - Méthode Agile',
+                    ],
+                ],
             ],
             [
                 'firstname' => 'Gael',
                 'lastname' => 'Daniel',
                 'modules' => [
                     [
-                        "name" => "Cadre légal - Droit numérique"
+                        'name' => 'Cadre légal - Droit numérique',
                     ],
                     [
-                        "name" => "RGPD"
+                        'name' => 'RGPD',
                     ],
                     [
-                        "name" => "Propriété Intellectuelle"
+                        'name' => 'Propriété Intellectuelle',
                     ],
                     [
-                        "name" => "RSE"
+                        'name' => 'RSE',
                     ],
                     [
-                        "name" => "Accessibilité"
+                        'name' => 'Accessibilité',
                     ],
-                ]
+                ],
             ],
             [
                 'firstname' => 'Hugo',
                 'lastname' => 'Knorr',
                 'modules' => [
                     [
-                        "name" => "Eco-Conception"
+                        'name' => 'Eco-Conception',
                     ],
                     [
-                        "name" => "React"
+                        'name' => 'React',
                     ],
                     [
-                        "name" => "Symfony"
+                        'name' => 'Symfony',
                     ],
-                ]
+                ],
             ],
             [
                 'firstname' => 'Jeff',
                 'lastname' => 'Martins-Jacquelot',
                 'modules' => [
                     [
-                        "name" => "Environnement de travail"
+                        'name' => 'Environnement de travail',
                     ],
                     [
-                        "name" => "Environnement de production"
+                        'name' => 'Environnement de production',
                     ],
                     [
-                        "name" => "Docker"
+                        'name' => 'Docker',
                     ],
                     [
-                        "name" => "Git"
+                        'name' => 'Git',
                     ],
-                ]
+                ],
             ],
             [
                 'firstname' => 'Maxime',
                 'lastname' => 'Delsaux',
                 'modules' => [
                     [
-                        "name" => "Devops/Cyber"
-                    ]
-                ]
+                        'name' => 'Devops/Cyber',
+                    ],
+                ],
             ],
             [
                 'firstname' => 'Cyril',
                 'lastname' => 'Peireira',
                 'modules' => [
                     [
-                        "name" => "Conférence"
-                    ]
-                ]
+                        'name' => 'Conférence',
+                    ],
+                ],
             ],
             [
                 'firstname' => 'Virginie',
                 'lastname' => 'Hougron',
                 'modules' => [
                     [
-                        "name" => "Rédaction de comptes rendus d'activités"
-                    ]
-                ]
+                        'name' => "Rédaction de comptes rendus d'activités",
+                    ],
+                ],
             ],
             [
                 'firstname' => 'Brigitte',
                 'lastname' => 'Esquenet',
                 'modules' => [
                     [
-                        "name" => "Anglais - Préparation au TOIEC"
-                    ]
-                ]
+                        'name' => 'Anglais - Préparation au TOIEC',
+                    ],
+                ],
             ],
             [
                 'firstname' => 'Sonia',
                 'lastname' => 'Aracil',
                 'modules' => [
                     [
-                        "name" => "Les fondamentaux de l'UX"
-                    ]
-                ]
+                        'name' => "Les fondamentaux de l'UX",
+                    ],
+                ],
             ],
             [
                 'firstname' => 'Olivier',
                 'lastname' => 'Salesse',
                 'modules' => [
                     [
-                        "name" => "L'UI et L'UX en mode projet"
-                    ]
-                ]
+                        'name' => "L'UI et L'UX en mode projet",
+                    ],
+                ],
             ],
             [
                 'firstname' => 'Christopher',
                 'lastname' => 'Espargelière',
                 'modules' => [
                     [
-                        "name" => "Tailwind css"
-                    ]
-                ]
+                        'name' => 'Tailwind css',
+                    ],
+                ],
             ],
             [
                 'firstname' => 'Charles',
                 'lastname' => 'Haller',
                 'modules' => [
                     [
-                        "name" => "Mise à niveau PHP"
+                        'name' => 'Mise à niveau PHP',
                     ],
                     [
-                        "name" => "PHP Objet"
-                    ]
-                ]
+                        'name' => 'PHP Objet',
+                    ],
+                ],
             ],
             [
                 'firstname' => 'Nicolas',
                 'lastname' => 'Pineau',
                 'modules' => [
                     [
-                        "name" => "Javascript"
-                    ]
-                ]
+                        'name' => 'Javascript',
+                    ],
+                ],
             ],
             [
                 'firstname' => 'Nicolas',
                 'lastname' => 'Castro',
                 'modules' => [
                     [
-                        "name" => "NextJS"
-                    ]
-                ]
+                        'name' => 'NextJS',
+                    ],
+                ],
             ],
         ];
 
         foreach ($data as $entry) {
             // creation user
             $user = new User();
-            $email = strtolower($entry['firstname'] . '.' . $entry['lastname'] . '@gmail.com');
+            $email = strtolower($entry['firstname'].'.'.$entry['lastname'].'@gmail.com');
             $user->setEmail($email);
             $user->setRoles(['ROLE_USER']);
             $user->setFirstname($entry['firstname']);
@@ -199,7 +198,7 @@ class InstructorFixtures extends Fixture implements DependentFixtureInterface
             $instructor->setUser($user);
 
             foreach ($entry['modules'] as $userModuleName) {
-                $module = $this->getReference($userModuleName["name"], Module::class);
+                $module = $this->getReference($userModuleName['name'], Module::class);
 
                 if ($module) {
                     $instructor->addModule($module);

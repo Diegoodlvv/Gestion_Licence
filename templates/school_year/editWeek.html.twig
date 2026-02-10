@@ -82,7 +82,7 @@
 				<button type="button" id="cancelButton" class="bg-gray-100 text-slate-700 hover:bg-gray-200 focus:ring-gray-300 inline-flex items-center justify-center rounded-lg px-12 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-offset-2">
 					Annuler
 				</button>
-				<twig:Button label="Confirmer" variant="red" type="button" href="{{ path('app_school_year_deleteWeek', {'id': year.id, 'weekId': week.id}) }}"/>
+				<twig:Button label="Confirmer" variant="red" type="button" href="{{ path('app_school_year_deleteWeek', {'id': year.id, 'coursePeriod': week.id}) }}"/>
 			</div>
 		</div>
 	</div>

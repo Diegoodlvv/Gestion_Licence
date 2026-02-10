@@ -42,8 +42,6 @@ class InstructorRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-
-
     public function InstructorByFilters(?string $lastname, ?string $firstname, ?string $email): ?QueryBuilder
     {
         $qb = $this->createQueryBuilder('i')
@@ -52,17 +50,17 @@ class InstructorRepository extends ServiceEntityRepository
 
         if ($lastname) {
             $qb->andWhere('LOWER(u.lastname) LIKE LOWER(:lastname)')
-                ->setParameter('lastname', '%' . $lastname . '%');
+                ->setParameter('lastname', '%'.$lastname.'%');
         }
 
         if ($firstname) {
             $qb->andWhere('LOWER(u.firstname) LIKE LOWER(:firstname)')
-                ->setParameter('firstname', '%' . $firstname . '%');
+                ->setParameter('firstname', '%'.$firstname.'%');
         }
 
         if ($email) {
             $qb->andWhere('LOWER(u.email) LIKE LOWER(:email)')
-                ->setParameter('email', '%' . $email . '%');
+                ->setParameter('email', '%'.$email.'%');
         }
 
         return $qb;
@@ -94,6 +92,7 @@ class InstructorRepository extends ServiceEntityRepository
 
         return $qb;
     }
+
     public function getUsedHoursPerModuleForInstructor(int $instructorId): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -105,13 +104,6 @@ class InstructorRepository extends ServiceEntityRepository
             ->setParameter('instructorId', $instructorId)
             ->getQuery()
             ->getResult();
-
-        // SELECT i.*, m.* 
-        // FROM intervention i
-        // INNER JOIN module m ON i.module_id = m.id
-        // INNER JOIN intervention_instructor ii ON i.id = ii.intervention_id
-        // INNER JOIN instructor inst ON ii.instructor_id = inst.id
-        // WHERE inst.id = :instructorId
 
         $usedHours = [];
 
@@ -136,21 +128,3 @@ class InstructorRepository extends ServiceEntityRepository
         return $usedHours;
     }
 }
-
-// Resume de toute la fonction getUsedHoursPerModuleForInstructor en SQL uniquement
-// SELECT 
-//     m.id AS module_id, 
-//     -- On calcule la différence entre fin et début (en secondes), on divise par 3600 pour avoir les heures, et on fait la SOMME
-//     SUM(TIMESTAMPDIFF(SECOND, i.start_date, i.end_date) / 3600) AS total_heures_realisees
-// FROM 
-//     intervention i
-// -- On joint la table module pour savoir à quel module l'intervention appartient
-// JOIN 
-//     module m ON i.module_id = m.id
-// -- On joint la table de liaison entre intervention et instructor (car c'est une relation ManyToMany)
-// JOIN 
-//     intervention_instructor ii ON i.id = ii.intervention_id
-// WHERE 
-//     ii.instructor_id = :ton_instructor_id
-// GROUP BY 
-//     m.id; -- On regroupe les résultats par Module pour avoir une ligne par module

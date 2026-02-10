@@ -2,16 +2,12 @@
 
 namespace App\Form;
 
-use App\Entity\Instructor;
-use App\Entity\Intervention;
 use App\Entity\Module;
-use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class InstructorInterventionsFilterType extends AbstractType
 {
@@ -22,21 +18,21 @@ class InstructorInterventionsFilterType extends AbstractType
                 'label' => 'Date de début',
                 'required' => false,
                 'attr' => [
-                    'class' => 'w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500'
+                    'class' => 'w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500',
                 ],
                 'label_attr' => [
-                    'class' => 'block text-sm font-medium text-slate-700 mb-1'
-                ]
+                    'class' => 'block text-sm font-medium text-slate-700 mb-1',
+                ],
             ])
             ->add('end_date', DateType::class, [
                 'label' => 'Date de fin',
                 'required' => false,
                 'attr' => [
-                    'class' => 'w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500'
+                    'class' => 'w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500',
                 ],
                 'label_attr' => [
-                    'class' => 'block text-sm font-medium text-slate-700 mb-1'
-                ]
+                    'class' => 'block text-sm font-medium text-slate-700 mb-1',
+                ],
             ])
             ->add('module', EntityType::class, [
                 'class' => Module::class,
@@ -45,11 +41,11 @@ class InstructorInterventionsFilterType extends AbstractType
                 'required' => false,
                 'placeholder' => 'Sélectionnez le module',
                 'attr' => [
-                    'class' => 'w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500'
+                    'class' => 'w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500',
                 ],
                 'label_attr' => [
-                    'class' => 'block text-sm font-medium text-slate-700 mb-1'
-                ]
+                    'class' => 'block text-sm font-medium text-slate-700 mb-1',
+                ],
             ])
         ;
     }

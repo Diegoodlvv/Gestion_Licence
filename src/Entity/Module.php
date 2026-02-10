@@ -23,15 +23,14 @@ class Module
     #[Assert\NotBlank()]
     private ?string $code = null;
 
-    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'childrens', cascade: ["persist"])]
-    #[ORM\JoinColumn(onDelete: "SET NULL")]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'childrens', cascade: ['persist'])]
+    #[ORM\JoinColumn(onDelete: 'SET NULL')]
     private ?self $parent = null;
-
 
     /**
      * @var Collection<int, self>
      */
-    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent', cascade: ["persist"])]
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent', cascade: ['persist'])]
     private ?Collection $childrens = null;
 
     #[ORM\Column(type: Types::TEXT, length: 255)]
@@ -256,7 +255,7 @@ class Module
     public function getFullName(): string
     {
         return $this->parent
-            ?  $this->parent->getFullName() . ' — ' . $this->name
+            ? $this->parent->getFullName().' — '.$this->name
             : $this->name;
     }
 }

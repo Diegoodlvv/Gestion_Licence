@@ -8,7 +8,7 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 final class Alert
 {
     /**
-     * success | error | warning
+     * success | error | warning.
      */
     public string $variant = 'success';
 
