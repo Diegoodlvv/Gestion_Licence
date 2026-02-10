@@ -57,6 +57,8 @@ class Intervention
      * @var Collection<int, Instructor>
      */
     #[ORM\ManyToMany(targetEntity: Instructor::class, inversedBy: 'interventions')]
+    #[Assert\NotNull]
+
     private Collection $instructors;
 
     public function __construct()
