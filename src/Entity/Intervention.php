@@ -15,8 +15,8 @@ use App\Validator as AssertCustom;
 
 #[ORM\Entity(repositoryClass: InterventionRepository::class)]
 #[UniqueEntity(
-    fields:['start_date'],
-    message:'Une intervention existe déjà à cette date.'
+    fields: ['start_date'],
+    message: 'Une intervention existe déjà à cette date.'
 )]
 #[AssertCustom\InterventionDuration]
 #[AssertCustom\InCoursePeriod]
@@ -29,17 +29,17 @@ class Intervention
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::TEXT, length:255)]
+    #[ORM\Column(type: Types::TEXT, length: 255)]
     #[Assert\NotNull]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Assert\NotNull(message:'Veuillez renseigner la date de début')]
+    #[Assert\NotNull(message: 'Veuillez renseigner la date de début')]
     private ?\DateTime $start_date = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Assert\NotNull(message:'Veuillez renseigner la date de début')]
-    #[Assert\GreaterThan(propertyPath:'start_date', message:'La date de début doit être inférieure à la date de fin')]
+    #[Assert\NotNull(message: 'Veuillez renseigner la date de début')]
+    #[Assert\GreaterThan(propertyPath: 'start_date', message: 'La date de début doit être inférieure à la date de fin')]
     private ?\DateTime $end_date = null;
 
     #[ORM\ManyToOne(inversedBy: 'interventions')]
@@ -60,6 +60,8 @@ class Intervention
      * @var Collection<int, Instructor>
      */
     #[ORM\ManyToMany(targetEntity: Instructor::class, inversedBy: 'interventions')]
+    #[Assert\NotNull]
+
     private Collection $instructors;
 
     public function __construct()

@@ -16,7 +16,7 @@
 
 		<div class="mb-8">
 			<h2 class="text-[#FFBD01] font-semibold mb-4">Filtres</h2>
-			{{ form_start(form, {'attr': {'class': 'flex flex-wrap items-end gap-4'}}) }}
+			{{ form_start(form, {'attr': {'class': 'flex flex-wrap gap-4'}}) }}
 			<div class="flex-1 min-w-48">
 				{{ form_row(form.start_date) }}
 			</div>
@@ -27,6 +27,7 @@
 				{{ form_row(form.module) }}
 			</div>
 			<div class="min-w-48">
+				<div class="block text-sm font-medium text-transparent mb-2">&nbsp;</div>
 				<twig:Button type="submit" variant="yellow" label="Filtrer"/>
 			</div>
 

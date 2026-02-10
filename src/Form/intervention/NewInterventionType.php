@@ -23,8 +23,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class NewInterventionType extends AbstractType
 {
-    public function __construct(private readonly CoursePeriodRepository $course_period_repository)
-    {}
+    public function __construct(private readonly CoursePeriodRepository $course_period_repository) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -34,39 +33,35 @@ class NewInterventionType extends AbstractType
             ->add('title', TextType::class, [
                 'label' => 'Titre',
                 'attr' => [
-                    'class' => 'w-full flex px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black',
                     'placeholder' => 'Cours sur ...'
                 ],
-                'label_attr' => ['class' => 'block text-sm text-slate-700 mb-1'],
             ])
-           ->add('start_date', DateTimeType::class, [
+            ->add('start_date', DateTimeType::class, [
                 'label' => 'Date de début - champ obligatoire',
-                'widget' => 'choice',
-                'hours' => [8,9,10,11,12,13,14,15,16,17],
-                'minutes' => [0,30],
-                'months' => [1,2,3,4,5,6,7,9,10,11,12],
-                'years' => [$year, $year-1, $year+1],
+                'widget' => 'single_text',
                 'attr' => [
-                    'class' => 'w-full flex px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black',
-                    'placeholder' => '12 Janvier 2026, ...'
+                    'data-controller' => 'flatpickr',
+                    'data-flatpickr-min-time-value' => '08:00',
+                    'data-flatpickr-max-time-value' => '17:30',
+                    'data-flatpickr-min-date-value' => ($year - 1) . '-01-01',
+                    'data-flatpickr-max-date-value' => ($year + 1) . '-12-31',
+                    'data-flatpickr-disable-months-value' => json_encode([8]), // August
                 ],
-                'label_attr' => ['class' => 'block text-sm text-slate-700 mb-1'],
             ])
             ->add('end_date', DateTimeType::class, [
                 'label' => 'Date de fin - champ obligatoire',
-                'widget' => 'choice',
-                'hours' => [8,9,10,11,12,13,14,15,16,17],
-                'minutes' => [0,30],
-                'months' => [1,2,3,4,5,6,7,9,10,11,12],
-                'years' => [$year, $year-1, $year+1],
+                'widget' => 'single_text',
                 'attr' => [
-                    'class' => 'w-full flex px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black',
-                    'placeholder' => '12 Janvier 2026, ...'
+                    'data-controller' => 'flatpickr',
+                    'data-flatpickr-min-time-value' => '08:00',
+                    'data-flatpickr-max-time-value' => '17:30',
+                    'data-flatpickr-min-date-value' => ($year - 1) . '-01-01',
+                    'data-flatpickr-max-date-value' => ($year + 1) . '-12-31',
+                    'data-flatpickr-disable-months-value' => json_encode([8]), // August
                 ],
-                'label_attr' => ['class' => 'block text-sm text-slate-700 mb-1'],
             ])
-           ->add('remotely', CheckboxType::class, [
-                'label' => false, 
+            ->add('remotely', CheckboxType::class, [
+                'label' => false,
                 'required' => false,
             ])
             ->add('intervention_type', EntityType::class, [
@@ -75,21 +70,16 @@ class NewInterventionType extends AbstractType
                 'placeholder' => "Seléctionnez un type d'intervention",
                 'label' => "Type de l'intervention - champ obligatoire",
                 'attr' => [
-                    'class' => 'w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black',
                     'data-controller' => 'intervention-type',
                     'data-intervention-type-target' => 'type'
                 ],
-                'label_attr' => ['class' => 'block text-sm text-slate-700 mb-1'],
             ])
             ->add('module', EntityType::class, [
                 'class' => Module::class,
                 'choice_label' => 'FullName',
                 'placeholder' => "Seléctionnez un module",
                 'label' => "Module de l'intervention - champ obligatoire",
-                'attr' => [
-                    'class' => 'w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:ring focus:ring-black focus:border-black',
-                ],
-                'label_attr' => ['class' => 'block text-sm text-slate-700 mb-1'],
+                'attr' => [],
             ])
             ->add('instructors', EntityType::class, [
                 'class' => Instructor::class,
@@ -100,12 +90,10 @@ class NewInterventionType extends AbstractType
                 'expanded' => false,
                 'placeholder' => 'Sélectionnez des intervenants...',
                 'attr' => [
-                    'class' => "w-full py-2",
                     'data-controller' => 'tom-select',
                 ],
-                'label_attr' => ['class' => 'block text-sm text-slate-700 mb-1'],
             ])
-            ->addEventListener(FormEvents::POST_SUBMIT, function (PostSubmitEvent $event){
+            ->addEventListener(FormEvents::POST_SUBMIT, function (PostSubmitEvent $event) {
                 $intervention = $event->getData();
 
                 if (!$intervention) {
@@ -122,7 +110,7 @@ class NewInterventionType extends AbstractType
         ;
     }
 
-    
+
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
