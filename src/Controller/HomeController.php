@@ -30,7 +30,7 @@ final class HomeController extends AbstractController
             $intervenants = [];
             foreach ($intervention->getInstructors() as $instructor) {
                 $intervenants[] = [
-                    'nom' => $instructor->getUser()->getFirstname().' '.$instructor->getUser()->getLastname(),
+                    'nom' => $instructor->getUser()->getFirstname() . ' ' . $instructor->getUser()->getLastname(),
                 ];
             }
 
@@ -41,7 +41,7 @@ final class HomeController extends AbstractController
                 'title' => $intervention->getTitle(),
                 'start' => $intervention->getStartDate()->format('Y-m-d H:i:s'),
                 'end' => $intervention->getEndDate()->format('Y-m-d H:i:s'),
-                'backgroundColor' => $color.'1A',
+                'backgroundColor' => $color . '1A',
                 'borderColor' => $color,
                 'textColor' => $color,
                 'intervenants' => $intervenants,
@@ -137,7 +137,8 @@ final class HomeController extends AbstractController
         $weekEnd = (clone $weekStart)->modify('+4 days');
         $sheet->setTitle('Semaine');
 
-        $sheet->setCellValue('A1', sprintf('Semaine du %s au %s',
+        $sheet->setCellValue('A1', sprintf(
+            'Semaine du %s au %s',
             $weekStart->format('d/m/Y'),
             $weekEnd->format('d/m/Y')
         ));
@@ -155,15 +156,15 @@ final class HomeController extends AbstractController
 
         for ($i = 0; $i < 5; ++$i) {
             $dateStr = $currentDate->format('Y-m-d');
-            $dayName = $this->getFrenchDayName($currentDate).' '.$currentDate->format('d/m');
+            $dayName = $this->getFrenchDayName($currentDate) . ' ' . $currentDate->format('d/m');
 
             $sheet->setCellValue("A$row", $dayName);
 
             if (isset($interventionsByDay[$dateStr])) {
                 $dayInterventions = $interventionsByDay[$dateStr];
 
-                $morning = array_filter($dayInterventions, fn ($i) => $i->getStartDate()->format('H') < 13);
-                $afternoon = array_filter($dayInterventions, fn ($i) => $i->getStartDate()->format('H') >= 13);
+                $morning = array_filter($dayInterventions, fn($i) => $i->getStartDate()->format('H') < 13);
+                $afternoon = array_filter($dayInterventions, fn($i) => $i->getStartDate()->format('H') >= 13);
 
                 if (!empty($morning)) {
                     $intervention = reset($morning);
@@ -213,7 +214,7 @@ final class HomeController extends AbstractController
 
             $sheet->setCellValue("A$row", $date->format('d/m/Y'));
             $sheet->setCellValue("B$row", $this->getFrenchDayName($date));
-            $sheet->setCellValue("C$row", $date->format('H:i').' - '.$intervention->getEndDate()->format('H:i'));
+            $sheet->setCellValue("C$row", $date->format('H:i') . ' - ' . $intervention->getEndDate()->format('H:i'));
             $sheet->setCellValue("D$row", $this->getInstructorNames($intervention));
             $sheet->setCellValue("E$row", $intervention->getTitle());
 
@@ -248,7 +249,7 @@ final class HomeController extends AbstractController
         $names = [];
         foreach ($intervention->getInstructors() as $instructor) {
             $user = $instructor->getUser();
-            $names[] = strtoupper(substr($user->getFirstname(), 0, 1)).'. '.strtoupper($user->getLastname());
+            $names[] = strtoupper(substr($user->getFirstname(), 0, 1)) . '. ' . strtoupper($user->getLastname());
         }
 
         return implode(', ', $names);
