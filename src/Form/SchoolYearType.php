@@ -22,7 +22,7 @@ class SchoolYearType extends AbstractType
             ->add('saison', TextType::class, [
                 'label' => 'Saison - champ obligatoire',
                 'attr' => [
-                    'placeholder' => '2024-2025'
+                    'placeholder' => '2024/2025'
                 ]
             ])
         ;
