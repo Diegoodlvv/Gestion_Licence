@@ -56,6 +56,6 @@ npm run watch
 
 ## Documentations 
 
-- Guide Utilisateur (PDF)
-- Modèle entité-association, outils utilisés et backlog (PDF)
+- [Guide Utilisateur](docs/guide-utilisateur.pdf)
+- [Modèle EA, outils et backlog](docs/documentation-technique.pdf)
 
