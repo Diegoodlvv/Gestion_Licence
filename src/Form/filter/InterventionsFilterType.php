@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Filter;
 
 use App\Entity\Module;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;

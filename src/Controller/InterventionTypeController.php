@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Form\filter\InterventionTypeFilterType;
+use App\Form\Filter\InterventionTypeFilterType;
 use App\Form\InterventionTypeEditType;
 use App\Repository\InterventionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,25 +17,21 @@ use PhpParser\Node\Stmt\TryCatch;
 
 final class InterventionTypeController extends AbstractController
 {
-    #[Route('/interventionType', name: 'app_interventiontype')]
-    public function index(PaginatorInterface $paginator, Request $request, EntityManagerInterface $em, InterventionTypeRepository $interventionTypeRepository): Response
+    #[Route('/interventionType', name: 'app_interventiontype', methods: ['GET'])]
+    public function index(PaginatorInterface $paginator, Request $request, InterventionTypeRepository $interventionTypeRepository): Response
     {
 
         $form = $this->createForm(InterventionTypeFilterType::class);
         $form->handleRequest($request);
 
-        $interventionType = [];
+        $name = $form->get('name')->getData();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $name = $form->get('name')->getData();
+        $interventionType = $interventionTypeRepository->findInterventionTypeByName($name);
 
-            if ($name) {
-                $interventionType = $interventionTypeRepository->findInstructorByName($name);
-            } else {
-                $interventionType = $interventionTypeRepository->findAll();
+        if ($form->isSubmitted()) {
+                if ($form->isValid()) {
+                $interventionType = $interventionTypeRepository->findInterventionTypeByName($name);
             }
-        } else {
-            $interventionType = $interventionTypeRepository->findAll();
         }
 
         $interventionType = $paginator->paginate(
@@ -51,7 +47,7 @@ final class InterventionTypeController extends AbstractController
         ]);
     }
 
-    #[Route('/interventionType/new', name: 'app_interventionType_new')]
+    #[Route('/interventionType/new', name: 'app_interventiontype_new', methods: ['POST'])]
     public function new(Request $request, InterventionTypeRepository $interventionTypeRepository, EntityManagerInterface $em)
     {
         $interventionType = new InterventionType();
@@ -59,15 +55,20 @@ final class InterventionTypeController extends AbstractController
         $form = $this->createForm(InterventionTypeEditType::class, $interventionType);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                $em->persist($interventionType);
-                $em->flush();
+        if ($form->isSubmitted()) {
+            if ($form->isValid()){
+                try {
+                    $em->persist($interventionType);
+                    $em->flush();
 
-                $this->addFlash('success', 'Type d\'intervention ajoute avec succès !');
-                return $this->redirectToRoute('app_interventiontype');
-            } catch (\Exception) {
-                $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout du type d\'intervention');
+                    $this->addFlash('success', 'Type d\'intervention ajoute avec succès !');
+                    return $this->redirectToRoute('app_interventiontype');
+                } catch (\Exception) {
+                    $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout du type d\'intervention');
+                    return $this->redirectToRoute('app_interventiontype');
+                }
+            } else {
+                $this->addFlash('error', 'Erreur avec le formulaire');
                 return $this->redirectToRoute('app_interventiontype');
             }
         }
@@ -77,7 +78,7 @@ final class InterventionTypeController extends AbstractController
         ]);
     }
 
-    #[Route('/interventionType/{id}/edit', name: 'app_interventionType_edit')]
+    #[Route('/interventionType/{id}/edit', name: 'app_interventiontype_edit')]
     public function edit($id, Request $request, InterventionTypeRepository $interventionTypeRepository, EntityManagerInterface $em): Response
     {
         $interventionType = $interventionTypeRepository->find($id);
@@ -102,7 +103,7 @@ final class InterventionTypeController extends AbstractController
         ]);
     }
 
-    #[Route('/interventionType/{id}/delete', name: 'app_interventionType_delete')]
+    #[Route('/interventionType/{id}/delete', name: 'app_interventiontype_delete')]
     public function delete($id, InterventionTypeRepository $interventionTypeRepository, EntityManagerInterface $em): Response
     {
         $interventionType = $interventionTypeRepository->find($id);

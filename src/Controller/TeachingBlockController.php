@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\TeachingBlock;
-use App\Form\TeachingBlockFilterType;
+use App\Form\Filter\TeachingBlockFilterType;
 use App\Form\TeachingBlockType;
 use App\Repository\TeachingBlockRepository;
 use Doctrine\ORM\EntityManagerInterface;
