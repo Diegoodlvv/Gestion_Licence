@@ -90,7 +90,7 @@ class InstructorFixtures extends Fixture implements DependentFixtureInterface
                 'lastname' => 'Delsaux',
                 'modules' => [
                     [
-                        'name' => 'Devops/Cyber',
+                        'name' => 'Devops et Cybersécurité',
                     ],
                 ],
             ],
