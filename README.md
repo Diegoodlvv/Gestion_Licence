@@ -4,10 +4,16 @@ Gestion Licence est une application web de gestion (ERP) du pôle bachelôr au s
 
 En tant qu'étudiants en 2ème année de bts SIO, nous avons du réalisé ce projet de fin d'année donné par le directeur technique d'une entreprise.
 
-- Travail d'équipe en binome. Fonctionnement en méthode agile avec un sprint review tout les lundis.
+- Travail d'équipe en binôme. Fonctionnement en méthode agile avec un sprint review tous les lundis.
 - Réalisation d'un backlog et d'une roadmap avec GitHub afin de suivre les sprints et de répartir les issues 
 - Communication et suivi à l'aide de logiciels comme slack et en présenciel plusieurs jours par semaine.
 
+## Technologies et versions 
+
+- **Backend**: Symfony 8, Doctrine ORM, PHP 8.5
+- **Frontend**: Tailwind CSS, Stimulus, FullCalendar, Tom Select
+- **Base de données**: MySQL 
+- **Build**: Webpack Encore
 
 ## Installation
 
@@ -47,12 +53,6 @@ npm run watch
 - Calendrier des cours
 - Export de données du calendrier et du personnel 
 
-## Stack
-
-- **Backend**: Symfony 8, Doctrine ORM, PHP 8.5
-- **Frontend**: Tailwind CSS, Stimulus, FullCalendar, Tom Select
-- **Base de données**: MySQL 
-- **Build**: Webpack Encore
 
 ## Documentations 
 
