@@ -53,3 +53,9 @@ npm run watch
 - **Frontend**: Tailwind CSS, Stimulus, FullCalendar, Tom Select
 - **Base de données**: MySQL 
 - **Build**: Webpack Encore
+
+## Documentations 
+
+- Guide Utilisateur (PDF)
+- Modèle entité-association, outils utilisés et backlog (PDF)
+
