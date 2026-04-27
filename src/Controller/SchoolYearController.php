@@ -7,7 +7,6 @@ use App\Entity\SchoolYear;
 use App\Form\CoursePeriodType;
 use App\Form\SchoolYearType;
 use App\Repository\CoursePeriodRepository;
-use App\Repository\SchoolYearRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,10 +17,14 @@ use Symfony\Component\Routing\Attribute\Route;
 final class SchoolYearController extends AbstractController
 {
     #[Route('/schoolyear', name: 'app_school_year')]
-    public function index(PaginatorInterface $paginator, Request $request, SchoolYearRepository $schoolYearRepository): Response
+    public function index(PaginatorInterface $paginator, Request $request, EntityManagerInterface $em): Response
     {
+        $dql = "SELECT a FROM App\Entity\SchoolYear a";
+
+        $query = $em->createQuery($dql);
+
         $schoolYears = $paginator->paginate(
-            $schoolYearRepository->findAllQuery(),
+            $query,
             $request->query->getInt('page', 1),
             10
         );

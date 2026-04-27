@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\SchoolYear;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -42,10 +41,15 @@ class SchoolYearRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    public function findAllQuery(): Query
+    public function findByCourseYear($year)
     {
-        return $this->createQueryBuilder('s')
-            ->orderBy('s.year', 'DESC')
-            ->getQuery();
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select('cy')
+            ->from('App\Entity\CoursePeriod', 'cy')
+            ->where('cy.school_year = :year')
+            ->setParameter('year', $year);
+
+        return $qb->getQuery()->getResult();
     }
 }
