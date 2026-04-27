@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Intervention;
 use App\Form\Intervention\EditInterventionType;
 use App\Form\Intervention\NewInterventionType;
-use App\Form\InterventionsFilterType;
+use App\Form\Filter\InterventionsFilterType;
 use App\Repository\InterventionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;

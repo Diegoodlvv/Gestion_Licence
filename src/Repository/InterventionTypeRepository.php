@@ -42,7 +42,7 @@ class InterventionTypeRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    public function findInstructorByName(string $name): ?QueryBuilder
+    public function findInterventionTypeByName(?string $name): ?QueryBuilder
     {
         $qb = $this->createQueryBuilder('i');
 

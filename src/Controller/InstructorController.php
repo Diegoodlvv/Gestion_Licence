@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Instructor;
 use App\Entity\User;
 use App\Form\EditInstructorType;
-use App\Form\InstructorFilterType;
+use App\Form\Filter\InstructorFilterType;
 use App\Form\InstructorInterventionsFilterType;
 use App\Form\NewInstructorType;
 use App\Repository\InstructorRepository;
@@ -26,26 +26,23 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/instructor')]
 class InstructorController extends AbstractController
 {
-    #[Route('/', name: 'app_instructor')]
+    #[Route(name: 'app_instructor', methods: ['GET'])]
     public function index(Request $request, InstructorRepository $instructorRepository, PaginatorInterface $pagination): Response
     {
         $form = $this->createForm(InstructorFilterType::class);
         $form->handleRequest($request);
 
-        $instructors = [];
+        $lastname = $form->get('lastname')->getData();
+        $firstname = $form->get('firstname')->getData();
+        $email = $form->get('email')->getData();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $lastname = $form->get('lastname')->getData();
-            $firstname = $form->get('firstname')->getData();
-            $email = $form->get('email')->getData();
+        $instructors = $instructorRepository->InstructorByFilters($lastname, $firstname, $email);
 
-            if ($lastname || $firstname || $email) {
-                $instructors = $instructorRepository->InstructorByFilters($lastname, $firstname, $email);
-            } else {
-                $instructors = $instructorRepository->findAll();
-            }
+        if ($form->isSubmitted())
+            if($form->isValid()) {
+            $instructors = $instructorRepository->InstructorByFilters($lastname, $firstname, $email);
         } else {
-            $instructors = $instructorRepository->findAll();
+            $this->addFlash('error', 'Erreur avec les filtres');
         }
 
         $pagination = $pagination->paginate(
@@ -60,26 +57,26 @@ class InstructorController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/show_interventions', name: 'app_instructor_interventions')]
+    #[Route(path: '/{id}/show_interventions', name: 'app_instructor_interventions')]
     public function showInterventions($id, InstructorRepository $instructorRepository, Request $request, PaginatorInterface $pagination): Response
     {
         $instructor = $instructorRepository->find($id);
         $form = $this->createForm(InstructorInterventionsFilterType::class);
         $form->handleRequest($request);
 
-        $interventions = [];
+        $start_date = $form->get('start_date')->getData();
+        $end_date = $form->get('end_date')->getData();
+        $module = $form->get('module')->getData();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $start_date = $form->get('start_date')->getData();
-            $end_date = $form->get('end_date')->getData();
-            $module = $form->get('module')->getData();
+        $interventions = $instructorRepository->InstructorInterventionsByFilters($id, $start_date, $end_date, $module);
 
-            if ($start_date || $end_date || $module) {
-                $interventions = $instructorRepository->InstructorInterventionsByFilters($id, $start_date, $end_date, $module);
+        if ($form->isSubmitted()){
+            if ($form->isValid()) {
+            $interventions = $instructorRepository->InstructorInterventionsByFilters($id, $start_date, $end_date, $module);
+            } else {
+                $this->addFlash('error', 'Erreur avec les filtres');
             }
-        } else {
-            $interventions = $instructorRepository->InstructorInterventionsByFilters($id, null, null, null);
-        }
+        } 
 
         $pagination = $pagination->paginate(
             $interventions,
@@ -97,41 +94,45 @@ class InstructorController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_instructor_new')]
+    #[Route(path: '/new', name: 'app_instructor_new', methods: ['POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher): Response
     {
         $instructor = new Instructor();
         $form = $this->createForm(NewInstructorType::class, $instructor);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                $user = new User();
-                $user->setEmail($form->get('email')->getData());
-                $user->setFirstname($form->get('firstname')->getData());
-                $user->setLastname($form->get('lastname')->getData());
-                $user->setRoles(['ROLE_USER']);
+        if ($form->isSubmitted()) {
+            if($form->isValid()) {
+                try {
+                    $user = new User();
+                    $user->setEmail($form->get('email')->getData());
+                    $user->setFirstname($form->get('firstname')->getData());
+                    $user->setLastname($form->get('lastname')->getData());
+                    $user->setRoles(['ROLE_USER']);
 
-                $password = $form->get('plainPassword')->getData();
-                $user->setPassword(
-                    $userPasswordHasher->hashPassword(
-                        $user,
-                        $password
-                    )
-                );
+                    $password = $form->get('plainPassword')->getData();
+                    $user->setPassword(
+                        $userPasswordHasher->hashPassword(
+                            $user,
+                            $password
+                        )
+                    );
 
-                $entityManager->persist($user);
-                $instructor->setUser($user);
+                    $entityManager->persist($user);
+                    $instructor->setUser($user);
 
-                $entityManager->persist($instructor);
-                $entityManager->flush();
-                $this->addFlash('success', 'Enseignant ajouté avec succès !');
+                    $entityManager->persist($instructor);
+                    $entityManager->flush();
+                    $this->addFlash('success', 'Enseignant ajouté avec succès !');
 
-                return $this->redirectToRoute('app_instructor');
-            } catch (\Exception) {
-                $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout de l\'enseignant');
+                    return $this->redirectToRoute('app_instructor');
+                } catch (\Exception) {
+                    $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout de l\'enseignant');
 
-                return $this->redirectToRoute('app_instructor');
+                    return $this->redirectToRoute('app_instructor');
+                }
+            } else {
+                $this->addFlash('error', 'Erreur dans le formulaire de création de l\'enseignant');
             }
         }
 
@@ -140,22 +141,26 @@ class InstructorController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_instructor_edit')]
+    #[Route('/{id}/edit', name: 'app_instructor_edit', methods: ['POST'])]
     public function edit(Instructor $instructor, InstructorRepository $instructorRepository, Request $request, EntityManagerInterface $entityManager)
     {
         $form = $this->createForm(EditInstructorType::class, $instructor);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                $entityManager->flush();
-                $this->addFlash('success', 'Enseignant modifié avec succès !');
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                try {
+                    $entityManager->flush();
+                    $this->addFlash('success', 'Enseignant modifié avec succès !');
 
-                return $this->redirectToRoute('app_instructor');
-            } catch (\Exception) {
-                $this->addFlash('error', 'Une erreur est survenue lors de la modification de l\'enseignant : ');
+                    return $this->redirectToRoute('app_instructor');
+                } catch (\Exception) {
+                    $this->addFlash('error', 'Une erreur est survenue lors de la modification de l\'enseignant : ');
 
-                return $this->redirectToRoute('app_instructor');
+                    return $this->redirectToRoute('app_instructor');
+                }
+            } else {
+                $this->addFlash('error', 'Erreur dans le formulaire de modification de l\'enseignant');
             }
         }
 
@@ -168,7 +173,7 @@ class InstructorController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/delete', name: 'app_instructor_delete')]
+    #[Route('/{id}/delete', name: 'app_instructor_delete', methods: ['DELETE'])]
     public function delete(Instructor $instructor, EntityManagerInterface $entityManager)
     {
         if ($instructor) {
@@ -179,7 +184,7 @@ class InstructorController extends AbstractController
         return $this->redirectToRoute('app_instructor');
     }
 
-    #[Route('/instructor/{id}/export', name: 'app_instructor_export')]
+    #[Route('/instructor/{id}/export', name: 'app_instructor_export', methods: ['GET'])]
     public function export($id, InstructorRepository $instructorRepository): StreamedResponse
     {
         $instructor = $instructorRepository->find($id);
