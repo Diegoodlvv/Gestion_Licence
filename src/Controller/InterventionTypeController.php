@@ -78,22 +78,25 @@ final class InterventionTypeController extends AbstractController
         ]);
     }
 
-    #[Route('/interventionType/{id}/edit', name: 'app_interventiontype_edit')]
+    #[Route('/interventionType/{id}/edit', name: 'app_interventiontype_edit', methods: ['GET', 'POST'])]
     public function edit($id, Request $request, InterventionTypeRepository $interventionTypeRepository, EntityManagerInterface $em): Response
     {
         $interventionType = $interventionTypeRepository->find($id);
         $form = $this->createForm(InterventionTypeEditType::class, $interventionType);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                $em->flush();
-                $this->addFlash('success', 'Type d\'intervention modifie avec succes !');
-                return $this->redirectToRoute('app_interventiontype');
-            } catch (\Exception) {
-                $this->addFlash('error', 'Une erreur est survenue lors de la modification du type d\'intervention');
-                return $this->redirectToRoute('app_interventiontype');
-            }
+        if ($form->isSubmitted())
+            if($form->isValid()) {
+                try {
+                    $em->flush();
+                    $this->addFlash('success', 'Type d\'intervention modifie avec succes !');
+                    return $this->redirectToRoute('app_interventiontype');
+                } catch (\Exception) {
+                    $this->addFlash('error', 'Une erreur est survenue lors de la modification du type d\'intervention');
+                    return $this->redirectToRoute('app_interventiontype');
+                }
+            } else {
+                $this->addFlash('error', 'Erreur avec le formulaire');
         }
 
 
@@ -103,7 +106,7 @@ final class InterventionTypeController extends AbstractController
         ]);
     }
 
-    #[Route('/interventionType/{id}/delete', name: 'app_interventiontype_delete')]
+    #[Route('/interventionType/{id}/delete', name: 'app_interventiontype_delete'), ]
     public function delete($id, InterventionTypeRepository $interventionTypeRepository, EntityManagerInterface $em): Response
     {
         $interventionType = $interventionTypeRepository->find($id);

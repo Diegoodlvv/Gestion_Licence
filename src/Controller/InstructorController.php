@@ -141,7 +141,7 @@ class InstructorController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_instructor_edit', methods: ['POST'])]
+    #[Route('/{id}/edit', name: 'app_instructor_edit', methods: ['GET', 'POST'])]
     public function edit(Instructor $instructor, InstructorRepository $instructorRepository, Request $request, EntityManagerInterface $entityManager)
     {
         $form = $this->createForm(EditInstructorType::class, $instructor);

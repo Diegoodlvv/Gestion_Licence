@@ -84,16 +84,20 @@ class ModuleController extends AbstractController
         $form = $this->createForm(ModuleType::class, $module);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                $em->flush();
-                $this->addFlash('success', 'Module modifié avec succès !');
+        if ($form->isSubmitted()) {
+            if($form->isValid()) { 
+                try {
+                    $em->flush();
+                    $this->addFlash('success', 'Module modifié avec succès !');
 
-                return $this->redirectToRoute('app_module');
-            } catch (\Exception) {
-                $this->addFlash('error', 'Une erreur est survenir lors de la modification du module !');
+                    return $this->redirectToRoute('app_module');
+                } catch (\Exception) {
+                    $this->addFlash('error', 'Une erreur est survenir lors de la modification du module !');
 
-                return $this->redirectToRoute('app_module');
+                    return $this->redirectToRoute('app_module');
+                }
+            } else {
+                $this->addFlash('error', 'Le formulaire contient des erreurs. Veuillez les corriger et réessayer.');
             }
         }
 
