@@ -1,10 +1,13 @@
 # Gestion Licence
 
-Application Symfony 8 pour gérer le pôle license au sein du Lycee Saint Vincent a Senlis, les instructeurs, les interventions et les blocs d'enseignement.
+Gestion Licence est une application web de gestion (ERP) du pôle bachelôr au sein du Lycée Saint Vincent à Senlis.
 
-## Fonctionnement
+En tant qu'étudiants en 2ème année de bts SIO, nous avons du réalisé ce projet de fin d'année donné par le directeur technique d'une entreprise.
 
-Travail d'equipe en binome. Fonctionnement en methode agile avec un sprint review tout les lundis.
+- Travail d'équipe en binome. Fonctionnement en méthode agile avec un sprint review tout les lundis.
+- Réalisation d'un backlog et d'une roadmap avec GitHub afin de suivre les sprints et de répartir les issues 
+- Communication et suivi à l'aide de logiciels comme slack et en présenciel plusieurs jours par semaine.
+
 
 ## Installation
 
@@ -16,10 +19,6 @@ cd Gestion_Licence
 # Installer les dépendances
 composer install
 npm install
-
-# Configuration
-cp .env.example .env
-# Configurer DATABASE_URL dans .env
 
 # Base de données
 php bin/console doctrine:migrations:migrate
@@ -41,15 +40,16 @@ npm run watch
 
 ## Fonctionnalités
 
-- Gestion des instructeurs et utilisateurs
+- Gestion des enseignants
 - Création et suivi des interventions
 - Organisation par blocs d'enseignement et années scolaires
+- Gestion des modules de cours 
 - Calendrier des cours
-- Export de données (spreadsheet)
+- Export de données du calendrier et du personnel 
 
 ## Stack
 
-- **Backend**: Symfony 8, Doctrine ORM
+- **Backend**: Symfony 8, Doctrine ORM, PHP 8.5
 - **Frontend**: Tailwind CSS, Stimulus, FullCalendar, Tom Select
-- **Base de données**: PostgreSQL (configuré dans .env)
+- **Base de données**: MySQL 
 - **Build**: Webpack Encore
