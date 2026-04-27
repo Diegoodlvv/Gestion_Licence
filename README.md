@@ -56,6 +56,6 @@ npm run watch
 
 ## Documentations 
 
-- [Guide Utilisateur](GuideUtilisateur(1).pdf)
+- [Guide Utilisateur](GuideUtilisateur.pdf)
 - [Modèle EA, outils et backlog](Documentation&Outils.pdf)
 
