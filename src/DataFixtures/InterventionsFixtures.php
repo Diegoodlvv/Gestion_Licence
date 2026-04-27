@@ -47,7 +47,7 @@ class InterventionsFixtures extends Fixture implements DependentFixtureInterface
                 'remotely' => 1,
                 'course_period_id' => '2025_12_w2',
                 'intervention_type_id' => 'Cours',
-                'module_id' => 'Devops/Cyber',
+                'module_id' => 'Devops et Cybersécurité',
                 'instructor' => [
                     [
                         'name' => 'Martins-Jacquelot',
