@@ -60,5 +60,10 @@ npm run watch
 - [Modèle EA, outils et backlog](Documentation&Outils.pdf)
 -[Figma](https://www.figma.com/design/hcKlxnQhmV2ErZ4n2qUae2/Enseignement-sup%C3%A9rieur?node-id=0-1&p=f&t=lrNyfH5Vv8xfSWpG-0)
 
+## Image du calendrier 
+
 <img width="1916" height="1052" alt="Capture d&#39;écran 2026-02-13 133442" src="https://github.com/user-attachments/assets/3560171a-72aa-48e2-959b-89f131542b97" />
+
+## Image des modules 
+
 <img width="504" height="933" alt="Capture d&#39;écran 2026-01-05 084550" src="https://github.com/user-attachments/assets/0d8f90d5-2669-40c4-8bbe-0ad027318f2f" />
