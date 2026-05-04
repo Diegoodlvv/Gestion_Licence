@@ -57,7 +57,7 @@ class InstructorController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/{id}/show_interventions', name: 'app_instructor_interventions')]
+    #[Route(path: '/{id}/show_interventions', name: 'app_instructor_interventions' , methods: ['GET'])]
     public function showInterventions($id, InstructorRepository $instructorRepository, Request $request, PaginatorInterface $pagination): Response
     {
         $instructor = $instructorRepository->find($id);
