@@ -174,11 +174,14 @@ class InstructorController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'app_instructor_delete', methods: ['DELETE'])]
-    public function delete(Instructor $instructor, EntityManagerInterface $entityManager)
+    public function delete(Instructor $instructor, EntityManagerInterface $entityManager, Request $request): Response
     {
-        if ($instructor) {
-            $entityManager->remove($instructor);
-            $entityManager->flush();
+        if($this->isCsrfTokenValid('delete'. $instructor->getId(), $request->getPayload()->getString('_token'))) {
+            $this->addFlash('success', 'Enseignant supprimé avec succès !');
+            if ($instructor) {
+                $entityManager->remove($instructor);
+                $entityManager->flush();
+            }
         }
 
         return $this->redirectToRoute('app_instructor');

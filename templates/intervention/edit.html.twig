@@ -60,9 +60,8 @@
 			</div>
 
 			<div class="mt-8 flex gap-4">
-				<a href="{{ path('app_intervention') }}">
-					<twig:Button label="Retour" variant="grey" type="button"/>
-				</a>
+				
+				<twig:Button label="Retour" variant="grey" type="button" href="{{ path('app_intervention') }}"/>
 				<div data-controller="modal" class="hidden"></div>
 				<button type="button" id="deleteButton" class="bg-red-600 text-white hover:bg-red-700 focus:ring-red-600 inline-flex items-center justify-center rounded-lg px-12 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-offset-2">
 					Supprimer
@@ -107,7 +106,7 @@
 
 			<div class="flex gap-3 p-6 border-t border-gray-200">
 				<twig:Button label="Annuler" variant="grey"/>
-				<twig:Button label="Confirmer" variant="red" type="submit" href="{{ path('app_intervention_delete', {'id': intervention.id}) }}"/>
+				{{ include('intervention/delete_form.html.twig', { intervention: intervention }) }}
 			</div>
 		</div>
 	</div>

@@ -53,7 +53,7 @@ final class InterventionController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_intervention_new')]
+    #[Route('/new', name: 'app_intervention_new' , methods: ['POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $intervention = new Intervention();
@@ -89,7 +89,7 @@ final class InterventionController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_intervention_edit')]
+    #[Route('/{id}/edit', name: 'app_intervention_edit', methods: ['GET', 'POST'])]
     public function edit(Intervention $intervention, Request $request, EntityManagerInterface $entityManager)
     {
         $form = $this->createForm(EditInterventionType::class, $intervention);
@@ -114,24 +114,16 @@ final class InterventionController extends AbstractController
         ]);
     }
 
-    #[Route('/intervention/{id}/delete', name: 'app_intervention_delete')]
-    public function delete(Intervention $intervention, EntityManagerInterface $em): Response
+    #[Route('/{id}/delete', name: 'app_intervention_delete', methods: ['DELETE'])]
+    public function delete(Intervention $intervention, EntityManagerInterface $em, Request $request): Response
     {
-        if ($intervention) {
-            try {
-                $em->remove($intervention);
-                $em->flush();
-
-                $this->addFlash('success', 'intervention supprimée avec succès !');
-
-                return $this->redirectToRoute('app_intervention');
-            } catch (\Exception) {
-                $this->addFlash('error', 'Erreur lors de la suppression de l\'intervention ');
-
-                return $this->redirectToRoute('app_intervention');
-            }
+        if($this->isCsrfTokenValid('delete' . $intervention->getId(), $request->getPayload()->getString('_token'))) {
+            $this->addFlash('success', 'intervention supprimée avec succès !');
+            $em->remove($intervention);
+            $em->flush();
         }
 
         return $this->redirectToRoute('app_intervention');
+
     }
 }
