@@ -1,0 +1,5 @@
+<form method="post" action="{{ path('app_interventiontype_delete', {'id': interventionType.id}) }}">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ interventionType.id) }}">
+    <twig:Button label="Supprimer" variant="red" type="submit" id="deleteButton"/>
+</form>
