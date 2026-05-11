@@ -1,0 +1,129 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Interventions -
+	{{ instructor.user.firstname }}
+	{{ instructor.user.lastname }}
+{% endblock %}
+
+{% block breadcrumb %}
+	<twig:BreadcrumbItem label="Corps enseignant" href="{{ path('app_instructor') }}"/>
+	<twig:BreadcrumbItem label="{{ instructor.user.firstname }} {{ instructor.user.lastname }}" href="{{ path('app_instructor_edit', {'id': instructor.id}) }}"/>
+	<twig:BreadcrumbItem label="Interventions"/>
+{% endblock %}
+
+{% block body %}
+	<main class="flex-1 bg-white p-12 font-sans">
+		<div class="mb-8">
+			<h1 class="text-3xl font-medium text-[#2C416E] mb-2">{{ instructor.user.firstname }}
+				{{ instructor.user.lastname }}</h1>
+
+			<h2 class="text-lg font-semibold text-amber-400 mb-4">Modules enseignés</h2>
+
+			<div class="space-y-2 mb-4 text-slate-900 font-medium">
+				{% for module in instructor.module %}
+					{% set used = usedHours[module.id] ?? 0 %}
+					{# variable temp $used, on check le tableau usedHours, si y a pas de module alors = 0 car pas d'intervention, sinon on recupere l'id #}
+					{% set remaining = module.hoursCount - used %}
+					{# on calcul le reste, heures total = heure du module - heures deja faites #}
+					<li class="list-none">{{ module.name }}
+						:
+						{{ module.hoursCount }}h00 (dont
+						{{ remaining }}h restantes pour cette année)</li>
+				{% endfor %}
+			</div>
+
+			<twig:Button label="Exporter le récapitulatif (fichier .xls)" type="button" variant="blue" href="{{ path('app_instructor_export', {'id': instructor.id}) }}"/>
+		</div>
+
+		<div class="border-t-2 border-amber-200 mb-8 w-full"></div>
+
+		<div class="flex gap-2 mb-8">
+			<twig:Button label="Informations générales" type=" button" variant="white" href="{{ path('app_instructor_edit', {'id': instructor.id}) }}"/>
+			<twig:Button label="Interventions" type="button" variant="blue"/>
+		</div>
+
+		<div class="mb-8">
+			<h3 class="text-xl font-semibold text-amber-400 mb-4">Filtrer les interventions</h3>
+
+			{{ form_start(form) }}
+			<div class="flex gap-4">
+				<div class="w-1/4">
+					{{ form_row(form.start_date) }}
+				</div>
+				<div class="w-1/4">
+					{{ form_row(form.end_date) }}
+				</div>
+				<div class="w-1/3">
+					{{ form_row(form.module) }}
+				</div>
+				<div class="w-auto">
+					<div class="block text-sm font-medium text-transparent mb-2">&nbsp;</div>
+					<button type="submit" class="bg-amber-400 text-slate-900 font-semibold px-8 py-2 rounded-md hover:bg-amber-500 transition h-[42px]">
+						Filtrer
+					</button>
+				</div>
+			</div>
+			{{ form_end(form) }}
+		</div>
+
+		<div>
+			<h3 class="text-xl font-bold text-slate-900 mb-6">{{ interventions|length }}
+				interventions trouvées</h3>
+
+			<div class="overflow-x-auto">
+				<table class="w-full text-left border-collapse">
+					<thead>
+						<tr class="bg-slate-50 text-slate-600 text-sm font-medium">
+							<th class="p-4 border-b border-slate-100">Date de l'intervention</th>
+							<th class="p-4 border-b border-slate-100">Module</th>
+							<th class="p-4 border-b border-slate-100">Type</th>
+							<th class="p-4 border-b border-slate-100">Intervenants</th>
+							<th class="p-4 border-b border-slate-100 text-center">En visio</th>
+						</tr>
+					</thead>
+					<tbody class="text-slate-800">
+						{% for intervention in interventions %}
+							<tr class="border-b border-slate-100 hover:bg-slate-50">
+								<td class="p-4">
+									{{ intervention.startDate|date('d/m/Y H\\hi') }}
+									à
+									{{ intervention.endDate|date('H\\hi') }}
+								</td>
+								<td class="p-4">{{ intervention.module.name }}</td>
+								<td class="p-4">{{ intervention.interventionType ? intervention.interventionType.name : 'N/A' }}</td>
+								<td class="p-4">
+									{% for instr in intervention.instructors %}
+										{{ instr.user.firstname|first|upper }}.
+										{{ instr.user.lastname|upper }}
+										{% if not loop.last %},
+										{% endif %}
+									{% endfor %}
+								</td>
+								<td class="p-4 text-center">
+									{% if intervention.remotely %}
+										<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mx-auto" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+										</svg>
+									{% else %}
+										<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mx-auto text-slate-400" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
+										</svg>
+									{% endif %}
+								</td>
+							</tr>
+						{% else %}
+							<tr>
+								<td colspan="5" class="p-4 text-center text-slate-500">Aucune intervention trouvée.</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+
+			<div class='pagination'>
+				{{ knp_pagination_render(interventions, 'pagination/knp_pagination.html.twig') }}
+			</div>
+		</div>
+
+	</main>
+{% endblock %}

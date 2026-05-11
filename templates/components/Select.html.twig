@@ -1,0 +1,33 @@
+<div class="flex flex-col gap-1 {{ class }}">
+	{% if label %}
+		<label class="text-sm font-medium text-slate-700">
+			{{ label }}
+			{% if required %}
+				<span class="text-red-500">*</span>
+			{% endif %}
+		</label>
+	{% endif %}
+
+	<select name="{{ name }}" {% if required %} required {% endif %} class="
+			            w-full rounded-lg border border-slate-300
+			            px-3 py-2 text-sm bg-white
+			            focus:outline-none focus:ring-2 focus:ring-blue-500
+			            focus:border-blue-500
+			        ">
+		{% if placeholder %}
+			<option value="" disabled {{ value is empty ? 'selected' }}>
+				{{ placeholder }}
+			</option>
+		{% endif %}
+
+		{% for optionValue, optionLabel in options %}
+			<option value="{{ optionValue }}" {{ optionValue == value ? 'selected' }}>
+				{{ optionLabel }}
+			</option>
+		{% endfor %}
+	</select>
+
+	{% if error %}
+		<span class="text-xs text-red-600">{{ error }}</span>
+	{% endif %}
+</div>
