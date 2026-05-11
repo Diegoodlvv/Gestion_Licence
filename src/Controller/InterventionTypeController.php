@@ -47,8 +47,8 @@ final class InterventionTypeController extends AbstractController
         ]);
     }
 
-    #[Route('/interventionType/new', name: 'app_interventiontype_new', methods: ['POST'])]
-    public function new(Request $request, InterventionTypeRepository $interventionTypeRepository, EntityManagerInterface $em)
+    #[Route('/interventionType/new', name: 'app_interventiontype_new', methods: ['GET','POST'])]
+    public function new(Request $request, EntityManagerInterface $em)
     {
         $interventionType = new InterventionType();
 
@@ -79,7 +79,7 @@ final class InterventionTypeController extends AbstractController
     }
 
     #[Route('/interventionType/{id}/edit', name: 'app_interventiontype_edit', methods: ['GET', 'POST'])]
-    public function edit($id, Request $request, InterventionTypeRepository $interventionTypeRepository, EntityManagerInterface $em): Response
+    public function edit(int $id, Request $request, InterventionTypeRepository $interventionTypeRepository, EntityManagerInterface $em): Response
     {
         $interventionType = $interventionTypeRepository->find($id);
         $form = $this->createForm(InterventionTypeEditType::class, $interventionType);
@@ -106,22 +106,13 @@ final class InterventionTypeController extends AbstractController
         ]);
     }
 
-    #[Route('/interventionType/{id}/delete', name: 'app_interventiontype_delete'), ]
-    public function delete($id, InterventionTypeRepository $interventionTypeRepository, EntityManagerInterface $em): Response
+    #[Route('/interventionType/{id}/delete', name: 'app_interventiontype_delete', methods:['DELETE'])]
+    public function delete(InterventionType $interventionType, InterventionTypeRepository $interventionTypeRepository, EntityManagerInterface $em, Request $request): Response
     {
-        $interventionType = $interventionTypeRepository->find($id);
-
-        if ($interventionType) {
-            try {
-                $em->remove($interventionType);
-                $em->flush();
-
-                $this->addFlash('success', 'Type d\'intervention supprimée avec succès !');
-                return $this->redirectToRoute('app_interventiontype');
-            } catch (\Exception) {
-                $this->addFlash('error', 'Vous ne pouvez pas supprimer un type d\'intervention qui a des interventions liés');
-                return $this->redirectToRoute('app_interventiontype');
-            }
+        if($this->isCsrfTokenValid('delete' . $interventionType->getId(), $request->getPayload()->getString('_token'))){
+            $this->addFlash('success', 'Suppression du type d\'intervention réussi');
+            $em->persist($interventionType);
+            $em->flush();
         }
 
         return $this->redirectToRoute('app_interventiontype');

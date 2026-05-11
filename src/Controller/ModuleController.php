@@ -41,7 +41,7 @@ class ModuleController extends AbstractController
     }
 
     #[Route('/module/{id}/add', name: 'app_module_add')]
-    public function add($id, Request $request, EntityManagerInterface $em, TeachingBlockRepository $teachingBlockRepository): Response
+    public function add(int $id, Request $request, EntityManagerInterface $em, TeachingBlockRepository $teachingBlockRepository): Response
     {
         $teachingBlock = $teachingBlockRepository->find($id);
 
@@ -107,22 +107,13 @@ class ModuleController extends AbstractController
         ]);
     }
 
-    #[Route('/module/{id}/delete', name: 'app_module_delete')]
-    public function delete(Module $module, EntityManagerInterface $em): Response
+    #[Route('/module/{id}/delete', name: 'app_module_delete', methods:['DELETE'])]
+    public function delete(Module $module, EntityManagerInterface $em, Request $request): Response
     {
-        if ($module) {
-            $moduleName = $module->getName();
-            try {
-                $em->remove($module);
-                $em->flush();
-                $this->addFlash('success', 'Module supprimé avec succès.');
-            } catch (\Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException) {
-                $this->addFlash('error', 'Impossible de supprimer le module "'.$moduleName.'" car il est lié à une ou plusieurs interventions.');
-            } catch (\Exception) {
-                $this->addFlash('error', 'Une erreur est survenue lors de la suppression du module ');
-            }
+        if($this->isCsrfTokenValid('delete' . $module->getId(), $request->getPayload()->getString('_token'))){
+            $this->addFlash('success', 'Supression du module réussi');
+            $em->persist($module);
+            $em->flush();
         }
-
-        return $this->redirectToRoute('app_module');
     }
 }

@@ -7,6 +7,7 @@ use App\Entity\SchoolYear;
 use App\Form\CoursePeriodType;
 use App\Form\SchoolYearType;
 use App\Repository\CoursePeriodRepository;
+use App\Repository\SchoolYearRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,11 +18,9 @@ use Symfony\Component\Routing\Attribute\Route;
 final class SchoolYearController extends AbstractController
 {
     #[Route('/schoolyear', name: 'app_school_year')]
-    public function index(PaginatorInterface $paginator, Request $request, EntityManagerInterface $em): Response
+    public function index(PaginatorInterface $paginator, Request $request, EntityManagerInterface $em, SchoolYearRepository $schoolYearRepository): Response
     {
-        $dql = "SELECT a FROM App\Entity\SchoolYear a";
-
-        $query = $em->createQuery($dql);
+        $query = $schoolYearRepository->findAll();
 
         $schoolYears = $paginator->paginate(
             $query,
@@ -90,22 +89,13 @@ final class SchoolYearController extends AbstractController
         ]);
     }
 
-    #[Route('/schoolyear/{id}/delete', name: 'app_school_year_delete')]
-    public function delete(SchoolYear $schoolYear, EntityManagerInterface $entityManager)
+    #[Route('/schoolyear/{id}/delete', name: 'app_school_year_delete', methods:['DELETE'])]
+    public function delete(SchoolYear $schoolYear, EntityManagerInterface $em, Request $request)
     {
-        if ($schoolYear) {
-            try {
-                $entityManager->remove($schoolYear);
-                $entityManager->flush();
-
-                $this->addFlash('success', 'Année scolaire supprimée avec succès !');
-
-                return $this->redirectToRoute('app_school_year');
-            } catch (\Exception) {
-                $this->addFlash('error', 'Vous ne pouvez pas supprimer une année qui a des semaines de cours liées');
-
-                return $this->redirectToRoute('app_school_year');
-            }
+        if($this->isCsrfTokenValid('delete' . $schoolYear->getId(),$request->getPayload()->getString('_token') )){
+            $this->addFlash('success', 'Suppression de l\'année scolaire réussi');
+            $em->persist($schoolYear);
+            $em->flush();
         }
 
         return $this->redirectToRoute('app_school_year');

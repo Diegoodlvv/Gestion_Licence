@@ -113,7 +113,7 @@
 
 			<div class="flex gap-3 p-6 border-t border-gray-200">
 				<twig:Button label="Annuler" variant="grey"/>
-				<twig:Button label="Confirmer" variant="red" type="submit" href="{{ path('app_school_year_delete', {'id': year.id}) }}"/>
+				{{ include('schoolyear/delete_form.html.twig')}}
 			</div>
 		</div>
 	</div>
