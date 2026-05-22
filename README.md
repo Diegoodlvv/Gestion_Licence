@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/JUwsCS71)
-=======
-<<<<<<< HEAD
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/JUwsCS71)
-=======
 # Gestion Licence
 
 Gestion Licence est une application web de gestion (ERP) du pôle bachelôr au sein du Lycée Saint Vincent à Senlis.
