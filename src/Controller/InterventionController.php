@@ -53,7 +53,7 @@ final class InterventionController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_intervention_new' , methods: ['POST'])]
+    #[Route('/new', name: 'app_intervention_new' , methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $intervention = new Intervention();
