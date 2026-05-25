@@ -67,3 +67,5 @@ npm run watch
 ## Image des modules 
 
 <img width="504" height="933" alt="Capture d&#39;écran 2026-01-05 084550" src="https://github.com/user-attachments/assets/0d8f90d5-2669-40c4-8bbe-0ad027318f2f" />
+>>>>>>> c9b4e1f1e408da5997c4f841a6542dea9da12018
+>>>>>>> b0d60cd8bb0f9b431bf94ead3cce0e62e4528633
