@@ -35,12 +35,13 @@ class InstructorController extends AbstractController
         $lastname = $form->get('lastname')->getData();
         $firstname = $form->get('firstname')->getData();
         $email = $form->get('email')->getData();
+        $typeContrat = $form->get('typeContrat')->getData();
 
-        $instructors = $instructorRepository->InstructorByFilters($lastname, $firstname, $email);
+        $instructors = $instructorRepository->InstructorByFilters($lastname, $firstname, $email, $typeContrat);
 
         if ($form->isSubmitted())
             if($form->isValid()) {
-            $instructors = $instructorRepository->InstructorByFilters($lastname, $firstname, $email);
+            $instructors = $instructorRepository->InstructorByFilters($lastname, $firstname, $email, $typeContrat);
         } else {
             $this->addFlash('error', 'Erreur avec les filtres');
         }
@@ -94,7 +95,7 @@ class InstructorController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/new', name: 'app_instructor_new', methods: ['POST'])]
+    #[Route(path: '/new', name: 'app_instructor_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher): Response
     {
         $instructor = new Instructor();

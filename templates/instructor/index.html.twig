@@ -31,6 +31,10 @@
 				{{ form_label(form.email)}}
 				{{ form_widget(form.email) }}
 			</div>
+			<div class="flex-1 min-w-48">
+				{{ form_label(form.typeContrat)}}
+				{{ form_widget(form.typeContrat) }}
+			</div>
 			<div class="min-w-48">
 				<twig:Button type="submit" variant="yellow" label="Filtrer"/>
 			</div>
@@ -53,6 +57,7 @@
 							<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Nom de famille</th>
 							<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Prénom</th>
 							<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Modules enseignés</th>
+							<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Type de contrat</th>
 							<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600">Nombre d'heures</th>
 							<th class="text-left py-4 px-6 text-sm font-semibold text-gray-600"></th>
 						</tr>
@@ -71,6 +76,7 @@
 									{{ moduleNames|join(', ') ?: '-' }}
 									{# join permet de joindre les modules avec une virgule #}
 								</td>
+								<td class="py-4 px-6 text-gray-800">{{ instructor.typeContrat ? instructor.typeContrat.libelle : '-' }}</td>
 								<td class="py-4 px-6 text-gray-800">
 									{% set totalHours = 0 %}
 									{% for module in instructor.module %}

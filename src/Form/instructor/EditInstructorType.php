@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Instructor;
 use App\Entity\Module;
+use App\Entity\TypeContrat;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -44,6 +45,12 @@ class EditInstructorType extends AbstractType
                     'data-controller' => 'tom-select',
                 ],
                 'label_attr' => ['class' => 'block text-sm text-slate-700 mb-1'],
+            ])
+            ->add('typeContrat', EntityType::class, [
+                'class' => TypeContrat::class,
+                'choice_label' => 'libelle',
+                'label' => 'Type de contrat',
+                'required' => true,
             ])
 
         ;

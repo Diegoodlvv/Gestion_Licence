@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Instructor;
+use App\Entity\Module;
+use App\Entity\TypeContrat;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -42,7 +44,7 @@ class InstructorRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    public function InstructorByFilters(?string $lastname, ?string $firstname, ?string $email): ?QueryBuilder
+    public function InstructorByFilters(?string $lastname, ?string $firstname, ?string $email, ?TypeContrat $typeContrat = null): ?QueryBuilder
     {
         $qb = $this->createQueryBuilder('i')
             ->leftJoin('i.user', 'u')
@@ -63,10 +65,15 @@ class InstructorRepository extends ServiceEntityRepository
                 ->setParameter('email', '%'.$email.'%');
         }
 
+        if ($typeContrat) {
+            $qb->andWhere('i.typeContrat = :typeContrat')
+                ->setParameter('typeContrat', $typeContrat);
+        }
+
         return $qb;
     }
 
-    public function InstructorInterventionsByFilters(int $instructorId, ?\DateTimeInterface $start_date, ?\DateTimeInterface $end_date, ?\App\Entity\Module $module): ?QueryBuilder
+    public function InstructorInterventionsByFilters(int $instructorId, ?\DateTimeInterface $start_date, ?\DateTimeInterface $end_date, ?Module $module): ?QueryBuilder
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('i')

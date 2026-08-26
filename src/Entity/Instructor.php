@@ -6,6 +6,7 @@ use App\Repository\InstructorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: InstructorRepository::class)]
 class Instructor
@@ -17,6 +18,11 @@ class Instructor
 
     #[ORM\ManyToOne(inversedBy: 'instructors')]
     private ?User $user = null;
+
+    #[ORM\ManyToOne(inversedBy: 'enseignants')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: 'Le type de contrat est obligatoire')]
+    private ?TypeContrat $typeContrat = null;
 
     /**
      * @var Collection<int, Module>
@@ -105,6 +111,18 @@ class Instructor
         if ($this->interventions->removeElement($intervention)) {
             $intervention->removeInstructor($this);
         }
+
+        return $this;
+    }
+
+    public function getTypeContrat(): ?TypeContrat
+    {
+        return $this->typeContrat;
+    }
+
+    public function setTypeContrat(?TypeContrat $typeContrat): static
+    {
+        $this->typeContrat = $typeContrat;
 
         return $this;
     }

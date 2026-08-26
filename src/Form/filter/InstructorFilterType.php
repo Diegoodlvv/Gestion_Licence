@@ -2,6 +2,8 @@
 
 namespace App\Form\Filter;
 
+use App\Entity\TypeContrat;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -44,6 +46,13 @@ class InstructorFilterType extends AbstractType
                 'label_attr' => [
                     'class' => 'block text-sm font-medium text-gray-700 mb-1',
                 ],
+            ])
+            ->add('typeContrat', EntityType::class, [
+                'class' => TypeContrat::class,
+                'choice_label' => 'libelle',
+                'label' => 'Type de contrat',
+                'required' => false,
+                'placeholder' => 'Saisir le type de contrat'
             ])
         ;
     }
